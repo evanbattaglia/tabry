@@ -1,0 +1,37 @@
+==========
+Flag no inline desc
+==========
+
+flag foo
+
+---
+
+(source_file
+  (flag_statement
+    names: (flag_name_list (string))))
+
+==========
+Flag inline desc
+==========
+
+flag foo "Some desc"
+
+---
+
+(source_file
+  (flag_statement
+    names: (flag_name_list (string))
+    desc: (string)))
+
+==========
+Flag inline desc multiple names
+==========
+
+flag (foo bar) "Some desc"
+
+---
+
+(source_file
+  (flag_statement
+    names: (flag_name_list (string) (string))
+    desc: (string)))

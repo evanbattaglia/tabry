@@ -1,0 +1,20 @@
+{
+  "name": "tree-sitter-tabry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bindings/node",
+  "scripts": {
+    "test": "tree-sitter test",
+    "gen": "tree-sitter generate"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nan": "^2.15.0",
+    "tree-sitter": "^0.20.0",
+    "yaml": "^2.0.0-8"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.0"
+  }
+}

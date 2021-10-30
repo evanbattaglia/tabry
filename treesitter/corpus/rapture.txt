@@ -1,0 +1,58 @@
+====================
+Rapture part 1
+====================
+
+cmd rapture
+sub (init whoami account)
+
+---
+
+(source_file
+  (cmd_statement (string))
+  (sub_statement
+    (string)
+    (string)
+    (string)
+  )
+)
+
+
+====================
+Rapture full example
+====================
+
+cmd rapture
+sub (init whoami account)
+
+sub (assume wrap) { arg @role }
+defopts @role { opts shell "rapture role ls|awk '{print $2}'" }
+
+---
+
+(source_file
+  (cmd_statement (string))
+  (sub_statement
+    (string)
+    (string)
+    (string)
+  )
+  (sub_statement
+    (string)
+    (string)
+    (block
+      (arg_statement
+        (arg_type)
+        (at_identifier)
+      )
+    )
+  )
+  (defopts_statement
+    (at_identifier)
+    (block
+      (opts_shell_statement (string))
+     
+    )
+  )
+)
+
+

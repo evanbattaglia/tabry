@@ -1,0 +1,96 @@
+==============
+Arg with two opts
+==============
+
+arg {
+  opts const "hello \"world\""
+  opts const abc
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+      (opts_const_statement (string)))))
+
+==============
+Named args
+==============
+
+arg foo
+arg foo @whatever
+arg foo @whatever {
+  opts const abc
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string)))
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (at_identifier))
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (at_identifier)
+    (block
+      (opts_const_statement (string)))))
+
+============
+Name and description
+============
+
+arg foo "my description"
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (string)))
+
+============
+Names and description
+============
+
+arg (foo bar) "my description"
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string) (string))
+    (string)))
+
+============
+Optional arg
+============
+
+opt arg
+opt arg foo @whatever {
+  opts const abc
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_modifier)
+    (arg_type))
+  (arg_statement
+    (arg_modifier)
+    (arg_type)
+    (arg_name_list (string))
+    (at_identifier)
+    (block
+      (opts_const_statement (string)))))
+

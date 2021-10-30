@@ -1,0 +1,79 @@
+==========
+At include
+==========
+
+sub ok {
+  arg {
+    include @foo
+    opts const abc
+  }
+}
+
+---
+
+(source_file
+  (sub_statement
+    (string)
+    (block
+      (arg_statement
+        (arg_type)
+        (block
+          (include_statement
+            (at_identifier))
+          (opts_const_statement
+            (string)))))))
+
+=============
+At definition
+=============
+
+defopts @bar {
+  opts const def
+}
+
+defargs @foo {
+  arg
+}
+
+---
+
+(source_file
+  (defopts_statement
+    (at_identifier)
+    (block
+      (opts_const_statement (string))))
+  (defargs_statement
+    (at_identifier)
+    (block
+      (arg_statement
+        (arg_type)))))
+
+=================
+Inline at include
+=================
+
+sub whatever @foo {
+  flagarg foo @wombat
+  arg @bar {
+    opts const abc
+  }
+}
+
+---
+
+(source_file
+  (sub_statement
+    (string)
+    (at_identifier)
+    (block
+      (flagarg_statement
+        (flag_name_list (string))
+        (at_identifier))
+      (arg_statement
+        (arg_type)
+        (at_identifier)
+        (block
+          (opts_const_statement
+            (string)))))))
+
+

@@ -1,0 +1,24 @@
+==========
+Desc
+==========
+
+sub ok {
+  desc foo
+  arg {
+    desc "bar"
+  }
+}
+
+---
+
+(source_file
+  (sub_statement
+    (string)
+    (block
+      (desc_statement
+        (string))
+      (arg_statement
+        (arg_type)
+        (block
+          (desc_statement
+            (string)))))))

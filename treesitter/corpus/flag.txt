@@ -1,0 +1,49 @@
+============
+Simple Flags
+============
+
+flagarg foo
+flagarg bar
+
+---
+
+(source_file
+  (flagarg_statement (flag_name_list (string)))
+  (flagarg_statement (flag_name_list (string))))
+
+================
+Flags with block
+================
+
+flagarg foo {
+  flagarg wombat
+}
+
+---
+
+(source_file
+  (flagarg_statement
+    (flag_name_list (string))
+    (block
+      (flagarg_statement
+        (flag_name_list (string))))))
+
+================
+Flags with modifier
+================
+
+reqd flagarg foo {
+  hidden flagarg wombat
+}
+
+---
+
+(source_file
+  (flagarg_statement
+    (flag_modifier)
+    (flag_name_list (string))
+    (block
+      (flagarg_statement
+        (flag_modifier)
+        (flag_name_list (string))))))
+
