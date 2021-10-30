@@ -39,17 +39,12 @@ module Tabry
       private
 
       def check_for_correct_usage(sub, state)
-        if show_usage?(sub, state)
+        if invalid_usage?(sub, state) || state.help
           cmd_name = File.basename($0)
           cmd_with_subs = [cmd_name, *state.subcommand_stack].join(' ')
-          puts sub.usage(cmd_with_subs)
-          exit 1
+          puts sub.usage(cmd_with_subs, add_help: state.subcommand_stack.empty?)
+          exit(state.help ? 0 : 1)
         end
-      end
-
-      def show_usage?(sub, state)
-        invalid_usage?(sub, state) ||
-          help_flag_passed?(state)
       end
 
       def invalid_usage?(sub, state)

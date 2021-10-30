@@ -33,7 +33,19 @@ module Tabry
       step_subcommand_match_subcommand(token) ||
         step_subcommand_match_dashdash(token) ||
         step_subcommand_match_flag(token) ||
+        step_subcommand_match_help(token) ||
         step_subcommand_match_arg(token)
+    end
+
+    def step_subcommand_match_help(token)
+      return false if state.help
+      return false unless state.mode == :subcommand
+      if (state.subcommand_stack.empty? && token == 'help') ||
+         (!state.dashdash && (token == '--help' || token == '-?'))
+        state.help = true
+        return true
+      end
+      false
     end
 
     def step_subcommand_match_subcommand(token)
@@ -58,8 +70,6 @@ module Tabry
       return false if state.dashdash
       flag, arg_value = current_sub.flags.match(token)
       return false unless flag
-
-      puts "MATCHING FLAG #{flag}"
 
       if arg_value
         state.flags[flag.name] = arg_value

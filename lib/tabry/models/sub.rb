@@ -39,7 +39,7 @@ module Tabry
         args.count
       end
 
-      def usage(cmd_name)
+      def usage(cmd_name, add_help: false)
         lines = []
         if description
           lines << description
@@ -55,14 +55,7 @@ module Tabry
           lines << "Usage: #{cmd_name}"
         end
 
-        if subs.any?
-          lines << ''
-          lines << 'SUBCOMMANDS'
-          subs.each do |name, s|
-            lines << name
-            lines << "  #{s.description}" if s.description
-          end
-        end
+        usage_add_subcommands(lines, add_help)
 
         if flags.any?
           lines << ''
@@ -75,6 +68,27 @@ module Tabry
 
         lines.join("\n")
       end
+
+      def usage_add_subcommands(lines, add_help)
+        if subs.any? || add_help
+          lines << ''
+          lines << 'SUBCOMMANDS'
+        end
+
+        sub_names = subs.keys
+        sub_names |= ['help'] if add_help
+
+        sub_names.sort.each do |name|
+          if (s = subs[name])
+            lines << name
+            lines << "  #{s.description}" if s.description
+          elsif name == 'help'
+            lines << 'help'
+            lines << "  Show help on command or subcommand"
+          end
+        end
+      end
+
     end
   end
 end

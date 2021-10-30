@@ -27,6 +27,10 @@ module Tabry
       def empty?
         to_h.empty?
       end
+
+      def keys
+        to_h.keys
+      end
     end
   end
 end

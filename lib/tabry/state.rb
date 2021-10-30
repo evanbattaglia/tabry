@@ -7,6 +7,7 @@ module Tabry
     :flags,
     :current_flag,
     :dashdash,
+    :help,
     keyword_init: true
   )
 end
