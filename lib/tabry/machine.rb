@@ -1,4 +1,5 @@
 require_relative 'state'
+require_relative 'util'
 
 module Tabry
   class Machine
@@ -12,8 +13,8 @@ module Tabry
     def run(tokens)
       tokens.each do |token|
         step(token)
-        puts "AFTER token #{token.inspect}"
-        puts "STATE: #{state.inspect}"
+        Tabry::Util.debug "AFTER token #{token.inspect}"
+        Tabry::Util.debug "STATE: #{state.inspect}"
       end
     end
 

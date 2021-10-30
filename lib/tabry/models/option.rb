@@ -1,6 +1,8 @@
 require_relative 'const_option'
 require_relative 'shell_option'
 require_relative 'include_option'
+require_relative 'file_option'
+require_relative 'directory_option'
 
 module Tabry
   module Models

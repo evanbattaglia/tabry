@@ -1,8 +1,8 @@
-require_relative 'option_base'
+require_relative 'config_object'
 
 module Tabry
   module Models
-    class FileOption < ConfigOption
+    class FileOption < ConfigObject
       FIELDS = {
         type: :string,
       }

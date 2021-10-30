@@ -1,8 +1,11 @@
+require 'yaml'
+require_relative 'models/config'
+
 module Tabry
   class ConfigLoader
     class ConfigNotFound < StandardError; end
 
-    def load(**args)
+    def self.load(**args)
       new(**args).load
     end
 

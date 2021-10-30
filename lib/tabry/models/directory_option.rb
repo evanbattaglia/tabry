@@ -1,8 +1,8 @@
-require_relative 'option_base'
+require_relative 'config_object'
 
 module Tabry
   module Models
-    class DirectoryOption < ConfigOption
+    class DirectoryOption < ConfigObject
       FIELDS = {
         type: :string,
       }
