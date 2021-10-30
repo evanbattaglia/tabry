@@ -2,8 +2,10 @@ require_relative 'state'
 
 module Tabry
   class Machine
-    attr_reader :state
+    attr_reader :state, :config
+
     def initialize(config)
+      @config = config
       @state = State.new(mode: :subcommand, subcommand_stack: [], args: [], flags: {}, usage: nil)
     end
 
@@ -23,15 +25,14 @@ module Tabry
 
     def current_sub
       # TODO: inefficient to call this a lot, slightly i guess
-      state.subcommand_stack.reduce(config.main) { |sub, sub_name| sub.subs[sub_name] }
+      config.dig_sub(state.subcommand_stack)
     end
 
     def step_subcommand(token)
-      step_subcommand_match_subcommand(token)
-      || step_subcommand_match_dashdash(token)
-      || step_subcommand_match_flag(token)
-      || step_subcommand_match_arg(token)
-      # TODO: no match
+      step_subcommand_match_subcommand(token) ||
+        step_subcommand_match_dashdash(token) ||
+        step_subcommand_match_flag(token) ||
+        step_subcommand_match_arg(token)
     end
 
     def step_subcommand_match_subcommand(token)
@@ -39,7 +40,7 @@ module Tabry
       sub = current_sub.subs.match(token)
       return false unless sub
 
-      state.subcommand_stack << sub.name
+      state.subcommand_stack << sub
       true
     end
 
@@ -54,13 +55,15 @@ module Tabry
 
     def step_subcommand_match_flag(token)
       return false if state.dashdash
-      flag, arg_value = current_sub.flags.match(token, state.flags)
+      flag, arg_value = current_sub.flags.match(token)
       return false unless flag
+
+      puts "MATCHING FLAG #{flag}"
 
       if arg_value
         state.flags[flag.name] = arg_value
       elsif flag.arg
-        state.mode = :flag
+        state.mode = :flagarg
         state.current_flag = flag.name
       else
         state.flags[flag.name] = true
@@ -71,7 +74,7 @@ module Tabry
 
     # TODO: usages will be quite tricky, skip for now...
     # this accepts anything, for now...
-    def step_subcommand_match_args(token)
+    def step_subcommand_match_arg(token)
       state.args << token
 
       true
@@ -79,12 +82,13 @@ module Tabry
 
     # Accepts anything, for now
     def step_flagarg(token)
-      state.flags[state.current_flag_name] = token
+      state.flags[state.current_flag] = token
+      state.mode = :subcommand
       true
     end
 
-    def options
-      send :"options_#{state.mode}"
+    def options(token)
+      send(:"options_#{state.mode}", token || '')
     end
 
     def options_subcommand(token)
@@ -102,13 +106,13 @@ module Tabry
     end
 
     def options_subcommand_flags(token)
-      current_sub.flags.options(token, state.used_flags_hash)
+      current_sub.flags.options(token, state.flags)
     end
 
     # TODO usages
     # TODO final_args, maybe it should be part of args list
     def options_subcommand_args(token)
-      current_sub.args.options[state.args.length]&.options&.options(token) || []
+      current_sub.args[state.args.length]&.options&.options(token) || []
     end
   end
 end

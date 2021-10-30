@@ -28,6 +28,14 @@ module Tabry
           end
         end
       end
+
+      def [](flag_name)
+        if flag_name.is_a?(Integer)
+          to_a[flag_name]
+        else
+          to_a.find{|f| f.name == flag_name}
+        end
+      end
     end
   end
 end

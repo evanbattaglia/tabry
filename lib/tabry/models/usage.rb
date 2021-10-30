@@ -13,6 +13,8 @@ module Tabry
         description: :string,
         final_args: [:object, :FinalArgs],
       }
+
+      attr_reader *FIELDS.keys
     end
   end
 end

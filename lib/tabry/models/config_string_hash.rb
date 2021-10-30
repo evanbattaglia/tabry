@@ -23,6 +23,10 @@ module Tabry
       def each(*args, &blk)
         to_h.each(*args, &blk)
       end
+
+      def empty?
+        to_h.empty?
+      end
     end
   end
 end

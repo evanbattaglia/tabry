@@ -7,6 +7,8 @@ module Tabry
         type: :string,
         value: :string,
       }
+
+      attr_reader *FIELDS.keys
     end
   end
 end

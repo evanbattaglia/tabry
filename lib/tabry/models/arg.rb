@@ -10,6 +10,8 @@ module Tabry
         optional: :boolean,
         strict: :boolean,
       }
+
+      attr_reader *FIELDS.keys
     end
   end
 end

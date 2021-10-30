@@ -22,6 +22,14 @@ module Tabry
       def each(*args, &blk)
         to_a.each(*args, &blk)
       end
+
+      def length
+        to_a.length
+      end
+
+      def empty?
+        to_a.empty?
+      end
     end
   end
 end

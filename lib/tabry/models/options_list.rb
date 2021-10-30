@@ -9,7 +9,7 @@ module Tabry
       end
 
       def options(token)
-        to_a.map{|option| option.options(token)}.inject(&:})
+        to_a.map{|option| option.options(token)}.inject(&:|)
       end
     end
   end

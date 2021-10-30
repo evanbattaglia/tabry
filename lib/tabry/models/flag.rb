@@ -19,6 +19,7 @@ module Tabry
             return token.sub("--#{al}=", "")
           end
         end
+        nil
       end
 
       def match(token)
@@ -32,6 +33,8 @@ module Tabry
       def alias_with_dash(al)
         al.length == 1 ? "-#{al}" : "--#{al}"
       end
+
+      attr_reader *FIELDS.keys
     end
   end
 end
