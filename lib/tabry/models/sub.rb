@@ -26,14 +26,17 @@ module Tabry
       def args; @args ||= ArgsList.new([]); end
 
       def can_be_used_with_n_args?(n_args)
-        if subs.any?
-          false
-        elsif args.length == n_args
-          # TODO: optional arguments and final args
-          true
-        else
-          false
-        end
+        return false if n_args == 0 && subs.any?
+        (min_args..max_args).include?(args.length)
+      end
+
+      def min_args
+        args.reject(&:optional).count
+      end
+
+      def max_args
+        return Float::INFINITY if final_args
+        args.count
       end
 
       def usage(cmd_name)

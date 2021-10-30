@@ -291,11 +291,6 @@ const handlers = {
 //////////////////////////////////////////////////////////////////
 
 
-function parse() {
-  const filename = process.argv[2];
-  if (!filename) { die("usage: compile.js file.tabry"); }
-  return parseFile(filename);
-}
 
 function parseFile(filename) {
   const parser = new Parser();
@@ -304,11 +299,20 @@ function parseFile(filename) {
   return tree;
 }
 
-const tree = parse()
+const filename = process.argv[2];
+const outputFn = process.argv[3];
+if (!filename) { die("usage: compile.js file.tabry [output.json] # or output.yml"); }
+const tree = parseFile(filename);
 
 const output = {cmd: null, main: {}};
 const state = {output, context: 'main', currentNode: output, currentSub: output.main};
 handleChildren(state, tree.rootNode);
 
-console.log(YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}))
+if (!outputFn) {
+  console.log(YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
+} else if (outputFn.match(/\.yml/)) {
+  fs.writeFileSync(outputFn, YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
+} else {
+  fs.writeFileSync(outputFn, JSON.stringify(output));
+}
 

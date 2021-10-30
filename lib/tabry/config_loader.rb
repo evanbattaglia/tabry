@@ -1,4 +1,3 @@
-require 'yaml'
 require_relative 'models/config'
 
 module Tabry
@@ -16,10 +15,15 @@ module Tabry
     end
 
     def load
+      return load_from_file(name) if name =~ /\.json$/i || name =~ /\.ya?ml$/i
+
       load_paths.each do |dir|
+        filename = "#{dir}/#{name}.json"
+        return load_from_file(filename) if File.exists?(filename)
         filename = "#{dir}/#{name}.yml"
         return load_from_file(filename) if File.exists?(filename)
       end
+
       raise ConfigNotFound, "Could not find Tabry config #{name.inspect} in paths: #{load_paths.inspect}"
     end
 
@@ -32,7 +36,15 @@ module Tabry
     end
 
     def load_from_file(filename)
-      Tabry::Models::Config.new(YAML.load(File.read(filename)))
+      if filename =~ /\.json$/
+        require 'json'
+        Tabry::Models::Config.new(JSON.parse(File.read(filename)))
+      elsif filename =~ /\.yml$/
+        require 'yaml'
+        Tabry::Models::Config.new(YAML.load(File.read(filename)))
+      else
+        raise 'unknown file type'
+      end
     end
   end
 end
