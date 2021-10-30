@@ -16,6 +16,12 @@ module Tabry
         final_args: [:object, :FinalArgs],
         subs: [:object, :Subs],
       }
+
+      # TODO put this default stuff into ConfigObject
+      def subs; @subs ||= Subs.new({}); end
+      def flags; @flags ||= FlagsList.new([]); end
+      def usages; @usages ||= UsagesList.new([]); end
+      def args; @args ||= ArgsList.new([]); end
     end
   end
 end

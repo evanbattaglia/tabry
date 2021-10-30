@@ -1,0 +1,87 @@
+main:
+  subs:
+    search:
+      description: "Searches splunk"
+      flags:
+        - name: background
+          aliases:
+            - b
+          description: "Search in the background"
+        - name: something-extra
+          description: "Something extra, bla bla"
+          required: true
+          arg: true
+        - name: foo
+          description: "You can put the desciption here too I guess"
+          arg: true
+          options:
+            - type: constant
+              value: abc
+            - type: constant
+              value: def
+            - type: constant
+              value: ghi
+        - name: bar
+          options:
+            # If this is too annoying, can parse out before
+            - type: include
+              value: bar-arg
+      args:
+        - name: search
+          options:
+            - type: constant
+              value: xyz
+            - type: include
+              value: bar-arg
+        - name: arg
+          options:
+            - type: include
+              value: bar-arg
+      final_args:
+        name: rest
+
+    abra:
+      aliases:
+        - a
+      args:
+        - name: foo
+
+    deploy:
+      usages:
+        - args:
+            - strict: true
+              options:
+                - type: constant
+                  value: all
+            - name: tag
+              options:
+                - type: shell
+                  value: "ls tags"
+        - args:
+          - options:
+            - type: shell
+              value: "ls cluster"
+
+    delete:
+      usages:
+        - flags:
+            - name: user
+              arg: true
+          final_args:
+            name: users
+            options:
+              - type: shell
+                value: "ls users"
+          description: "deletes users"
+        - final_args:
+            name: things
+            options:
+              - type: shell
+                value: "ls things"
+
+option_includes:
+  bar-arg:
+    - type: constant
+      value: "yes"
+    - type: constant
+      value: "no"

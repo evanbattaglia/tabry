@@ -7,6 +7,10 @@ module Tabry
       def initialize(arr)
         super(arr, Option)
       end
+
+      def options(token)
+        to_a.map{|option| option.options(token)}.inject(&:})
+      end
     end
   end
 end

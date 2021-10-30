@@ -7,6 +7,7 @@ module Tabry
       include Enumerable
 
       def initialize(arr, klass)
+        arr ||= []
         unless arr.is_a?(Array)
           raise "#{self.class.name} must be an array. Got #{arr.class}"
         end
