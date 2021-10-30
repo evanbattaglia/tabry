@@ -121,12 +121,15 @@ function createFlag(state, {nameAndAliases, desc, mods, ats, block, arg}) {
   }
 }
 
-function createSub(state, {nameAndAliases, ats, block}) {
+function createSub(state, {nameAndAliases, ats, block, desc}) {
   const [name, ...aliases] = textFromString(nameAndAliases).split(",");
   const sub = {};
   safeSet(state.currentSub, 'subs', name, sub);
   if (aliases.length) {
     sub.aliases = aliases;
+  }
+  if (desc) {
+    sub.description = textFromString(desc);
   }
   // TODO ats
 
@@ -214,15 +217,16 @@ const handlers = {
 
   handleSubStatement(state, node) {
     checkContext(state, node, ['main', 'sub']);
-    const {names, ats, block} = pick(node, {
+    const {names, ats, block, desc} = pick(node, {
       block: 'block',
+      names: 'sub_name_list',
+      desc: 'string',
     }, {
-      names: 'string',
       ats: 'at_identifier',
     });
 
-    for (const nameAndAliases of names) {
-      createSub(state, {nameAndAliases, ats, block});
+    for (const nameAndAliases of names.namedChildren) {
+      createSub(state, {nameAndAliases, ats, block, desc});
     }
   },
 
@@ -257,6 +261,16 @@ const handlers = {
     createOpts(state, {type: 'include', value: textFromString(value)});
   },
 
+  handleOptsFileStatement(state, node) {
+    checkContext(state, node, ['arg', 'flag', 'option_include']);
+    createOpts(state, {type: 'file'});
+  },
+
+  handleOptsDirStatement(state, node) {
+    checkContext(state, node, ['arg', 'flag', 'option_include']);
+    createOpts(state, {type: 'directory'});
+  },
+
   handleIncludeStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_includes']);
     const {at} = pick(node, {at: 'at_identifier'});
@@ -267,7 +281,11 @@ const handlers = {
     checkContext(state, node, ['main']);
     const {at, block} = pick(node, {at: 'at_identifier', block: 'block'});
     createOptionIncludes(state, {at, block});
-  }
+  },
+
+  handleERROR(state, node) {
+    die(`Tree-sitter parse error. Try running npx tree-sitter parse. State:\n${JSON.stringify(state)}`);
+  },
 }
 
 //////////////////////////////////////////////////////////////////

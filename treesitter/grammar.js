@@ -2,7 +2,6 @@ module.exports = grammar({
   name: 'tabry',
 
   rules: {
-    // TODO: add the actual grammar rules
     source_file: $ => repeat($._toplevel_statement),
 
     _toplevel_statement: $ => choice(
@@ -12,6 +11,7 @@ module.exports = grammar({
       $.defargs_statement,
     ),
 
+    // TODO fix restrictions here, e.g. cna't have flagarg inside flagarg
     _common_statement: $ => choice(
       $.arg_statement,
       $.flagarg_statement,
@@ -25,6 +25,8 @@ module.exports = grammar({
       $._common_statement,
       $.opts_const_statement,
       $.opts_shell_statement,
+      $.opts_file_statement,
+      $.opts_dir_statement,
       $.include_statement,
     ),
 
@@ -51,7 +53,8 @@ module.exports = grammar({
 
     sub_statement: $ => seq(
       'sub',
-      field('values', $._strings),
+      field('names', $.sub_name_list),
+      optional(field('desc', $.string)),
       repeat($.at_identifier),
       optional($.block),
     ),
@@ -101,6 +104,16 @@ module.exports = grammar({
       $.string,
     ),
 
+    opts_file_statement: $ => seq(
+      'opts',
+      'file',
+    ),
+
+    opts_dir_statement: $ => seq(
+      'opts',
+      'dir',
+    ),
+
     flagarg_statement: $ => seq(
       optional($.flag_modifier),
       'flagarg',
@@ -134,6 +147,7 @@ module.exports = grammar({
 
     flag_name_list: $ => $._strings,
     arg_name_list: $ => $._strings,
+    sub_name_list: $ => $._strings,
 
     _strings: $ => choice(
       $.string,

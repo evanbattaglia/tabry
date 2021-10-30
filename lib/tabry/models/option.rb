@@ -14,6 +14,10 @@ module Tabry
           ShellOption.new(hash)
         when 'include'
           IncludeOption.new(hash)
+        when 'file'
+          FileOption.new(hash)
+        when 'directory'
+          DirectoryOption.new(hash)
         else
           raise "unknown option type #{hash['type']}"
         end

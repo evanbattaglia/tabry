@@ -1,0 +1,21 @@
+============
+Options
+============
+
+arg {
+  opts const a
+  opts shell "ls"
+  opts file
+  opts dir
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+      (opts_shell_statement (string))
+      (opts_file_statement)
+      (opts_dir_statement))))

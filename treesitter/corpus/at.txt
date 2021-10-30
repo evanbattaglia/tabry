@@ -13,7 +13,7 @@ sub ok {
 
 (source_file
   (sub_statement
-    (string)
+    (sub_name_list (string))
     (block
       (arg_statement
         (arg_type)
@@ -63,7 +63,7 @@ sub whatever @foo {
 
 (source_file
   (sub_statement
-    (string)
+    (sub_name_list (string))
     (at_identifier)
     (block
       (flagarg_statement

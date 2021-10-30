@@ -13,7 +13,8 @@ sub ok {
 
 (source_file
   (sub_statement
-    (string)
+    (sub_name_list
+      (string))
     (block
       (desc_statement
         (string))
