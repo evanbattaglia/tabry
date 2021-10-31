@@ -59,9 +59,11 @@ module Tabry
       if flags.any?
         lines << ''
         lines << 'FLAGS'
-        flags.each do |flag|
+        flags.map(&:name).sort.each do |name|
+          flag = flags[name]
           flag_name = [flag.name, *flag.aliases].map{|al| flag.alias_with_dash(al)}.join(", ")
           flag_name << " <arg>" if flag.arg
+          flag_name << " (required)" if flag.required
           lines << flag_name
           lines << "  #{flag.description}" if flag.description
         end

@@ -26,6 +26,13 @@ module Tabry
 
 
     def options_subcommand(token)
+      if token
+        required_flag = current_sub.flags.first_required_flag(used: state.flags)
+        if required_flag
+          return [required_flag.name_with_dashes]
+        end
+      end
+
       options_subcommand_subs(token) |
         options_subcommand_flags(token) |
         options_subcommand_args(token)
@@ -45,7 +52,7 @@ module Tabry
     end
 
     def options_subcommand_flags(token)
-      current_sub.flags.options(token, state.flags)
+      current_sub.flags.options(token, used: state.flags)
     end
 
     # TODO usages

@@ -8,9 +8,15 @@ module Tabry
         super(**args, klass: Flag)
       end
 
-      def options(token, used_flags_hash)
+      def first_required_flag(used:)
+        to_a.find do |flag|
+          flag.required && !used[flag.name]
+        end
+      end
+
+      def options(token, used:)
         to_a.map do |flag|
-          if used_flags_hash[flag.name]
+          if used[flag.name]
             nil
           elsif token.nil? || flag.name_with_dashes.start_with?(token)
             # TODO hidden until '-'

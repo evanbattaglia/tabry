@@ -10,5 +10,6 @@ raise 'Usage: tabry-help config_name [arg1 [arg2]]...' unless ARGV.length >= 1
 
 config_name, *args = ARGV
 result = Tabry::Runner.new(config_name: config_name).parse(args)
-puts "(Help from tabry-help; running command directly may provide more usage info)"
-puts result.usage(config_name)
+usage = result.usage(config_name)
+puts "(Usage info from tabry-help; running command directly may provide more help)\n\n"
+puts usage
