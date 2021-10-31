@@ -1,0 +1,540 @@
+[
+  {
+    "type": "arg_name_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "arg_statement",
+    "named": true,
+    "fields": {
+      "at": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "at_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "arg_modifier",
+          "named": true
+        },
+        {
+          "type": "arg_name_list",
+          "named": true
+        },
+        {
+          "type": "arg_type",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "arg_type",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "arg_statement",
+          "named": true
+        },
+        {
+          "type": "desc_statement",
+          "named": true
+        },
+        {
+          "type": "flag_statement",
+          "named": true
+        },
+        {
+          "type": "flagarg_statement",
+          "named": true
+        },
+        {
+          "type": "include_statement",
+          "named": true
+        },
+        {
+          "type": "opts_const_statement",
+          "named": true
+        },
+        {
+          "type": "opts_dir_statement",
+          "named": true
+        },
+        {
+          "type": "opts_file_statement",
+          "named": true
+        },
+        {
+          "type": "opts_shell_statement",
+          "named": true
+        },
+        {
+          "type": "sub_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cmd_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "defargs_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "defopts_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "desc_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "flag_modifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "flag_name_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "flag_statement",
+    "named": true,
+    "fields": {
+      "desc": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "names": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "flag_name_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "flag_modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "flagarg_statement",
+    "named": true,
+    "fields": {
+      "desc": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "names": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "flag_name_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "flag_modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "include_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "opts_const_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "opts_dir_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "opts_file_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "opts_shell_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "arg_statement",
+          "named": true
+        },
+        {
+          "type": "cmd_statement",
+          "named": true
+        },
+        {
+          "type": "defargs_statement",
+          "named": true
+        },
+        {
+          "type": "defopts_statement",
+          "named": true
+        },
+        {
+          "type": "desc_statement",
+          "named": true
+        },
+        {
+          "type": "flag_statement",
+          "named": true
+        },
+        {
+          "type": "flagarg_statement",
+          "named": true
+        },
+        {
+          "type": "sub_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sub_name_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sub_statement",
+    "named": true,
+    "fields": {
+      "desc": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "names": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "sub_name_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "at_identifier",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "arg",
+    "named": false
+  },
+  {
+    "type": "arg_modifier",
+    "named": true
+  },
+  {
+    "type": "args",
+    "named": false
+  },
+  {
+    "type": "at_identifier",
+    "named": true
+  },
+  {
+    "type": "cmd",
+    "named": false
+  },
+  {
+    "type": "const",
+    "named": false
+  },
+  {
+    "type": "defargs",
+    "named": false
+  },
+  {
+    "type": "defopts",
+    "named": false
+  },
+  {
+    "type": "desc",
+    "named": false
+  },
+  {
+    "type": "dir",
+    "named": false
+  },
+  {
+    "type": "file",
+    "named": false
+  },
+  {
+    "type": "flag",
+    "named": false
+  },
+  {
+    "type": "flagarg",
+    "named": false
+  },
+  {
+    "type": "hidden",
+    "named": false
+  },
+  {
+    "type": "include",
+    "named": false
+  },
+  {
+    "type": "opts",
+    "named": false
+  },
+  {
+    "type": "reqd",
+    "named": false
+  },
+  {
+    "type": "shell",
+    "named": false
+  },
+  {
+    "type": "string",
+    "named": true
+  },
+  {
+    "type": "sub",
+    "named": false
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "}",
+    "named": false
+  }
+]
