@@ -40,11 +40,6 @@ module Tabry
         self
       end
 
-      def can_be_used_with_n_args?(n_args)
-        return false if n_args == 0 && subs.any?
-        (min_args..max_args).include?(n_args)
-      end
-
       def min_args
         args.reject(&:optional).count
       end

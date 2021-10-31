@@ -39,9 +39,14 @@ module Tabry
       private
 
       def check_for_correct_usage(result)
-        if result.invalid_usage? || result.help?
+        if result.help?
           puts result.usage(File.basename($0))
-          exit(result.help? ? 0 : 1)
+          exit 0
+        elsif result.invalid_usage?
+          puts "Invalid usage: #{result.invalid_usage_reason}"
+          puts
+          puts result.usage(File.basename($0))
+          exit(1)
         end
       end
 
