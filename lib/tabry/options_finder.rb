@@ -1,25 +1,29 @@
 module Tabry
   class OptionsFinder
-    attr_reader :result, :state
+    attr_reader :result
 
     # Returns an array of options
     def self.options(result, token)
-      new(result, state).options(token)
+      new(result).options(token)
+    end
+
+    def initialize(result)
+      @result = result
+    end
+
+    def options(token)
+      send(:"options_#{state.mode}", token || '')
     end
 
     private
-    def initialize(result, state)
-      @result = result
-      @state = state
+    def state
+      result.state
     end
 
     def current_sub
       @current_sub ||= result.current_sub
     end
 
-    def options(token)
-      send(:"options_#{state.mode}", token || '')
-    end
 
     def options_subcommand(token)
       options_subcommand_subs(token) |

@@ -1,6 +1,7 @@
 require_relative 'config_loader'
 require_relative 'machine'
 require_relative 'options_finder'
+require_relative 'result'
 
 # Loads a config, runs the machine, creates a Result object to encapsulate results.
 # Also options() convenience function
@@ -12,7 +13,7 @@ module Tabry
     end
 
     def options(args, last=nil)
-      Tabry::OptionsFinder.options(parse(args), token)
+      Tabry::OptionsFinder.options(parse(args), last)
     end
 
     def parse(args)

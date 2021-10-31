@@ -15,9 +15,10 @@ module Tabry
 
       def run(raw_args)
         result = runner.parse(raw_args)
-        sub = result.current_sub
+        check_for_correct_usage(result)
 
-        check_for_correct_usage(sub, state)
+        sub = result.current_sub
+        state = result.state
 
         met = state.subcommand_stack.join('__')
         met = 'main' if met == ''
@@ -39,7 +40,7 @@ module Tabry
 
       def check_for_correct_usage(result)
         if result.invalid_usage? || result.help?
-          puts usage_with_program_name
+          puts result.usage(File.basename($0))
           exit(result.help? ? 0 : 1)
         end
       end

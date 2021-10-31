@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 require_relative '../lib/tabry/runner'
 
-raise 'Usage: tabry-test-parse config_name arg1 [arg2]...' unless ARGV.length >= 1
+raise 'Usage: tabry-help config_name [arg1 [arg2]]...' unless ARGV.length >= 1
 
 config_name, *args = ARGV
 result = Tabry::Runner.new(config_name: config_name).parse(args)
-puts result.usage_with_program_name
+puts result.usage(config_name)

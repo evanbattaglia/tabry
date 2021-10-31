@@ -1,6 +1,10 @@
 require_relative 'state'
 require_relative 'util'
 
+# The core Tabry state machine / parser which reads tokens, figures out if it's
+# a sub/flag/arg/etc. and advances the state
+#
+# The output is a State object -- the final state of the machine.
 module Tabry
   class Machine
     attr_reader :state, :config
@@ -11,8 +15,6 @@ module Tabry
       machine.run(tokens)
       machine.state
     end
-
-    private
 
     def initialize(config)
       @config = config
@@ -27,8 +29,14 @@ module Tabry
       end
     end
 
+    private
     def step(token)
       send :"step_#{state.mode}", token
+    end
+
+    def current_sub
+      # TODO a bit of a waste to look this up every time.
+      config.dig_sub(state.subcommand_stack)
     end
 
     # usage? arg?
