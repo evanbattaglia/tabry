@@ -24,7 +24,7 @@ module Tabry
         return load_from_file(filename) if File.exists?(filename)
       end
 
-      raise ConfigNotFound, "Could not find Tabry config #{name.inspect}.json or #{name.inspec}.yml in paths: #{load_paths.inspect}"
+      raise ConfigNotFound, "Could not find Tabry config #{name}.json or #{name}.yml in paths: #{load_paths.inspect}"
     end
 
     private

@@ -9,14 +9,13 @@ module Tabry
       def initialize(config_name, cli_class)
         @cli_class = cli_class
         @runner = Tabry::Runner.new(config_name: config_name)
-        @config = runner.config
       end
 
       DISALLOWED_SUBCOMMAND_NAMES = %w[args flags internals]
 
       def run(raw_args)
-        state = runner.parse(raw_args)
-        sub = config.dig_sub(state.subcommand_stack)
+        result = runner.parse(raw_args)
+        sub = result.current_sub
 
         check_for_correct_usage(sub, state)
 
@@ -38,21 +37,11 @@ module Tabry
 
       private
 
-      def check_for_correct_usage(sub, state)
-        if invalid_usage?(sub, state) || state.help
-          cmd_name = File.basename($0)
-          cmd_with_subs = [cmd_name, *state.subcommand_stack].join(' ')
-          puts sub.usage(cmd_with_subs, add_help: state.subcommand_stack.empty?)
-          exit(state.help ? 0 : 1)
+      def check_for_correct_usage(result)
+        if result.invalid_usage? || result.help?
+          puts usage_with_program_name
+          exit(result.help? ? 0 : 1)
         end
-      end
-
-      def invalid_usage?(sub, state)
-        !sub.can_be_used_with_n_args?(state.args.count)
-      end
-
-      def help_flag_passed?(state)
-        (state.args & %w[-? --help]).any?
       end
 
       def named_args(sub, state)

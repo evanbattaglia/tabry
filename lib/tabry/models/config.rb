@@ -19,10 +19,6 @@ module Tabry
         super(raw: raw, root: self)
       end
 
-      def current_sub(state)
-        dig_sub(state.subcommand_stack)
-      end
-
       def dig_sub(sub_stack)
         sub_stack.reduce(main) { |sub, sub_name| sub.subs.by_name[sub_name] }
       end
