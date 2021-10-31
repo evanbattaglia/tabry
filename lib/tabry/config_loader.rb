@@ -30,7 +30,7 @@ module Tabry
     private
     def load_paths
       @load_paths ||= [
-        *ENV['TABRY_IMPORTS_PATH']&.split(':'),
+        *ENV['TABRY_IMPORTS_PATH']&.split(':').reject(&:empty?),
         ENV['HOME'] + "/.tabry/",
       ]
     end

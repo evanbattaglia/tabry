@@ -49,11 +49,8 @@ _tabry_completions()
   [[ -n "$TABRY_DEBUG" ]] && echo -n tabry end bash: && date +%s.%N >&2
 }
 
-complete -F _tabry_completions cg
-complete -F _tabry_completions rake
-complete -F _tabry_completions rapture
-complete -F _tabry_completions vaulted
-complete -F _tabry_completions Lmain
-complete -F _tabry_completions LbulkMain
-complete -F _tabry_completions aws
+# To use: put a .json/.yml tabry config file in ~/.tabry (e.g. ~/.aws.json)
+# Then, run this script in your shell startup scripts, plus (e.g.)
+#
+# complete -F _tabry_completions aws
 
