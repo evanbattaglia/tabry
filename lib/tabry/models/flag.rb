@@ -6,7 +6,7 @@ module Tabry
   module Models
     class Flag < ConfigObject
       def self.new(**args)
-        if args[:hash]['include']
+        if args[:raw]['include']
           IncludeFlag.new(**args)
         else
           super(**args)
@@ -21,6 +21,10 @@ module Tabry
         arg: :boolean,
         options: [:list_object, :OptionsList]
       }
+
+      def flatten
+        self
+      end
 
       def match_with_value(token)
         [name, *aliases].each do |al|

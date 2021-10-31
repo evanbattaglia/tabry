@@ -9,7 +9,7 @@ module Tabry
   module Models
     class Sub < ConfigObject
       def self.new(**args)
-        hash = args[:hash]
+        hash = args[:raw]
         if hash['include']
           IncludeSub.new(**args)
         else

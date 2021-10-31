@@ -18,7 +18,7 @@ module Tabry
         "#<#{desc}>"
       end
 
-      attr_reader :_root :_raw
+      attr_reader :_root, :_raw
 
       def initialize(raw:, root:)
         @_raw = raw
@@ -56,12 +56,12 @@ module Tabry
 
       def init_field_object(key, val, object_class)
         assert_of_class(key, val, Hash)
-        Object.const_get("Tabry::Models::#{object_class}").new(val, root)
+        Object.const_get("Tabry::Models::#{object_class}").new(raw: val, root: _root)
       end
 
       def init_field_list_object(key, val, object_class)
         assert_of_class(key, val, Array)
-        Object.const_get("Tabry::Models::#{object_class}").new(val, root)
+        Object.const_get("Tabry::Models::#{object_class}").new(raw: val, root: _root)
       end
 
       def init_field_boolean(key, val)

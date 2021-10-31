@@ -9,6 +9,10 @@ module Tabry
       }
 
       attr_reader *FIELDS.keys
+
+      def flatten
+        self
+      end
     end
   end
 end

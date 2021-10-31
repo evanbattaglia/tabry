@@ -6,7 +6,7 @@ module Tabry
   module Models
     class Arg < ArgBase
       def self.new(**args)
-        if args[:hash]['include']
+        if args[:raw]['include']
           IncludeArg.new(**args)
         else
           super(**args)
@@ -21,6 +21,10 @@ module Tabry
       }
 
       attr_reader *FIELDS.keys
+
+      def flatten
+        self
+      end
     end
   end
 end

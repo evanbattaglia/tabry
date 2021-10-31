@@ -11,14 +11,14 @@ module Tabry
         @_root = root
 
         raw ||= {}
-        unless raw.is_a?(raw)
+        unless raw.is_a?(Hash)
           raise "#{self.class.name} must be a Hash. Got #{raw.class}"
         end
         unless raw.keys.all?{|k| k.is_a?(String)}
           raise "#{self.class.name} keys must all be string keys."
         end
 
-        @to_h = raw.transform_values{|a| klass.new(a)}
+        @to_h = raw.transform_values{|a| klass.new(raw: a, root: root)}
       end
 
       def [](*args)

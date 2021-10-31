@@ -38,10 +38,10 @@ module Tabry
     def load_from_file(filename)
       if filename =~ /\.json$/
         require 'json'
-        Tabry::Models::Config.new(JSON.parse(File.read(filename)))
+        Tabry::Models::Config.new(raw: JSON.parse(File.read(filename)))
       elsif filename =~ /\.yml$/
         require 'yaml'
-        Tabry::Models::Config.new(YAML.load(File.read(filename)))
+        Tabry::Models::Config.new(raw: YAML.load(File.read(filename)))
       else
         raise 'unknown file type'
       end

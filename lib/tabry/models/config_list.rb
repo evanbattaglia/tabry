@@ -3,7 +3,7 @@ require_relative 'config_list'
 module Tabry
   module Models
     class ConfigList
-      attr_reader :to_a
+      attr_reader :to_a, :unflattened
       include Enumerable
 
       def initialize(raw:, root:, klass:)
@@ -11,10 +11,18 @@ module Tabry
 
         raw ||= []
         unless raw.is_a?(Array)
-          raise "#{self.class.name} must be an array. Got #{arr.class}"
+          raise "#{self.class.name} must be an array. Got #{raw.class}"
         end
 
-        @to_a = raw.map{|a| klass.new(raw: a, root: root)}
+        @unflattened = raw.map{|a| klass.new(raw: a, root: root)}
+      end
+
+      def to_a
+        flatten
+      end
+
+      def flatten
+        @flatten ||= unflattened.map(&:flatten).flatten
       end
 
       def [](*args)
