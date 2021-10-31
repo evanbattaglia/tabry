@@ -56,17 +56,7 @@ module Tabry
         end
 
         usage_add_subcommands(lines, add_help)
-
-        if flags.any?
-          lines << ''
-          lines << 'FLAGS'
-          flags.each do |flag|
-            lines << [flag.name, *flag.aliases].map{|al| flag.alias_with_dash(al)}.join(", ")
-            lines << "  #{flag.description}" if flag.description
-          end
-        end
-
-        lines.join("\n")
+        usage_add_flags(lines)
       end
 
       def usage_add_subcommands(lines, add_help)
@@ -89,6 +79,20 @@ module Tabry
         end
       end
 
+      def usage_add_flags(lines)
+        if flags.any?
+          lines << ''
+          lines << 'FLAGS'
+          flags.each do |flag|
+            flag_name = [flag.name, *flag.aliases].map{|al| flag.alias_with_dash(al)}.join(", ")
+            flag_name << " <arg>" if flag.arg
+            lines << flag_name
+            lines << "  #{flag.description}" if flag.description
+          end
+        end
+
+        lines.join("\n")
+      end
     end
   end
 end

@@ -109,7 +109,7 @@ module Tabry
     end
 
     def options_flagarg(token)
-      current_sub.flags[state.current_flag].options.options(token)
+      current_sub.flags[state.current_flag].options&.options(token) || []
     end
 
     def options_subcommand_subs(token)
