@@ -3,6 +3,7 @@ require_relative 'flags_list'
 require_relative 'usages_list'
 require_relative 'final_args'
 require_relative 'subs_list'
+require_relative 'include_sub'
 
 module Tabry
   module Models
@@ -28,11 +29,16 @@ module Tabry
 
       attr_reader *FIELDS.keys
 
+
       # TODO put this default stuff into ConfigObject
       def subs; @subs ||= SubsList.new([]); end
       def flags; @flags ||= FlagsList.new([]); end
       def usages; @usages ||= UsagesList.new([]); end
       def args; @args ||= ArgsList.new([]); end
+
+      def flatten
+        self
+      end
 
       def can_be_used_with_n_args?(n_args)
         return false if n_args == 0 && subs.any?

@@ -6,6 +6,10 @@ module Tabry
       def initialize(include_name)
         @include_name = include_name
       end
+
+      def flatten
+        config[include_name]
+      end
     end
   end
 end

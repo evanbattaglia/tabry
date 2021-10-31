@@ -1,6 +1,9 @@
 require_relative 'config_object'
 require_relative 'sub'
 require_relative 'option_includes'
+require_relative 'arg_includes'
+require_relative 'flag_includes'
+require_relative 'sub_includes'
 
 module Tabry
   module Models

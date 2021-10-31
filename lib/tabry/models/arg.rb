@@ -1,5 +1,6 @@
 require_relative 'arg_base'
 require_relative 'options_list'
+require_relative 'include_arg'
 
 module Tabry
   module Models

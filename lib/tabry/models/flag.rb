@@ -1,5 +1,6 @@
 require_relative 'config_object'
 require_relative 'options_list'
+require_relative 'include_flag'
 
 module Tabry
   module Models

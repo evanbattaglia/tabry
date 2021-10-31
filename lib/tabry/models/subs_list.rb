@@ -13,14 +13,18 @@ module Tabry
         @by_name ||= to_a.map{|sub| [sub.name, sub]}.to_h
       end
 
+      def flatten
+        @flatten ||= to_a.map(&:flatten).flatten
+      end
+
       def match(token)
         # TODO -- includes
-        to_a.find{|sub| sub.name == token}
+        flatten.find{|sub| sub.name == token}
       end
 
       def options(token)
         # TODO -- includes
-        to_a.map(&:name).select{|name| name.start_with?(token)}
+        flatten.map(&:name).select{|name| name.start_with?(token)}
       end
     end
   end

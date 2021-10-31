@@ -2,7 +2,7 @@ require_relative 'const_option'
 require_relative 'shell_option'
 require_relative 'include_option'
 require_relative 'file_option'
-require_relative 'directory_option'
+require_relative 'dir_option'
 
 module Tabry
   module Models
@@ -10,7 +10,7 @@ module Tabry
       def self.new(hash)
         # TODO assert type
         case hash['type']
-        when 'constant'
+        when 'const'
           ConstOption.new(hash)
         when 'shell'
           ShellOption.new(hash)
@@ -18,8 +18,8 @@ module Tabry
           IncludeOption.new(hash)
         when 'file'
           FileOption.new(hash)
-        when 'directory'
-          DirectoryOption.new(hash)
+        when 'dir'
+          DirOption.new(hash)
         else
           raise "unknown option type #{hash['type']}"
         end

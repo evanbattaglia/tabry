@@ -289,17 +289,17 @@ const handlers = {
 
   handleOptsDirStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include']);
-    createOpts(state, {type: 'directory'});
+    createOpts(state, {type: 'dir'});
   },
 
   handleIncludeStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include',
-      'arg_include', 'sub_include', 'flag_include', 'sub']);
+      'arg_include', 'sub_include', 'flag_include', 'sub', 'main']);
     const {at} = pick(node, {at: 'at_identifier'});
     if (state.context.match(/^(arg|flag|sub)_include$/)) {
       const type = state.context.split('_')[0];
       createIncludeObjectOnSub(state, {at, type});
-    } else if (state.context == 'sub') {
+    } else if (state.context == 'sub' || state.context == 'main') {
       createIncludeObjectOnSub(state, {at});
     } else {
       createOpts(state, {type: 'include', value: nameFromAt(at)});
