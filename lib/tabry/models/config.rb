@@ -2,8 +2,6 @@ require_relative 'config_object'
 require_relative 'sub'
 require_relative 'option_includes'
 require_relative 'arg_includes'
-require_relative 'flag_includes'
-require_relative 'sub_includes'
 
 module Tabry
   module Models
@@ -13,14 +11,16 @@ module Tabry
         main: [:object, :Sub],
         option_includes: [:object, :OptionIncludes],
         arg_includes: [:object, :ArgIncludes],
-        flag_includes: [:object, :FlagIncludes],
-        sub_includes: [:object, :SubIncludes],
       }
 
       attr_reader *FIELDS.keys
 
       def initialize(raw:)
         super(raw: raw, root: self)
+      end
+
+      def current_sub(state)
+        dig_sub(state.subcommand_stack)
       end
 
       def dig_sub(sub_stack)

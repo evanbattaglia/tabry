@@ -32,10 +32,10 @@ module Tabry
 
 
       # TODO put this default stuff into ConfigObject
-      def subs; @subs ||= SubsList.new([]); end
-      def flags; @flags ||= FlagsList.new([]); end
-      def usages; @usages ||= UsagesList.new([]); end
-      def args; @args ||= ArgsList.new([]); end
+      def subs; @subs ||= SubsList.new(raw: [], root: _root); end
+      def flags; @flags ||= FlagsList.new(raw: [], root: _root); end
+      def usages; @usages ||= UsagesList.new(raw: [], root: _root); end
+      def args; @args ||= ArgsList.new(raw: [], root: _root); end
 
       def flatten
         self

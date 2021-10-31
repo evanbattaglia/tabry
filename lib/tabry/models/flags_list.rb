@@ -27,6 +27,7 @@ module Tabry
             return flag
           end
         end
+        false
       end
 
       def [](flag_name)

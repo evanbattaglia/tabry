@@ -9,7 +9,7 @@ module Tabry
       end
 
       def flatten
-        _root.arg_includes[include_name].flatten
+        _root.arg_includes[include_name].args.flatten
       end
     end
   end

@@ -43,6 +43,7 @@ module Tabry
       if (state.subcommand_stack.empty? && token == 'help') ||
          (!state.dashdash && (token == '--help' || token == '-?'))
         state.help = true
+        Tabry::Util.debug "MATCHED help ON token #{token.inspect}"
         return true
       end
       false
@@ -54,6 +55,7 @@ module Tabry
       return false unless sub
 
       state.subcommand_stack << sub.name
+      Tabry::Util.debug "MATCHED sub #{sub.name} ON token #{token.inspect}"
       true
     end
 
@@ -80,6 +82,7 @@ module Tabry
         state.flags[flag.name] = true
       end
 
+      Tabry::Util.debug "MATCHED flag #{flag.name} ON token #{token.inspect}"
       true
     end
 
@@ -88,6 +91,7 @@ module Tabry
     def step_subcommand_match_arg(token)
       state.args << token
 
+      Tabry::Util.debug "MATCHED arg ON token #{token.inspect}"
       true
     end
 
@@ -113,7 +117,12 @@ module Tabry
     end
 
     def options_subcommand_subs(token)
-      current_sub.subs.options(token)
+      if state.args.any?
+        # once an arg has been given, can no longer use a subcommand
+        []
+      else
+        current_sub.subs.options(token)
+      end
     end
 
     def options_subcommand_flags(token)

@@ -121,18 +121,11 @@ function createFlag(state, {nameAndAliases, desc, mods, ats, block, arg}) {
   }
 }
 
-function createIncludeObjectOnSub(state, {at, type}) {
+function createIncludeObjectOnSub(state, {at}) {
   const name = nameFromAt(at);
-  const typeFromMap = state.includeTypeMap[name];
-  if (!typeFromMap) {
-    const typeDesc = type ? `def${type}s` : "defflags/defargs/defsubs";
-    die(`Reference to unknown ${typeDesc} ${JSON.stringify('@' + name)}`);
-  } else if (type && typeFromMap !== type) {
-    die(`Invalid include type for @${at} -- expected ${type} but @${at} is a def${typeFromMap}s`);
+  for (const type of ['arg', 'flag', 'sub']) {
+    safePush(state.currentNode, type + 's', {include: name});
   }
-  type = typeFromMap;
-
-  safePush(state.currentNode, type + 's', {include: name});
 }
 
 function createSub(state, {nameAndAliases, ats, block, desc}) {
@@ -196,11 +189,17 @@ function createArg(state, {name, desc, type, mods, ats, block}) {
   }
 }
 
-function createIncludes(state, {type, at, block}) {
+function createOptionInclude(state, {type, at, block}) {
   const list = [];
-  const include = { [type + 's']: list };
-  handleChildren({...state, currentNode: include, context: type + '_include'}, block);
-  safeSet(state.output, type + '_includes', nameFromAt(at), list);
+  const include = { options: list };
+  safeSet(state.output, 'option_includes', nameFromAt(at), list);
+  handleChildren({...state, currentNode: include, context: 'option_include'}, block);
+}
+
+function createArgInclude(state, {type, at, block}) {
+  const include = {};
+  safeSet(state.output, 'arg_includes', nameFromAt(at), include);
+  handleChildren({...state, currentNode: include, context: 'arg_include'}, block);
 }
 
 /// STATEMENT HANDLERS
@@ -212,7 +211,7 @@ const handlers = {
   },
 
   handleFlagStatement(state, node, arg=false) {
-    checkContext(state, node, ['sub', 'flag_include']);
+    checkContext(state, node, ['sub', 'arg_include']);
     const {mods, desc, names, ats, block} = pick(node, {
       block: 'block',
       names: 'flag_name_list',
@@ -237,7 +236,7 @@ const handlers = {
   },
 
   handleSubStatement(state, node) {
-    checkContext(state, node, ['main', 'sub', 'sub_include']);
+    checkContext(state, node, ['main', 'sub', 'arg_include']);
     const {names, ats, block, desc} = pick(node, {
       block: 'block',
       names: 'sub_name_list',
@@ -294,58 +293,29 @@ const handlers = {
 
   handleIncludeStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include',
-      'arg_include', 'sub_include', 'flag_include', 'sub', 'main']);
+      'arg_include', 'sub', 'main']);
     const {at} = pick(node, {at: 'at_identifier'});
-    if (state.context.match(/^(arg|flag|sub)_include$/)) {
-      const type = state.context.split('_')[0];
-      createIncludeObjectOnSub(state, {at, type});
-    } else if (state.context == 'sub' || state.context == 'main') {
+    if (['arg_include', 'sub', 'main'].includes(state.context)) {
       createIncludeObjectOnSub(state, {at});
     } else {
       createOpts(state, {type: 'include', value: nameFromAt(at)});
     }
   },
 
-  _handleDefStatement(state, node, type) {
+  handleDefargsStatement(state, node) {
     checkContext(state, node, ['main']);
     const {at, block} = pick(node, {at: 'at_identifier', block: 'block'});
-    createIncludes(state, {type, at, block});
-  },
-
-  handleDefargsStatement(state, node) {
-    handlers._handleDefStatement(state, node, 'arg');
+    createArgInclude(state, {at, block});
   },
   handleDefoptsStatement(state, node) {
-    handlers._handleDefStatement(state, node, 'option');
-  },
-  handleDefsubsStatement(state, node) {
-    handlers._handleDefStatement(state, node, 'sub');
-  },
-  handleDefflagsStatement(state, node) {
-    handlers._handleDefStatement(state, node, 'flag');
+    checkContext(state, node, ['main']);
+    const {at, block} = pick(node, {at: 'at_identifier', block: 'block'});
+    createOptionInclude(state, {at, block});
   },
 
   handleERROR(state, node) {
     die(`Tree-sitter parse error. Try running npx tree-sitter parse. State:\n${JSON.stringify(state)}`);
   },
-}
-
-//////////////////////////////////////////////////////////////////
-
-// Need to know type of include so we know what type "include @foo" refers to
-function makeIncludeTypeMap(rootNode) {
-  const map = {};
-  for (const type of ['flag', 'sub', 'arg']) {
-    for (const node of childrenOfType(rootNode, 'def' + type + 's_statement')) {
-      const {at} = pick(node, {at: 'at_identifier'});
-      const name = nameFromAt(at);
-      if (map[name]) {
-        die(`Duplicate flag/sub/arg include name ${name}`);
-      }
-      map[name] = type;
-    }
-  }
-  return map;
 }
 
 function parseFile(filename) {
@@ -364,7 +334,6 @@ const output = {cmd: null, main: {}};
 const state = {
   output,
   context: 'main', currentNode: output.main,
-  includeTypeMap: makeIncludeTypeMap(tree.rootNode),
 };
 handleChildren(state, tree.rootNode);
 

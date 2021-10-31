@@ -9,11 +9,10 @@ module.exports = grammar({
       $.cmd_statement,
       $.defopts_statement,
       $.defargs_statement,
-      $.defflags_statement,
-      $.defsubs_statement,
     ),
 
     // TODO fix restrictions here, e.g. cna't have flagarg inside flagarg
+    // make an _opts_block_statement with only opts_*_statement. make an and opts_block
     _common_statement: $ => choice(
       $.arg_statement,
       $.flagarg_statement,
@@ -21,6 +20,7 @@ module.exports = grammar({
       $.sub_statement,
       $._comment,
       $.desc_statement,
+      $.include_statement,
     ),
 
     _block_statement: $ => choice(
@@ -29,7 +29,6 @@ module.exports = grammar({
       $.opts_shell_statement,
       $.opts_file_statement,
       $.opts_dir_statement,
-      $.include_statement,
     ),
 
     include_statement: $ => seq(
@@ -45,16 +44,6 @@ module.exports = grammar({
     ),
     defargs_statement: $ => seq(
       'defargs',
-      $.at_identifier,
-      $.block,
-    ),
-    defflags_statement: $ => seq(
-      'defflags',
-      $.at_identifier,
-      $.block,
-    ),
-    defsubs_statement: $ => seq(
-      'defsubs',
       $.at_identifier,
       $.block,
     ),
@@ -153,7 +142,7 @@ module.exports = grammar({
 
     block: $ => seq(
       '{',
-      repeat($._block_statement),
+      repeat1($._block_statement),
       '}',
     ),
 

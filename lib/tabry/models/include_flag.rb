@@ -9,7 +9,7 @@ module Tabry
       end
 
       def flatten
-        _root.flag_includes[include_name].flatten
+        _root.arg_includes[include_name].flags.flatten
       end
     end
   end
