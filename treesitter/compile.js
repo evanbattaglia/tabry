@@ -114,27 +114,47 @@ function createFlag(state, {nameAndAliases, desc, mods, ats, block, arg}) {
     flag.arg = true;
   }
 
-  safePush(state.currentSub, 'flags', flag);
+  safePush(state.currentNode, 'flags', flag);
 
   if (block) {
     handleChildren({...state, currentNode: flag, context: 'flag'}, block);
   }
 }
 
+function createIncludeObjectOnSub(state, {at, type}) {
+  const name = nameFromAt(at);
+  const typeFromMap = state.includeTypeMap[name];
+  if (!typeFromMap) {
+    const typeDesc = type ? `def${type}s` : "defflags/defargs/defsubs";
+    die(`Reference to unknown ${typeDesc} ${JSON.stringify('@' + name)}`);
+  } else if (type && typeFromMap !== type) {
+    die(`Invalid include type for @${at} -- expected ${type} but @${at} is a def${typeFromMap}s`);
+  }
+  type = typeFromMap;
+
+  safePush(state.currentNode, type + 's', {include: name});
+}
+
 function createSub(state, {nameAndAliases, ats, block, desc}) {
   const [name, ...aliases] = textFromString(nameAndAliases).split(",");
-  const sub = {};
-  safeSet(state.currentSub, 'subs', name, sub);
+  const sub = {name};
+  safePush(state.currentNode, 'subs', sub);
+
   if (aliases.length) {
     sub.aliases = aliases;
   }
   if (desc) {
     sub.description = textFromString(desc);
   }
-  // TODO ats
+
+  const newState = {...state, currentNode: sub, context: 'sub'};
+
+  for (const at of ats) {
+    createIncludeObjectOnSub(newState, {at});
+  }
 
   if (block) {
-    handleChildren({...state, currentSub: sub, currentNode: sub, context: 'sub'}, block);
+    handleChildren(newState, block);
   }
 }
 
@@ -169,17 +189,17 @@ function createArg(state, {name, desc, type, mods, ats, block}) {
     arg.description = textFromString(desc);
   }
 
-  safePush(state.currentSub, 'args', arg);
+  safePush(state.currentNode, 'args', arg);
 
   if (block) {
     handleChildren({...state, currentNode: arg, context: 'arg'}, block);
   }
 }
 
-function createOptionIncludes(state, {at, block}) {
-  const optionInclude = {};
-  safePush(state.currentNode, 'option_includes', optionInclude);
-  handleChildren({...state, currentNode: optionInclude, context: 'option_include'}, block);
+function createIncludes(state, {type, at, block}) {
+  const include = {};
+  safePush(state.currentNode, type + '_includes', include);
+  handleChildren({...state, currentNode: include, context: type + '_include'}, block);
 }
 
 /// STATEMENT HANDLERS
@@ -191,7 +211,7 @@ const handlers = {
   },
 
   handleFlagStatement(state, node, arg=false) {
-    checkContext(state, node, ['sub']);
+    checkContext(state, node, ['sub', 'flag_include']);
     const {mods, desc, names, ats, block} = pick(node, {
       block: 'block',
       names: 'flag_name_list',
@@ -216,7 +236,7 @@ const handlers = {
   },
 
   handleSubStatement(state, node) {
-    checkContext(state, node, ['main', 'sub']);
+    checkContext(state, node, ['main', 'sub', 'sub_include']);
     const {names, ats, block, desc} = pick(node, {
       block: 'block',
       names: 'sub_name_list',
@@ -231,7 +251,7 @@ const handlers = {
   },
 
   handleArgStatement(state, node) {
-    checkContext(state, node, ['main', 'sub']);
+    checkContext(state, node, ['main', 'sub', 'arg_include']);
     const {mods, type, names, ats, block, desc} = pick(node, {
       type: 'arg_type',
       block: 'block',
@@ -272,15 +292,36 @@ const handlers = {
   },
 
   handleIncludeStatement(state, node) {
-    checkContext(state, node, ['arg', 'flag', 'option_includes']);
+    checkContext(state, node, ['arg', 'flag', 'option_include',
+      'arg_include', 'sub_include', 'flag_include', 'sub']);
     const {at} = pick(node, {at: 'at_identifier'});
-    createOpts(state, {type: 'include', value: nameFromAt(at)});
+    if (state.context.match(/^(arg|flag|sub)_include$/)) {
+      const type = state.context.split('_')[0];
+      createIncludeObjectOnSub(state, {at, type});
+    } else if (state.context == 'sub') {
+      createIncludeObjectOnSub(state, {at});
+    } else {
+      createOpts(state, {type: 'include', value: nameFromAt(at)});
+    }
   },
 
-  handleDefoptsStatement(state, node) {
+  _handleDefStatement(state, node, type) {
     checkContext(state, node, ['main']);
     const {at, block} = pick(node, {at: 'at_identifier', block: 'block'});
-    createOptionIncludes(state, {at, block});
+    createIncludes(state, {type, at, block});
+  },
+
+  handleDefargsStatement(state, node) {
+    handlers._handleDefStatement(state, node, 'arg');
+  },
+  handleDefoptsStatement(state, node) {
+    handlers._handleDefStatement(state, node, 'option');
+  },
+  handleDefsubsStatement(state, node) {
+    handlers._handleDefStatement(state, node, 'sub');
+  },
+  handleDefflagsStatement(state, node) {
+    handlers._handleDefStatement(state, node, 'flag');
   },
 
   handleERROR(state, node) {
@@ -290,7 +331,21 @@ const handlers = {
 
 //////////////////////////////////////////////////////////////////
 
-
+// Need to know type of include so we know what type "include @foo" refers to
+function makeIncludeTypeMap(rootNode) {
+  const map = {};
+  for (const type of ['flag', 'sub', 'arg']) {
+    for (const node of childrenOfType(rootNode, 'def' + type + 's_statement')) {
+      const {at} = pick(node, {at: 'at_identifier'});
+      const name = nameFromAt(at);
+      if (map[name]) {
+        die(`Duplicate flag/sub/arg include name ${name}`);
+      }
+      map[name] = type;
+    }
+  }
+  return map;
+}
 
 function parseFile(filename) {
   const parser = new Parser();
@@ -305,7 +360,11 @@ if (!filename) { die("usage: compile.js file.tabry [output.json] # or output.yml
 const tree = parseFile(filename);
 
 const output = {cmd: null, main: {}};
-const state = {output, context: 'main', currentNode: output, currentSub: output.main};
+const state = {
+  output,
+  context: 'main', currentNode: output,
+  includeTypeMap: makeIncludeTypeMap(tree.rootNode),
+};
 handleChildren(state, tree.rootNode);
 
 if (!outputFn) {

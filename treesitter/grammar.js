@@ -9,6 +9,8 @@ module.exports = grammar({
       $.cmd_statement,
       $.defopts_statement,
       $.defargs_statement,
+      $.defflags_statement,
+      $.defsubs_statement,
     ),
 
     // TODO fix restrictions here, e.g. cna't have flagarg inside flagarg
@@ -35,7 +37,7 @@ module.exports = grammar({
       $.at_identifier,
     ),
 
-    // TODO limit types of statements inside defopts and defargs
+    // TODO limit types of statements inside defopts and defargs etc.
     defopts_statement: $ => seq(
       'defopts',
       $.at_identifier,
@@ -43,6 +45,16 @@ module.exports = grammar({
     ),
     defargs_statement: $ => seq(
       'defargs',
+      $.at_identifier,
+      $.block,
+    ),
+    defflags_statement: $ => seq(
+      'defflags',
+      $.at_identifier,
+      $.block,
+    ),
+    defsubs_statement: $ => seq(
+      'defsubs',
       $.at_identifier,
       $.block,
     ),

@@ -26,6 +26,14 @@
         {
           "type": "SYMBOL",
           "name": "defargs_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "defflags_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "defsubs_statement"
         }
       ]
     },
@@ -123,6 +131,40 @@
         {
           "type": "STRING",
           "value": "defargs"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "at_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
+        }
+      ]
+    },
+    "defflags_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "defflags"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "at_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
+        }
+      ]
+    },
+    "defsubs_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "defsubs"
         },
         {
           "type": "SYMBOL",
