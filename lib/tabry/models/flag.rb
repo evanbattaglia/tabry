@@ -4,6 +4,14 @@ require_relative 'options_list'
 module Tabry
   module Models
     class Flag < ConfigObject
+      def self.new(hash)
+        if hash['include']
+          IncludeFlag.new(hash['include'])
+        else
+          super(hash)
+        end
+      end
+
       FIELDS = {
         aliases: :string_array,
         description: :string,

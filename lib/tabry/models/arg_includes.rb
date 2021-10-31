@@ -1,11 +1,11 @@
 require_relative 'config_string_hash'
-require_relative 'options_list'
+require_relative 'args_list'
 
 module Tabry
   module Models
-    class OptionIncludes < ConfigStringHash
+    class ArgIncludes < ConfigStringHash
       def initialize(hash)
-        super(hash, OptionsList)
+        super(hash, ArgsList)
       end
     end
   end

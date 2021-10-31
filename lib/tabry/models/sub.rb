@@ -7,6 +7,14 @@ require_relative 'subs'
 module Tabry
   module Models
     class Sub < ConfigObject
+      def self.new(hash)
+        if hash['include']
+          IncludeSub.new(hash['include'])
+        else
+          super(hash)
+        end
+      end
+
       FIELDS = {
         aliases: :string_array,
         args: [:list_object, :ArgsList],
@@ -14,13 +22,13 @@ module Tabry
         usages: [:list_object, :UsagesList],
         description: :string,
         final_args: [:object, :FinalArgs],
-        subs: [:object, :Subs],
+        subs: [:list_object, :SubsList],
       }
 
       attr_reader *FIELDS.keys
 
       # TODO put this default stuff into ConfigObject
-      def subs; @subs ||= Subs.new({}); end
+      def subs; @subs ||= SubsList.new({}); end
       def flags; @flags ||= FlagsList.new([]); end
       def usages; @usages ||= UsagesList.new([]); end
       def args; @args ||= ArgsList.new([]); end
@@ -65,11 +73,12 @@ module Tabry
           lines << 'SUBCOMMANDS'
         end
 
-        sub_names = subs.keys
+        subs_by_name = subs.by_name
+        sub_names = subs_by_name.keys
         sub_names |= ['help'] if add_help
 
         sub_names.sort.each do |name|
-          if (s = subs[name])
+          if (s = subs_by_name[name])
             lines << name
             lines << "  #{s.description}" if s.description
           elsif name == 'help'

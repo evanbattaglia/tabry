@@ -197,9 +197,10 @@ function createArg(state, {name, desc, type, mods, ats, block}) {
 }
 
 function createIncludes(state, {type, at, block}) {
-  const include = {};
-  safePush(state.currentNode, type + '_includes', include);
+  const list = [];
+  const include = { [type + 's']: list };
   handleChildren({...state, currentNode: include, context: type + '_include'}, block);
+  safeSet(state.currentNode, type + '_includes', nameFromAt(at), list);
 }
 
 /// STATEMENT HANDLERS
@@ -278,7 +279,7 @@ const handlers = {
   handleOptsShellStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include']);
     const {value} = pick(node, {value: 'string'});
-    createOpts(state, {type: 'include', value: textFromString(value)});
+    createOpts(state, {type: 'shell', value: textFromString(value)});
   },
 
   handleOptsFileStatement(state, node) {
