@@ -18,6 +18,7 @@ module Tabry
         options: [:list_object, :OptionsList],
         optional: :boolean,
         strict: :boolean,
+        description: :string,
       }
 
       attr_reader *FIELDS.keys
