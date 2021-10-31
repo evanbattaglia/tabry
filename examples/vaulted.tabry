@@ -1,7 +1,7 @@
 cmd vaulted
 
-sub add { arg }
-sub cp {
+sub add,create,new { arg }
+sub cp,copy {
   arg @opts-vault
   arg
 }
@@ -19,9 +19,9 @@ sub exec @flags-exec {
   arg @opts-vault
   arg
 }
-sub ls
+sub ls,list
 sub passwd { arg @opts-vault }
-sub rm { arg @opts-vault }
+sub rm,delete,remove { arg @opts-vault }
 sub shell @flags-exec @flagarg-region { arg @opts-vault }
 sub upgrade
 

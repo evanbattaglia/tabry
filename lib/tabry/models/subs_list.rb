@@ -13,7 +13,9 @@ module Tabry
       end
 
       def match(token)
-        to_a.find{|sub| sub.name == token}
+        to_a.find do |sub|
+          [sub.name, *sub.aliases].include?(token)
+        end
       end
 
       def options(token)
