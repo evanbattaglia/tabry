@@ -18,8 +18,11 @@ module Tabry
         "#<#{desc}>"
       end
 
-      def initialize(raw)
+      attr_reader :_root :_raw
+
+      def initialize(raw:, root:)
         @_raw = raw
+        @_root = root or raise 'missing root'
         unknown_fields = @_raw.keys - self.class::FIELDS.keys.map(&:to_s)
         if !unknown_fields.empty?
           raise "Unknown field(s) #{unknown_fields.inspect} for #{self.class}"
@@ -53,12 +56,12 @@ module Tabry
 
       def init_field_object(key, val, object_class)
         assert_of_class(key, val, Hash)
-        Object.const_get("Tabry::Models::#{object_class}").new(val)
+        Object.const_get("Tabry::Models::#{object_class}").new(val, root)
       end
 
       def init_field_list_object(key, val, object_class)
         assert_of_class(key, val, Array)
-        Object.const_get("Tabry::Models::#{object_class}").new(val)
+        Object.const_get("Tabry::Models::#{object_class}").new(val, root)
       end
 
       def init_field_boolean(key, val)

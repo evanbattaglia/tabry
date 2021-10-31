@@ -5,11 +5,11 @@ require_relative 'include_flag'
 module Tabry
   module Models
     class Flag < ConfigObject
-      def self.new(hash)
-        if hash['include']
-          IncludeFlag.new(hash['include'])
+      def self.new(**args)
+        if args[:hash]['include']
+          IncludeFlag.new(**args)
         else
-          super(hash)
+          super(**args)
         end
       end
 

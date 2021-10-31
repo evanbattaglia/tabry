@@ -4,8 +4,8 @@ require_relative 'args_list'
 module Tabry
   module Models
     class ArgIncludes < ConfigStringHash
-      def initialize(hash)
-        super(hash, ArgsList)
+      def initialize(**args)
+        super(**args, klass: ArgsList)
       end
     end
   end

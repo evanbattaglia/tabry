@@ -7,19 +7,20 @@ require_relative 'dir_option'
 module Tabry
   module Models
     module Option
-      def self.new(hash)
+      def self.new(**args)
         # TODO assert type
+        hash = args[:raw]
         case hash['type']
         when 'const'
-          ConstOption.new(hash)
+          ConstOption.new(**args)
         when 'shell'
-          ShellOption.new(hash)
+          ShellOption.new(**args)
         when 'include'
-          IncludeOption.new(hash)
+          IncludeOption.new(**args)
         when 'file'
-          FileOption.new(hash)
+          FileOption.new(**args)
         when 'dir'
-          DirOption.new(hash)
+          DirOption.new(**args)
         else
           raise "unknown option type #{hash['type']}"
         end

@@ -6,13 +6,15 @@ module Tabry
       attr_reader :to_a
       include Enumerable
 
-      def initialize(arr, klass)
-        arr ||= []
-        unless arr.is_a?(Array)
+      def initialize(raw:, root:, klass:)
+        raise 'missing root' unless root
+
+        raw ||= []
+        unless raw.is_a?(Array)
           raise "#{self.class.name} must be an array. Got #{arr.class}"
         end
 
-        @to_a = arr.map{|a| klass.new(a)}
+        @to_a = raw.map{|a| klass.new(raw: a, root: root)}
       end
 
       def [](*args)

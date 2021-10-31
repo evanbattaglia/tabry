@@ -4,8 +4,8 @@ require_relative 'option'
 module Tabry
   module Models
     class OptionsList < ConfigList
-      def initialize(arr)
-        super(arr, Option)
+      def initialize(**args)
+        super(**args, klass: Option)
       end
 
       def options(token)

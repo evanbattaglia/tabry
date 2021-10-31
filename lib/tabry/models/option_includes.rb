@@ -4,8 +4,8 @@ require_relative 'options_list'
 module Tabry
   module Models
     class OptionIncludes < ConfigStringHash
-      def initialize(hash)
-        super(hash, OptionsList)
+      def initialize(**args)
+        super(**args, klass: OptionsList)
       end
     end
   end

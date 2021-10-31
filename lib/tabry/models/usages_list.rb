@@ -4,8 +4,8 @@ require_relative 'usage'
 module Tabry
   module Models
     class UsagesList < ConfigList
-      def initialize(arr)
-        super(arr, Usage)
+      def initialize(**args)
+        super(**args, klass: Usage)
       end
     end
   end

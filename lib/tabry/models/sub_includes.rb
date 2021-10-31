@@ -4,8 +4,8 @@ require_relative 'subs_list'
 module Tabry
   module Models
     class SubIncludes < ConfigStringHash
-      def initialize(hash)
-        super(hash, SubsList)
+      def initialize(**args)
+        super(**args, klass: SubsList)
       end
     end
   end

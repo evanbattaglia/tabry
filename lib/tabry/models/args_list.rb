@@ -4,8 +4,8 @@ require_relative 'args_list'
 module Tabry
   module Models
     class ArgsList < ConfigList
-      def initialize(arr)
-        super(arr, Arg)
+      def initialize(**args)
+        super(**args, klass: Arg)
       end
     end
   end

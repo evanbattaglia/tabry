@@ -4,8 +4,8 @@ require_relative 'flags_list'
 module Tabry
   module Models
     class FlagIncludes < ConfigStringHash
-      def initialize(hash)
-        super(hash, FlagsList)
+      def initialize(**args)
+        super(**args, klass: FlagsList)
       end
     end
   end

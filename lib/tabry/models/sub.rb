@@ -8,11 +8,12 @@ require_relative 'include_sub'
 module Tabry
   module Models
     class Sub < ConfigObject
-      def self.new(hash)
+      def self.new(**args)
+        hash = args[:hash]
         if hash['include']
-          IncludeSub.new(hash['include'])
+          IncludeSub.new(**args)
         else
-          super(hash)
+          super(**args)
         end
       end
 

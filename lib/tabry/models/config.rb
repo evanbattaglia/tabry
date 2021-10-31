@@ -19,6 +19,10 @@ module Tabry
 
       attr_reader *FIELDS.keys
 
+      def initialize(raw:)
+        super(raw: raw, root: self)
+      end
+
       def dig_sub(sub_stack)
         sub_stack.reduce(main) { |sub, sub_name| sub.subs.by_name[sub_name] }
       end

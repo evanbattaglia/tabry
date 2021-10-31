@@ -4,8 +4,8 @@ require_relative 'sub'
 module Tabry
   module Models
     class SubsList < ConfigList
-      def initialize(hash)
-        super(hash, Sub)
+      def initialize(**args)
+        super(**args, klass: Sub)
       end
 
       def by_name

@@ -5,11 +5,11 @@ require_relative 'include_arg'
 module Tabry
   module Models
     class Arg < ArgBase
-      def self.new(hash)
-        if hash['include']
-          IncludeArg.new(hash['include'])
+      def self.new(**args)
+        if args[:hash]['include']
+          IncludeArg.new(**args)
         else
-          super(hash)
+          super(**args)
         end
       end
 

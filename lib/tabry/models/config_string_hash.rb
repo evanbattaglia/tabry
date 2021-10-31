@@ -4,16 +4,21 @@ module Tabry
       attr_reader :to_h
       include Enumerable
 
-      def initialize(hash, klass)
-        hash ||= {}
-        unless hash.is_a?(Hash)
-          raise "#{self.class.name} must be an hash. Got #{hash.class}"
+      attr_reader :_raw, :_root
+
+      def initialize(raw:, root:, klass:)
+        @_raw = raw
+        @_root = root
+
+        raw ||= {}
+        unless raw.is_a?(raw)
+          raise "#{self.class.name} must be a Hash. Got #{raw.class}"
         end
-        unless hash.keys.all?{|k| k.is_a?(String)}
+        unless raw.keys.all?{|k| k.is_a?(String)}
           raise "#{self.class.name} keys must all be string keys."
         end
 
-        @to_h = hash.transform_values{|a| klass.new(a)}
+        @to_h = raw.transform_values{|a| klass.new(a)}
       end
 
       def [](*args)
