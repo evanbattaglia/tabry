@@ -200,7 +200,7 @@ function createIncludes(state, {type, at, block}) {
   const list = [];
   const include = { [type + 's']: list };
   handleChildren({...state, currentNode: include, context: type + '_include'}, block);
-  safeSet(state.currentNode, type + '_includes', nameFromAt(at), list);
+  safeSet(state.output, type + '_includes', nameFromAt(at), list);
 }
 
 /// STATEMENT HANDLERS
@@ -363,7 +363,7 @@ const tree = parseFile(filename);
 const output = {cmd: null, main: {}};
 const state = {
   output,
-  context: 'main', currentNode: output,
+  context: 'main', currentNode: output.main,
   includeTypeMap: makeIncludeTypeMap(tree.rootNode),
 };
 handleChildren(state, tree.rootNode);

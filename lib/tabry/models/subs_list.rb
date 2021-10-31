@@ -10,7 +10,7 @@ module Tabry
 
       def by_name
         # TODO -- includes
-        to_a.map{|sub| [sub.name, sub]}.to_h
+        @by_name ||= to_a.map{|sub| [sub.name, sub]}.to_h
       end
 
       def match(token)

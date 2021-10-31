@@ -53,7 +53,7 @@ module Tabry
       sub = current_sub.subs.match(token)
       return false unless sub
 
-      state.subcommand_stack << sub
+      state.subcommand_stack << sub.name
       true
     end
 
