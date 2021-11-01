@@ -22,17 +22,16 @@ module Tabry
 
         met = state.subcommand_stack.join('__')
         met = 'main' if met == ''
-        named_args = named_args(sub, state)
 
         ::Tabry::Util.debug "met: #{met.inspect}"
-        ::Tabry::Util.debug "named_args: #{named_args.inspect}"
+        ::Tabry::Util.debug "named_args: #{result.named_args.inspect}"
 
         internals = Internals.new(
           runner: runner, config: config, raw_args: raw_args,
           state: state, met: met
         )
 
-        cli = @cli_class.new(state.flags, state.args, named_args, internals)
+        cli = @cli_class.new(state.flags, state.args, result.named_args, internals)
         cli_send_met(cli, met)
       end
 
@@ -48,17 +47,6 @@ module Tabry
           puts result.usage(File.basename($0))
           exit(1)
         end
-      end
-
-      def named_args(sub, state)
-        # TODO final args
-        res = {}
-        state.args.each_with_index do |arg_val, i|
-          if (arg_name = sub.args[i]&.name)
-            res[arg_name] = arg_val
-          end
-        end
-        res
       end
 
       def cli_send_met(cli, met)

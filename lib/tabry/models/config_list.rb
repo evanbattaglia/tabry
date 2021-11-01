@@ -1,3 +1,4 @@
+require_relative 'config_error'
 require_relative 'config_list'
 
 module Tabry
@@ -11,7 +12,7 @@ module Tabry
 
         raw ||= []
         unless raw.is_a?(Array)
-          raise "#{self.class.name} must be an array. Got #{raw.class}"
+          raise ConfigError, "#{self.class.name} must be an array. Got #{raw.class}"
         end
 
         @unflattened = raw.map{|a| klass.new(raw: a, root: root)}

@@ -16,10 +16,7 @@ module Tabry
 
       def options(token, used:)
         to_a.map do |flag|
-          if used[flag.name]
-            nil
-          elsif token.nil? || flag.name_with_dashes.start_with?(token)
-            # TODO hidden until '-'
+          if token&.start_with?('-') && flag.name_with_dashes.start_with?(token) && !used[flag.name]
             flag.name_with_dashes
           end
         end.compact

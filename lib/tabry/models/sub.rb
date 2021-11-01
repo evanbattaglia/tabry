@@ -1,7 +1,6 @@
 require_relative 'args_list'
 require_relative 'flags_list'
 require_relative 'usages_list'
-require_relative 'final_args'
 require_relative 'subs_list'
 require_relative 'include_sub'
 
@@ -21,7 +20,6 @@ module Tabry
         aliases: :string_array,
         args: [:list_object, :ArgsList],
         description: :string,
-        final_args: [:object, :FinalArgs],
         flags: [:list_object, :FlagsList],
         name: :string,
         subs: [:list_object, :SubsList],
@@ -45,7 +43,7 @@ module Tabry
       end
 
       def max_args
-        return Float::INFINITY if final_args
+        return Float::INFINITY if args.any?(&:varargs?)
         args.count
       end
     end

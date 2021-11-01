@@ -24,7 +24,6 @@ module Tabry
       @current_sub ||= result.current_sub
     end
 
-
     def options_subcommand(token)
       if token
         required_flag = current_sub.flags.first_required_flag(used: state.flags)
@@ -56,9 +55,14 @@ module Tabry
     end
 
     # TODO usages
-    # TODO final_args, maybe it should be part of args list
     def options_subcommand_args(token)
-      current_sub.args[state.args.length]&.options&.options(token) || []
+      if current_sub.args.n_passed_in_varargs(state.args.length) > 0
+        arg = current_sub.args.varargs_arg
+      else
+        arg = current_sub.args[state.args.length]
+      end
+
+      arg&.options&.options(token) || []
     end
   end
 end

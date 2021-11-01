@@ -1,3 +1,4 @@
+require_relative 'config_error'
 require_relative 'const_option'
 require_relative 'shell_option'
 require_relative 'include_option'
@@ -22,7 +23,7 @@ module Tabry
         when 'dir'
           DirOption.new(**args)
         else
-          raise "unknown option type #{hash['type']}"
+          raise ConfigError, "unknown option type #{hash['type']}"
         end
       end
     end

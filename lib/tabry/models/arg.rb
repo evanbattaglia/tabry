@@ -19,12 +19,18 @@ module Tabry
         optional: :boolean,
         strict: :boolean,
         description: :string,
+        varargs: :boolean,
       }
 
       attr_reader *FIELDS.keys
 
       def flatten
         self
+      end
+
+      # Alias (more clear intention)
+      def varargs?
+        varargs
       end
     end
   end

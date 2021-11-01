@@ -1,3 +1,5 @@
+require_relative 'config_error'
+
 module Tabry
   module Models
     class ConfigObject
@@ -25,7 +27,7 @@ module Tabry
         @_root = root or raise 'missing root'
         unknown_fields = @_raw.keys - self.class::FIELDS.keys.map(&:to_s)
         if !unknown_fields.empty?
-          raise "Unknown field(s) #{unknown_fields.inspect} for #{self.class}"
+          raise ConfigError, "Unknown field(s) #{unknown_fields.inspect} for #{self.class}"
         end
 
         raw.each do |key, val|
@@ -37,7 +39,8 @@ module Tabry
       # Gets fields, asserts is either nil or of given type
       def assert_of_class(key, val, klasses)
         unless Array(klasses).any?{|klass| val.is_a?(klass)}
-          raise "Invalid type #{val.class} for #{self.class} field #{key.inspect}, expected #{klasses.inspect}"
+          raise ConfigError,
+            "Invalid type #{val.class} for #{self.class} field #{key.inspect}, expected #{klasses.inspect}"
         end
       end
 

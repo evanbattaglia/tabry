@@ -57,6 +57,14 @@ module Tabry
       end
     end
 
+    def non_varargs
+      @non_varargs ||= state.args.drop(current_sub.args.n_passed_in_varargs(state.args.count))
+    end
+
+    def varargs
+      @varargs ||= state.args.take(current_sub.args.n_passed_in_varargs(state.args.count))
+    end
+
     def missing_required_flags?
       current_sub.flags.each do |flag|
         if flag.required && !state.flags[flag.name]
@@ -78,6 +86,20 @@ module Tabry
 
     def help?
       state.help || (state.args & %w[-? --help]).any?
+    end
+
+    def named_args
+      @named_args ||= {}.tap do |res|
+        if (varargs_name = current_sub.args.varargs_arg&.name)
+          res[varargs_name] = varargs
+        end
+
+        non_varargs.each_with_index do |arg_val, i|
+          if (arg_name = current_sub.args[i]&.name)
+            res[arg_name] = arg_val
+          end
+        end
+      end
     end
   end
 end

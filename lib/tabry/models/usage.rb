@@ -1,7 +1,6 @@
 require_relative 'config_object'
 require_relative 'args_list'
 require_relative 'flags_list'
-require_relative 'final_args'
 
 # Note: shares many traits with subs
 module Tabry
@@ -11,7 +10,6 @@ module Tabry
         args: [:list_object, :ArgsList],
         flags: [:list_object, :FlagsList],
         description: :string,
-        final_args: [:object, :FinalArgs],
       }
 
       attr_reader *FIELDS.keys
