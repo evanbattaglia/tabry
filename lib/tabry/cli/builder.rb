@@ -58,6 +58,7 @@ module Tabry
             res[arg_name] = arg_val
           end
         end
+        res
       end
 
       def cli_send_met(cli, met)
