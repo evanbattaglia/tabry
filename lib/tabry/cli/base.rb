@@ -10,6 +10,18 @@ module Tabry
         @flags = FlagProxy.new(flags)
         @internals = internals
       end
+
+      def self.after_action(*method_names, only: nil, except: nil, &blk)
+        [*method_names, blk].compact.each do |met|
+          (@after_actions ||= []) << [met, {only: only, except: except}]
+        end
+      end
+
+      def self.before_action(*method_names, only: nil, except: nil, &blk)
+        [*method_names, blk].compact.each do |met|
+          (@before_actions ||= []) << [met, {only: only, except: except}]
+        end
+      end
     end
   end
 end

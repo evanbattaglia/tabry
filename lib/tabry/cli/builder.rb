@@ -57,7 +57,18 @@ module Tabry
           STDERR.puts %Q{FATAL: CLI does not support command #{met}}
           exit 1
         else
+          run_hooks(cli, met, :@before_actions)
           cli.send(met.to_sym)
+          run_hooks(cli, met, :@after_actions)
+        end
+      end
+
+      def run_hooks(cli, met, instance_var)
+        met = met.to_s
+        cli.class.instance_variable_get(instance_var)&.each do |hook, opts|
+          next if opts&.dig(:exclude)&.map(&:to_s)&.include?(met.to_s)
+          next if opts[:only] && !opts[:only]&.include?(met.to_s)
+          hook.is_a?(Proc) ? hook[cli] : cli.send(hook.to_sym)
         end
       end
     end
