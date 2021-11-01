@@ -58,11 +58,15 @@ module Tabry
     end
 
     def non_varargs
-      @non_varargs ||= state.args.drop(current_sub.args.n_passed_in_varargs(state.args.count))
+      @non_varargs ||= state.args.first(state.args.length - n_passed_in_varargs)
     end
 
     def varargs
-      @varargs ||= state.args.take(current_sub.args.n_passed_in_varargs(state.args.count))
+      @varargs ||= state.args.last(n_passed_in_varargs)
+    end
+
+    def n_passed_in_varargs
+      current_sub.args.n_passed_in_varargs(state.args.count)
     end
 
     def missing_required_flags?
