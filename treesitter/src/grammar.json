@@ -84,6 +84,10 @@
         {
           "type": "SYMBOL",
           "name": "opts_dir_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "title_statement"
         }
       ]
     },
@@ -220,6 +224,19 @@
         }
       ]
     },
+    "title_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "title"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        }
+      ]
+    },
     "arg_type": {
       "type": "CHOICE",
       "members": [
@@ -229,7 +246,7 @@
         },
         {
           "type": "STRING",
-          "value": "args"
+          "value": "varargs"
         }
       ]
     },

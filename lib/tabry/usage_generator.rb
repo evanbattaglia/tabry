@@ -28,7 +28,9 @@ module Tabry
 
       if args.any?
         arg_strings = args.map do |a|
-          str = "<#{a.name || 'arg'}>"
+          name = a.title || 'arg'
+          str = "<#{name}>"
+          str += " [<#{name}>...]" if a.varargs?
           str = "[#{str}]" if a.optional
           str
         end

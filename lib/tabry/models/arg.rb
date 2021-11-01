@@ -20,6 +20,7 @@ module Tabry
         strict: :boolean,
         description: :string,
         varargs: :boolean,
+        title: :string,
       }
 
       attr_reader *FIELDS.keys
@@ -31,6 +32,10 @@ module Tabry
       # Alias (more clear intention)
       def varargs?
         varargs
+      end
+
+      def title
+        @title || name
       end
     end
   end

@@ -29,6 +29,7 @@ module.exports = grammar({
       $.opts_shell_statement,
       $.opts_file_statement,
       $.opts_dir_statement,
+      $.title_statement,
     ),
 
     include_statement: $ => seq(
@@ -70,15 +71,20 @@ module.exports = grammar({
       $.string,
     ),
 
+    title_statement: $ => seq(
+      'title',
+      $.string,
+    ),
+
     arg_type: $ => choice(
       'arg',
-      'args',
+      'varargs',
     ),
 
     arg_statement: $ => seq(
       optional($.arg_modifier),
       // restrictions:
-      // * 'arg' or 'args' cannot after 'args'.
+      // * 'arg' or 'varargs' cannot after 'args'.
       // * non-optional arg(s) cannot come after optional arg
       $.arg_type,
       optional(

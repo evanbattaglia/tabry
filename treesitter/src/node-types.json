@@ -108,6 +108,10 @@
         {
           "type": "sub_statement",
           "named": true
+        },
+        {
+          "type": "title_statement",
+          "named": true
         }
       ]
     }
@@ -446,6 +450,21 @@
     }
   },
   {
+    "type": "title_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -460,10 +479,6 @@
   {
     "type": "arg_modifier",
     "named": true
-  },
-  {
-    "type": "args",
-    "named": false
   },
   {
     "type": "at_identifier",
@@ -531,6 +546,14 @@
   },
   {
     "type": "sub",
+    "named": false
+  },
+  {
+    "type": "title",
+    "named": false
+  },
+  {
+    "type": "varargs",
     "named": false
   },
   {

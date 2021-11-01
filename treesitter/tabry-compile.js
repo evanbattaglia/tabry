@@ -166,8 +166,7 @@ function setMods(object, mods, tabryToYaml) {
   }
 }
 
-function createArg(state, {name, desc, type, mods, ats, block}) {
-  // TODO: final args (type = args)
+function createArg(state, {name, desc, mods, ats, block, varargs}) {
   const arg = {};
   if (name) {
     arg.name = textFromString(name);
@@ -180,6 +179,9 @@ function createArg(state, {name, desc, type, mods, ats, block}) {
 
   if (desc) {
     arg.description = textFromString(desc);
+  }
+  if (varargs) {
+    arg.varargs = true;
   }
 
   safePush(state.currentNode, 'args', arg);
@@ -208,6 +210,11 @@ const handlers = {
   handleDescStatement(state, node) {
     checkContext(state, node, ['main', 'sub', 'arg', 'flag']);
     state.currentNode.description = textFromString(firstChildOfType(node, 'string'));
+  },
+
+  handleTitleStatement(state, node) {
+    checkContext(state, node, ['arg']);
+    state.currentNode.title = textFromString(firstChildOfType(node, 'string'));
   },
 
   handleFlagStatement(state, node, arg=false) {
@@ -261,9 +268,13 @@ const handlers = {
       mods: 'arg_modifier',
       ats: 'at_identifier',
     });
+    const varargs = type.text === 'varargs';
+    if (varargs && names && names.length > 1) {
+      die(`Args statement may have a maximum of one name`);
+    }
     const effectiveNames = names ? names.namedChildren : [undefined];
     for (const name of effectiveNames) {
-      createArg(state, {name, type, mods, ats, block, desc});
+      createArg(state, {name, mods, ats, block, desc, varargs});
     }
   },
 

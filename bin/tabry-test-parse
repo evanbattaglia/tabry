@@ -13,3 +13,4 @@ if result.invalid_usage?
 else
   puts "Valid usage"
 end
+puts "Named args: #{result.named_args.inspect}"
