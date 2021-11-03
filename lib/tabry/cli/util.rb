@@ -12,9 +12,9 @@ module Tabry
         cmdline
       end
 
-      def system(*cmdline, **opts)
-        cmdline = make_cmdline(*cmdline, **opts)
-        Kernel.system cmdline
+      def system(*cmdline, echo: false, echo_only: false, **opts)
+        cmdline = make_cmdline(*cmdline, **opts, echo: echo || echo_only)
+        Kernel.system cmdline unless echo_only
       end
 
       # TODO would be nice to get separate STDERR and STDOUT
