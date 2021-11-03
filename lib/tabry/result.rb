@@ -11,8 +11,13 @@ module Tabry
     end
 
     def current_sub
-      @current_sub ||= config.dig_sub(state.subcommand_stack)
+      @current_sub ||= sub_stack.last
     end
+
+    def sub_stack
+      @sub_stack ||= config.dig_sub_array(state.subcommand_stack)
+    end
+
 
     # TODO have this return reason why invalid
     def invalid_usage_reason
@@ -80,8 +85,7 @@ module Tabry
 
     def usage(cmd_name=nil)
       cmd_name ||= config.cmd
-      cmdline_string = [cmd_name, *state.subcommand_stack].join(' ')
-      Tabry::UsageGenerator.new(current_sub, cmdline_string, top_level?).usage
+      Tabry::UsageGenerator.new(sub_stack, cmd_name, top_level?).usage
     end
 
     def top_level?

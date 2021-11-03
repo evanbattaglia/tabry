@@ -218,7 +218,7 @@ const handlers = {
   },
 
   handleFlagStatement(state, node, arg=false) {
-    checkContext(state, node, ['sub', 'arg_include']);
+    checkContext(state, node, ['sub', 'main', 'arg_include']);
     const {mods, desc, names, ats, block} = pick(node, {
       block: 'block',
       names: 'flag_name_list',

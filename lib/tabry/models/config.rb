@@ -19,8 +19,16 @@ module Tabry
         super(raw: raw, root: self)
       end
 
-      def dig_sub(sub_stack)
+      def dig_sub(sub_stack, &blk)
         sub_stack.reduce(main) { |sub, sub_name| sub.subs.by_name[sub_name] }
+      end
+
+      def dig_sub_array(sub_stack)
+        subs = [main]
+        sub_stack.each do |sub_name|
+          subs << subs.last.subs.by_name[sub_name]
+        end
+        subs
       end
 
       def inspect

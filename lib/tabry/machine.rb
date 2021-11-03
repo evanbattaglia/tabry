@@ -81,7 +81,11 @@ module Tabry
 
     def step_subcommand_match_flag(token)
       return false if state.dashdash
-      flag, arg_value = current_sub.flags.match(token)
+      flag, arg_value = nil
+      config.dig_sub_array(state.subcommand_stack).each do |sub|
+        flag, arg_value = sub.flags.match(token)
+        break if flag
+      end
       return false unless flag
 
       if arg_value

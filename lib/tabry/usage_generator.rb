@@ -2,15 +2,17 @@ require_relative 'core_ext/string/colors'
 
 module Tabry
   class UsageGenerator
-    attr_reader :sub, :cmdline_string, :top_level
+    attr_reader :sub, :cmdline_string, :top_level, :sub_stack
 
-    def self.usage(sub, cmdline_string, top_level)
-      new(sub, cmdline_string, top_level).usage
+    def self.usage(config, sub_stack, cmdline_string, top_level)
+      new(config, sub_stack, cmdline_string, top_level).usage
     end
 
-    def initialize(sub, cmdline_string, top_level)
-      @sub ||= sub
-      @cmdline_string = cmdline_string
+    def initialize(sub_stack, cmd_name, top_level)
+      @sub_stack = sub_stack
+      @sub = sub_stack.last
+      non_main_subs = sub_stack[1..-1]
+      @cmdline_string = [cmd_name, *non_main_subs.map(&:name)].join(' ')
       @top_level = top_level
     end
 
@@ -77,16 +79,32 @@ module Tabry
     end
 
     def usage_add_flags(lines)
-      if flags.any?
-        lines << ''
-        lines << 'FLAGS'.green.bold
-        flags.map(&:name).sort.each do |name|
-          flag = flags[name]
-          flag_name = [flag.name, *flag.aliases].map{|al| flag.alias_with_dash(al).bold}.join(", ")
-          flag_name << " <arg>" if flag.arg
-          flag_name << " (required)" if flag.required
-          lines << flag_name
-          lines << "  #{flag.description}" if flag.description
+      partial_sub_stack = []
+      sub_stack_with_names = sub_stack.map do |sub|
+        partial_sub_stack << sub.name
+        [sub, partial_sub_stack.compact.join(' ')]
+      end
+
+      sub_stack_with_names.reverse.each do |sub, full_sub_name|
+        if sub.flags.any?
+          lines << ''
+          lines << 'FLAGS'.green.bold
+          if sub != sub_stack.last
+            if full_sub_name == ''
+              lines.last << ' (global)'.green.bold
+            else
+              lines.last << " (#{full_sub_name})".green.bold
+            end
+          end
+
+          sub.flags.map(&:name).sort.each do |name|
+            flag = sub.flags[name]
+            flag_name = [flag.name, *flag.aliases].map{|al| flag.alias_with_dash(al).bold}.join(", ")
+            flag_name << " <arg>" if flag.arg
+            flag_name << " (required)" if flag.required
+            lines << flag_name
+            lines << "  #{flag.description}" if flag.description
+          end
         end
       end
     end
@@ -104,7 +122,7 @@ module Tabry
       end
     end
 
-    %i[subs flags args description].each do |met|
+    %i[subs args description].each do |met|
       define_method met do
         sub.send met
       end

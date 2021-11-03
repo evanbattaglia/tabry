@@ -25,10 +25,12 @@ module Tabry
     end
 
     def options_subcommand(token)
-      if token
-        required_flag = current_sub.flags.first_required_flag(used: state.flags)
-        if required_flag
-          return [required_flag.name_with_dashes]
+      if token.to_s == ''
+        result.sub_stack.each do |sub|
+          required_flag = sub.flags.first_required_flag(used: state.flags)
+          if required_flag
+            return [required_flag.name_with_dashes]
+          end
         end
       end
 
@@ -38,7 +40,9 @@ module Tabry
     end
 
     def options_flagarg(token)
-      current_sub.flags[state.current_flag].options&.options(token) || []
+      result.sub_stack.map do |sub|
+        sub.flags[state.current_flag]&.options&.options(token)
+      end.compact.flatten.uniq
     end
 
     def options_subcommand_subs(token)
@@ -51,7 +55,7 @@ module Tabry
     end
 
     def options_subcommand_flags(token)
-      current_sub.flags.options(token, used: state.flags)
+      result.sub_stack.map{|sub| sub.flags.options(token, used: state.flags)}.flatten.uniq
     end
 
     # TODO usages
