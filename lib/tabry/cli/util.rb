@@ -5,11 +5,27 @@ module Tabry
   module CLI
     module Util
       module_function
-      def system(cmdline, *args, echo: false)
+      def make_cmdline(cmdline, *args, echo: false)
         args = Array(args).flatten
         cmdline = cmdline % args.map{|a| Shellwords.escape(a)}
-        puts cmdline if echo
+        STDERR.puts cmdline if echo
+        cmdline
+      end
+
+      def system(*cmdline, **opts)
+        cmdline = make_cmdline(*cmdline, **opts)
         Kernel.system cmdline
+      end
+
+      # TODO would be nice to get separate STDERR and STDOUT
+      def backtick_or_die(*cmdline, **opts)
+        cmdline = make_cmdline(*cmdline, **opts)
+        res = `#{cmdline}`
+        if !$?.success?
+          STDERR.puts "COMMAND FAILED with exit code #{$?.exitstatus}: #{cmdline}"
+          exit 1
+        end
+        res
       end
     end
   end
