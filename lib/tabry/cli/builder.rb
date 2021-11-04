@@ -68,7 +68,7 @@ module Tabry
         cli.class.instance_variable_get(instance_var)&.each do |hook, opts|
           next if opts&.dig(:exclude)&.map(&:to_s)&.include?(met.to_s)
           next if opts[:only] && !opts[:only]&.include?(met.to_s)
-          hook.is_a?(Proc) ? hook[cli] : cli.send(hook.to_sym)
+          hook.is_a?(Proc) ? cli.instance_eval(&hook) : cli.send(hook.to_sym)
         end
       end
     end
