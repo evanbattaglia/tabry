@@ -18,7 +18,7 @@ module Tabry
 
     def initialize(config)
       @config = config
-      @state = State.new(mode: :subcommand, subcommand_stack: [], args: [], flags: {}, usage: nil)
+      @state = State.new(mode: :subcommand, subcommand_stack: [], args: [], flags: {})
     end
 
     def run(tokens)
@@ -38,8 +38,6 @@ module Tabry
       # TODO a bit of a waste to look this up every time.
       config.dig_sub(state.subcommand_stack)
     end
-
-    # usage? arg?
 
     def step_subcommand(token)
       step_subcommand_match_subcommand(token) ||
@@ -101,7 +99,6 @@ module Tabry
       true
     end
 
-    # TODO: usages will be quite tricky, skip for now...
     # this accepts anything, for now...
     def step_subcommand_match_arg(token)
       state.args << token

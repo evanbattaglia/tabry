@@ -3,7 +3,6 @@ module Tabry
     :mode,
     :subcommand_stack,
     :args,
-    :usage,
     :flags,
     :current_flag,
     :dashdash,

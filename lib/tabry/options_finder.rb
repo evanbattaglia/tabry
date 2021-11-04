@@ -58,7 +58,6 @@ module Tabry
       result.sub_stack.map{|sub| sub.flags.options(token, used: state.flags)}.flatten.uniq
     end
 
-    # TODO usages
     def options_subcommand_args(token)
       if current_sub.args.n_passed_in_varargs(state.args.length) > 0
         arg = current_sub.args.varargs_arg

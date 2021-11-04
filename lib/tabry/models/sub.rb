@@ -1,6 +1,5 @@
 require_relative 'args_list'
 require_relative 'flags_list'
-require_relative 'usages_list'
 require_relative 'subs_list'
 require_relative 'include_sub'
 
@@ -23,7 +22,6 @@ module Tabry
         flags: [:list_object, :FlagsList],
         name: :string,
         subs: [:list_object, :SubsList],
-        usages: [:list_object, :UsagesList],
       }
 
       attr_reader *FIELDS.keys
@@ -31,7 +29,6 @@ module Tabry
       # TODO put this default stuff into ConfigObject
       def subs; @subs ||= SubsList.new(raw: [], root: _root); end
       def flags; @flags ||= FlagsList.new(raw: [], root: _root); end
-      def usages; @usages ||= UsagesList.new(raw: [], root: _root); end
       def args; @args ||= ArgsList.new(raw: [], root: _root); end
 
       def flatten
