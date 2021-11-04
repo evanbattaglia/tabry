@@ -20,7 +20,7 @@ module Tabry
         sub = result.current_sub
         state = result.state
 
-        met = state.subcommand_stack.join('__')
+        met = state.subcommand_stack.join('__').gsub('-', '_')
         met = 'main' if met == ''
 
         ::Tabry::Util.debug "met: #{met.inspect}"
