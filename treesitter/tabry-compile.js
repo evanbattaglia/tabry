@@ -55,9 +55,34 @@ function textFromString(node) {
   let text = node.text;
   if (text[0] == '"') {
     try {
-      text = JSON.parse(text);
+      // TODO: this may notbe all technically correct, may want to just replace
+      // \\ and \" with a regex (carefully constructed, probably equal to the
+      // one in grammar.js)
+      const replacedNewlines = text.replace(/\n/g, "\\n");
+      text = JSON.parse(replacedNewlines);
     } catch (e) {
     }
+  }
+  return unindent(text);
+}
+
+// Remove indentation up to the minimum indentation level of the string.
+// e.g.:
+//   desc "
+//        ---- Hello! ----
+//      My thing:
+//        * xyz
+//        * abc
+//   "
+// Will have indentation removed such that My thing has no indentation "---- Hello! ----"
+// has two spaes of indentation.
+function unindent(text) {
+  if (text.includes("\n")) {
+    const lines = text.split("\n").filter(l => l.trim().length !== 0);
+    const minIndent = Math.min.apply(Math, lines.map(l => l.match(/^( *)/)[0].length));
+    const removeIndent = new RegExp(`^ {${minIndent}}`);
+    text = text.split("\n").map(l => l.replace(removeIndent, '')).join("\n");
+    text = text.replace(/^\s*\n/, '').replace(/\s*$/, '');
   }
   return text;
 }

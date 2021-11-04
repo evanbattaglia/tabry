@@ -161,7 +161,7 @@ module.exports = grammar({
       $._strings_list,
     ),
 
-    string: $ => /[A-Za-z_][a-zA-Z0-9_,-]*|"([^"\\\n]|\\"|\\\\)*"/,
+    string: $ => /[A-Za-z_][a-zA-Z0-9_,-]*|"([^"\\]|\\"|\\\\)*"/,
 
     _strings_list: $ => seq(
       '(',

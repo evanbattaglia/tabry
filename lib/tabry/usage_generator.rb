@@ -50,6 +50,13 @@ module Tabry
       lines.join("\n")
     end
 
+    def add_text_with_indent(lines, text, indent_string)
+      return unless text
+      text.split("\n").each do |line|
+        lines << indent_string + line
+      end
+    end
+
     def usage_add_subcommands(lines, top_level)
       if subs.any? || top_level
         lines << ''
@@ -70,7 +77,7 @@ module Tabry
           end
 
           lines << name_line
-          lines << "  #{s.description}" if s.description
+          add_text_with_indent(lines, s.description, '  ')
         elsif name == 'help'
           lines << 'help'.bold
           lines << "  Show help on command or subcommand"
@@ -103,7 +110,7 @@ module Tabry
             flag_name << " <arg>" if flag.arg
             flag_name << " (required)" if flag.required
             lines << flag_name
-            lines << "  #{flag.description}" if flag.description
+            add_text_with_indent(lines, flag.description, '  ')
           end
         end
       end
@@ -117,7 +124,7 @@ module Tabry
           arg_name = arg.name.bold
           arg_name += ' (optional)' if arg.optional
           lines << arg_name
-          lines << "  #{arg.description}" if arg.description
+          add_text_with_indent(lines, arg.description, '  ')
         end
       end
     end
