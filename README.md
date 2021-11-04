@@ -77,3 +77,10 @@ proper setup into you `~/.bash_profile` as described above.
 
 (You may wish to experimenting with using Gel, which is much faster than
 Bundler, but it often has issues.)
+
+# TODO
+* `mycmd -ab` should be interpreted as `mycmd -a -b`
+* I have an idea for different "usages" to allow different argument numbers,
+  flags, or argument options depending on what is previously matched
+* if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. mycmd -a mysub
+* multi-line descriptions

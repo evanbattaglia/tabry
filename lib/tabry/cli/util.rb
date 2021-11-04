@@ -15,7 +15,7 @@ module Tabry
 
       def system(*cmdline, **opts)
         cmdline = make_cmdline(*cmdline, **opts)
-        Kernel.system cmdline unless cmdline
+        Kernel.system cmdline if cmdline
       end
 
       # TODO would be nice to get separate STDERR and STDOUT
@@ -28,6 +28,11 @@ module Tabry
           exit 1
         end
         res
+      end
+
+      def open_web_page(url)
+        command = RUBY_PLATFORM.include?('linux') ? 'xdg-open' : 'open'
+        system "%s %s", command, url
       end
     end
   end
