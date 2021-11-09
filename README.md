@@ -6,7 +6,7 @@ to:
 * Easily create your own CLIs which have tab completion and usage
   information built-in
 
-Tabry is target towards "subcommand" or "git-style" CLIs.
+Tabry is targeted towards "subcommand" or "git-style" CLIs.
 
 # Making a config
 The first step in using tabry is to create a tabry configuration file.
