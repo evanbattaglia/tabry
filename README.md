@@ -130,7 +130,8 @@ proper setup (i.e., sourcing `tabry_bash.sh` and the adding the `complete`
 command) into your `~/.bash_profile` as described above.
 
 You may wish to experiment with using Gel, which is much faster than
-Bundler, but it often has issues.
+Bundler, but it often has issues. See the script for the example CLI script
+in examples/mycli/bin.
 
 # CLI Utils
 Tabry::CLI::Util has useful utilities which, while not required for creating a

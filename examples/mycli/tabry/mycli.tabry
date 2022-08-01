@@ -1,0 +1,21 @@
+cmd mycli
+desc "
+  A sample CLI written using Tabry
+
+  You can put examples here, etc...
+
+  See also the examples of tabry files in tabry/examples/tabry/
+"
+
+sub things {
+  sub list,l "List the things"
+  sub add,a { arg thing-name }
+  sub delete,d @thing-name
+}
+
+defargs @thing-name {
+  arg thing-name {
+    opts shell "mycli things list"
+  }
+}
+

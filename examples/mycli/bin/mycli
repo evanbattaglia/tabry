@@ -1,0 +1,23 @@
+#!/usr/bin/env -S ruby --disable-gems
+
+# Attempt to use Gel if available. Need to --disable-gems because Gel has its
+# own rubygems compatibility layer it needs to load first.
+ENV['GEM_PATH']&.split(':')&.each do |path|
+  path = Dir["#{path}/gems/gel-*/lib/gel/compatibility"].first
+  if path
+    $LOAD_PATH.unshift path
+    break
+  end
+end
+
+require 'rubygems'
+
+# Load Gel or Bundler.
+ENV['GEL_GEMFILE'] = ENV['BUNDLE_GEMFILE'] = "#{__dir__}/../Gemfile"
+require 'bundler/setup'
+
+# Run the app
+require 'tabry/cli/builder'
+require_relative '../lib/mycli/cli.rb'
+
+Tabry::CLI::Builder.new("#{__dir__}/../tabry/mycli.json", Mycli::CLI).run(ARGV)

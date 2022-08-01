@@ -1,0 +1,2 @@
+source "https://rubygems.org"
+gem "tabry", path: "../../" # TODO point this to github tabry or rubygems tabry
