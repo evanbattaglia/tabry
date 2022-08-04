@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.files       = ["lib/tabry/runner.rb", "lib/tabry/cli/builder.rb"]
   s.homepage    = 'https://github.com/evanbattaglia/tabry'
 
-  # TODO more cargo cult possibly
-  s.files         = Dir.glob("{lib,spec}/**/*") + %w(Rakefile test.sh)
+  s.files         = Dir.glob("{lib,bin,sh,spec}/**/*") + %w(tabry.gemspec)
+  # TODO more cargo cult possibly:
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]

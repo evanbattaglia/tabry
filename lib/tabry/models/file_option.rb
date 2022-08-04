@@ -12,6 +12,10 @@ module Tabry
       def options(token)
         [:file]
       end
+
+      def flatten
+        self
+      end
     end
   end
 end
