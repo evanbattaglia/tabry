@@ -9,7 +9,11 @@ require_relative '../lib/tabry/runner'
 COMP_POINT_SENTINEL = "\uFFFF"
 
 # TODO: in weird scenarios this acts weird: namely, special shell operators like <(ls), $$((1 + 1))
-# however, this will handled the common scenarios of escaping with quotes, single quotes, and backslashes
+# Also it crashed on unbalanced quotes, like: foo "bar<TAB>
+# however, this will handle the common scenarios of escaping with quotes, single quotes, and backslashes
+# Split up args and put the argument that comp_point is in in the `last_arg` variable.
+# Just cutting off everything after comp_point might have worked, although
+# maybe we wanted the whole arg? Not sure this is the best.
 cmd_line, comp_point = ARGV
 cmd_line = cmd_line.dup
 cmd_line[comp_point.to_i...comp_point.to_i] = COMP_POINT_SENTINEL
