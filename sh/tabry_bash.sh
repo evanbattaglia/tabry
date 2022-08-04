@@ -1,5 +1,10 @@
 #/usr/bin/env bash
 
+# Bash completion
+# _tabry_completions function is same for any command you use with tabry, you just need
+# to do `complete -F _tabry_completions mycmd` for your command. This calls the tabry-bash
+# ruby script. For more info see LANGUAGE_REFERENCE.md
+
 _tabry_bash="$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/../bin/tabry-bash
 
 _tabry_completions()
