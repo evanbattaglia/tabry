@@ -523,10 +523,6 @@
         {
           "type": "STRING",
           "value": "reqd"
-        },
-        {
-          "type": "STRING",
-          "value": "hidden"
         }
       ]
     },

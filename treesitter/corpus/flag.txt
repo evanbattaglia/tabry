@@ -33,7 +33,7 @@ Flags with modifier
 ================
 
 reqd flagarg foo {
-  hidden flagarg wombat
+  flagarg wombat
 }
 
 ---
@@ -44,6 +44,5 @@ reqd flagarg foo {
     (flag_name_list (string))
     (block
       (flagarg_statement
-        (flag_modifier)
         (flag_name_list (string))))))
 

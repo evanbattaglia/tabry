@@ -17,7 +17,6 @@ module Tabry
         name: :string,
         options: [:list_object, :OptionsList],
         optional: :boolean,
-        strict: :boolean,
         description: :string,
         varargs: :boolean,
         title: :string,

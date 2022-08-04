@@ -10,7 +10,9 @@ module Tabry
       end
 
       def flatten
-        _root.option_includes[value].flatten
+        inc = _root.option_includes[value]
+        raise "Bad tabry config: include #{value.inspect} not found" unless inc
+        inc.flatten
       end
     end
   end

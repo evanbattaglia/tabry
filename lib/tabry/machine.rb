@@ -80,7 +80,8 @@ module Tabry
     def step_subcommand_match_flag(token)
       return false if state.dashdash
       flag, arg_value = nil
-      config.dig_sub_array(state.subcommand_stack).each do |sub|
+      # Reverse: most specific sub's flag takes precedence in case of multiple matching
+      config.dig_sub_array(state.subcommand_stack).reverse.each do |sub|
         flag, arg_value = sub.flags.match(token)
         break if flag
       end

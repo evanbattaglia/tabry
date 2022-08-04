@@ -521,10 +521,6 @@
     "named": false
   },
   {
-    "type": "hidden",
-    "named": false
-  },
-  {
     "type": "include",
     "named": false
   },

@@ -33,22 +33,34 @@ To compile a tabry file into JSON:
    `~/.tabry` so it is always available to tabry. An alternative is to add the
    path containing the `.json` or `.yml` file onto `TABRY_IMPORT_PATHS`
    (colon-separated). For CLIs you can pass in the full path to the file in the
-   main runnable file for your CLI (more below).
+   main runnable file for your CLI (more below), which will make the config
+   available for your CLI's commands and usage info, but will not enable tab
+   completion.
 
-# Tab completion
+See the `LANGUAGE.md` file for a guide on making your own config. See
+`examples/tabry` for some example configs for tab completion for existing
+commands.
+
+# Tab completion (for existing commands)
 Tab completion works by telling your shell to run a ruby script which calls
 tabry code every time it wants to get completion suggestions. The tabry script
 will then use the tabry configuration for the proper command. Both the shell
 code and the ruby script are specific to the shell. Currently only bash is
 supported.
 
-to add tab completion:
+To add tab completion:
 * Add a tabry JSON/YAML file in ~/.tabry (or add a symlink) under the name of
   the command. For instance, to add tab completion to the "aws" command,
   run `cp examples/aws.json` `~/.tabry`
-* Add `source /path/to/tabry/sh/tabry_bash.sh` to your `~/.bash_profile`
+  * An alternative is to add the directory with your compile Tabry `.json` file
+    to `TABRY_IMPORTS_PATH` (e.g. in your `~/.bash_profile` or `~/.zshrc`)
+* Add `source /path/to/tabry/sh/tabry_bash.sh` to your `~/.bash_profile` or
+  `~/.zshrc`. Even if you have multiple tabry completion files, this only has
+  to be done once.
 * Add (e.g.) `complete -F _tabry_completions aws` for each command you want tab
   completion for.
+* Note: for zsh, if you have problems, you may need to run `compinit` and
+  `bashcompinit` before sourcing the `tabry_bash.sh` script.
 
 # Building CLIs
 To use Tabry to build CLIs, start a new project and use tabry as a gem.  Then
@@ -56,7 +68,43 @@ create a class `MyCLI` which descends from `Tabry::CLI::Base`. Then add methods
 for each subcommand you wish to implement (if no subcommand is given, `main`
 will be called). From there you can access `args` and `flags` passed in.
 Deeper-level subcommands are the subcommands joined by `__`, e.g. `mycli things
-delete` would call  a method `things__delete`.
+delete` would call a method `things__delete`.
+
+```
+cmd mycli
+arg foo
+sub things {
+  sub delete {
+    flag bar,b
+    flagarg waz,w
+  }
+}
+```
+```
+class MyCLI < Tabry::CLI:Base
+  def main
+    puts args.foo
+  end
+
+  def things__delete
+    puts flags.bar # boolean
+    puts flags.waz # string
+  end
+end
+```
+
+You can also send some things to a sub-cli:
+```
+class ThingsCLI < Tabry::CLI::Base
+  def things__delete = puts(flags.bar)
+end
+
+class MyCLI < Tabry::CLI::Base
+  sub_route :things, ThingsCLI
+  def main = puts(args.foo)
+end
+```
+end
 
 To run your CLI, now you just have to use `Tabry::CLI::Builder`, which links
 the config file, the CLI class, and the actual command-line arguments. For
@@ -71,16 +119,43 @@ require_relative '../lib/mycli'
 Tabry::CLI::Builder.new("#{__dir__}/../mycli.json", MyCLI).run(ARGV)
 ```
 
-If you want to use tab completion, don't forget to put symlink to `mycli.json`
+Make this file executable and you can now run your command, with all its
+subcommands. There is a "help" subcommand (also "--help") which shows usage
+information added in automatically (usage info is also shown if invalid
+arguments are given).
+
+If you want to use tab completion, don't forget to put a symlink to `mycli.json`
 in `~/.tabry` (or add on to the the `TABRY_IMPORT_PATHS` env var) and add the
-proper setup into you `~/.bash_profile` as described above.
+proper setup (i.e., sourcing `tabry_bash.sh` and the adding the `complete`
+command) into your `~/.bash_profile` as described above.
 
-(You may wish to experimenting with using Gel, which is much faster than
-Bundler, but it often has issues.)
+You may wish to experiment with using Gel, which is much faster than
+Bundler, but it often has issues.
 
-# TODO
+# CLI Utils
+Tabry::CLI::Util has useful utilities which, while not required for creating a
+Tabry CLI, are useful to CLIs in general. Here are some examples
+
+```
+# if command returns non-zero status, exit immediately. Otherwise returns the
+# output of the command.
+# if echo_only is true, simply prints what it would do (and returns nil)
+data = Tabry::CLI::Util.backtick_or_die("ls %s %s", [file1, file2], echo_only: is_dryrun)
+
+# system() is similar but, like Ruby's system, passes through output to STDOUT/ERR instead
+# of returning the output. Both backtick_and_die can take echo_only or echo. echo
+# prints the command it is running but still runs it.
+Tabry::CLI::Util.system("ls %s", [filename], echo: is_verbose)
+
+# cross-platform (uses open on Mac, xdg-open on Linux)
+open_web_page("http://example.com")
+
+# Config provides a handy YAML config, most often in the user's home directory
+# (it expands "~")
+MyConfig = Tabry::CLI::Util::Config.new('~/.mycmd.yml')
+MyConfig.config.foo.bar # config is an openstruct
+```
+
+# Future possible improvements
 * `mycmd -ab` should be interpreted as `mycmd -a -b`
-* I have an idea for different "usages" to allow different argument numbers,
-  flags, or argument options depending on what is previously matched
-* if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. mycmd -a mysub
-* multi-line descriptions
+* if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`

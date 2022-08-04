@@ -20,19 +20,26 @@ module Tabry
 
       # TODO would be nice to get separate STDERR and STDOUT
       def backtick_or_die(*cmdline, **opts)
+        backtick_with_process_status(*cmdline, **opts).first
+      end
+
+      def backtick_with_process_status(*cmdline, valid_statuses: [0], **opts)
         cmdline = make_cmdline(*cmdline, **opts)
-        return unless cmdline
+        return [nil, nil] unless cmdline
         res = `#{cmdline}`
-        if !$?.success?
-          STDERR.puts "COMMAND FAILED with exit code #{$?.exitstatus}: #{cmdline}"
+        status = $?
+        if valid_statuses && !valid_statuses.include?(status.exitstatus)
+          STDERR.puts "COMMAND FAILED with exit code #{status.exitstatus}: #{cmdline}"
           exit 1
         end
-        res
+        [res, status]
       end
 
       def open_web_page(url)
         command = RUBY_PLATFORM.include?('linux') ? 'xdg-open' : 'open'
-        system "%s %s", command, url
+        unless system("(%s %s 2>&1) >/dev/null", command, url)
+          STDERR.puts "WARNING: opening web page failed: #{make_cmdline("%s %s", command, url)}"
+        end
       end
     end
   end

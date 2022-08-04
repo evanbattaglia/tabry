@@ -1,0 +1,7 @@
+cmd: null
+main:
+  subs:
+    - name: mycmd
+      description: |-
+        My command:
+          * It does stuff

@@ -12,6 +12,15 @@ module Tabry
     end
 
     def options(token)
+      # Bit of a hack: send this down to autocomplete shell commands
+      # TODO: set this only in ShellOption -- would require passing state down on thru
+      ENV['TABRY_AUTOCOMPLETE_STATE'] = {
+        cmd: result.config.cmd,
+        flags: result.state.flags,
+        args: result.state.args,
+        current_flag: result.state.current_flag
+      }.to_json
+
       send(:"options_#{state.mode}", token || '')
     end
 

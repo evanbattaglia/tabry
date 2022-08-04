@@ -11,8 +11,8 @@ module.exports = grammar({
       $.defargs_statement,
     ),
 
-    // TODO fix restrictions here, e.g. cna't have flagarg inside flagarg
-    // make an _opts_block_statement with only opts_*_statement. make an and opts_block
+    // TODO fix restrictions here, e.g. can't have flagarg inside flagarg
+    // make an _opts_block_statement with only opts_*_statement. and make an opts_block
     _common_statement: $ => choice(
       $.arg_statement,
       $.flagarg_statement,
@@ -141,7 +141,6 @@ module.exports = grammar({
 
     flag_modifier: $ => choice(
       'reqd',
-      'hidden',
     ),
 
     arg_modifier: $ => 'opt',

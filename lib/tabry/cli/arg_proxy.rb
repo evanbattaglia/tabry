@@ -35,6 +35,12 @@ module Tabry
         res
       end
 
+      def slice(*keys)
+        [keys].flatten.each_with_object({}) do |key, result_hash|
+          result_hash[key] = self[key]
+        end
+      end
+
       def <=>(*args)
         @args.<=>(*args)
       end

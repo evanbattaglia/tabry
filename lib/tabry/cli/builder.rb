@@ -21,18 +21,19 @@ module Tabry
         state = result.state
 
         met = state.subcommand_stack.join('__').gsub('-', '_')
-        met = 'main' if met == ''
 
         ::Tabry::Util.debug "met: #{met.inspect}"
         ::Tabry::Util.debug "named_args: #{result.named_args.inspect}"
 
         internals = Internals.new(
           runner: runner, config: config, raw_args: raw_args,
-          state: state, met: met
+          state: state, met: met, result: result
         )
 
-        cli = @cli_class.new(state.flags, state.args, result.named_args, internals)
-        cli_send_met(cli, met)
+        cli = instantiate_cli(@cli_class, internals)
+        actual_cli, actual_met = get_cli_object_and_met(cli, met, internals)
+
+        cli_send_met(actual_cli, actual_met)
       end
 
       private
@@ -49,11 +50,34 @@ module Tabry
         end
       end
 
-      def cli_send_met(cli, met)
+      def instantiate_cli(klass, internals)
+        return klass unless klass.is_a?(Class)
+        state = internals.state
+        klass.new(state.flags, state.args, internals.result.named_args, internals)
+      end
+
+      # Recursively look through sub_routes for the CLI to be used
+      def get_cli_object_and_met(cli, met, internals)
         if DISALLOWED_SUBCOMMAND_NAMES.include?(met)
           STDERR.puts %Q(FATAL: Tabry does not support top-level subcommands named: #{DISALLOWED_SUBCOMMAND_NAMES.join(',')})
           exit 1
-        elsif !cli.respond_to?(met.to_sym)
+        end
+
+        return [cli, 'main'] if met.to_s == ''
+
+        sub_route_clis = cli.class.instance_variable_get(:@sub_route_clis)
+        sub_name, rest = met.split("__", 2)
+
+        if sub_route_clis&.dig(sub_name)
+          sub_route_clis[sub_name] = instantiate_cli(sub_route_clis[sub_name], internals)
+          get_cli_object_and_met(sub_route_clis[sub_name], rest, internals)
+        else
+          [cli, met]
+        end
+      end
+
+      def cli_send_met(cli, met)
+        if !cli.respond_to?(met.to_sym)
           STDERR.puts %Q{FATAL: CLI does not support command #{met}}
           exit 1
         else

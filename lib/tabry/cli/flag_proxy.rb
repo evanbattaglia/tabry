@@ -17,6 +17,12 @@ module Tabry
         nil
       end
 
+      def slice(*keys)
+        [keys].flatten.each_with_object({}) do |key, result_hash|
+          result_hash[key] = self[key]
+        end
+      end
+
       def method_missing(met, default=nil, *args)
         self[met] || default
       end

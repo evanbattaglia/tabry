@@ -1,0 +1,410 @@
+===============
+Getting started
+===============
+cmd control-vehicle
+
+# The vehicle argument
+# Note: comments must be on a line of their own
+arg {
+  opts const car
+  opts const bike
+}
+
+arg {
+  opts const go
+  opts const stop
+}
+
+---
+
+(source_file
+  (cmd_statement (string))
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+      (opts_const_statement (string))
+    )
+  )
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+      (opts_const_statement (string))
+    )
+  )
+)
+
+
+====================================
+Arguments and possible options (arg)
+====================================
+arg vehicle_type1
+arg vehicle_type3 "The type of vehicle"
+arg vehicle_type4 {
+  desc "The type of vehicle"
+}
+arg { opts const a }
+arg (bool1 bool2) {
+  opts const T
+  opts const F
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+  )
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (string)
+  )
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (block
+      (desc_statement (string))
+    )
+  )
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+    )
+  )
+  (arg_statement
+    (arg_type)
+    (arg_name_list
+      (string)
+      (string)
+    )
+    (block
+      (opts_const_statement (string))
+      (opts_const_statement (string))
+    )
+  )
+)
+
+=======
+Options
+=======
+arg {
+  opts const hello
+  opts const "hello \"world\""
+  opts const (T F true false yes no)
+  opts shell "mycmd list-things"
+  opts file
+  opts dir
+}
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (block
+      (opts_const_statement (string))
+      (opts_const_statement (string))
+      (opts_const_statement (string) (string) (string) (string) (string) (string))
+      (opts_shell_statement (string))
+      (opts_file_statement)
+      (opts_dir_statement)
+    )
+  )
+) 
+
+=========================================================
+Optional args and Varargs (opt arg, varargs, opt varargs)
+=========================================================
+arg first-arg-mandatory
+opt arg second-arg-optional
+opt varargs rest-args-optional { opts const (foo bar waz) }
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+  )
+  (arg_statement
+    (arg_modifier)
+    (arg_type)
+    (arg_name_list (string))
+  )
+  (arg_statement
+    (arg_modifier)
+    (arg_type)
+    (arg_name_list (string))
+    (block
+      (opts_const_statement (string) (string) (string))
+    )
+  )
+)
+
+===============
+Argument titles
+===============
+arg thing_to_search_for { title "thing to search for" }
+varargs files_to_load { title "file to load" }
+
+---
+
+(source_file
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (block
+      (title_statement (string))
+    )
+  )
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+    (block
+      (title_statement (string))
+    )
+  )
+)
+
+===================================
+Flags (flag, flagarg, reqd flagarg)
+===================================
+flag dry-run,d
+flag dry-run2,r "Don't act, only show what would be done"
+flagarg f,format { opts const (json yml) }
+flagarg env,e "The environment (this must be given)" {
+  opts const (prod beta dev)
+}
+flag (interactive,i force,f)
+
+---
+
+(source_file
+  (flag_statement
+    (flag_name_list (string))
+  )
+  (flag_statement
+    (flag_name_list (string))
+    (string)
+  )
+  (flagarg_statement
+    (flag_name_list (string))
+    (block
+      (opts_const_statement (string) (string))
+    )
+  )
+  (flagarg_statement
+    (flag_name_list (string))
+    (string)
+    (block
+      (opts_const_statement (string) (string) (string))
+    )
+  )
+  (flag_statement
+    (flag_name_list
+      (string)
+      (string)
+    )
+  ) 
+)
+
+===================
+Subcommands (sub) 1
+===================
+sub list "List the things"
+sub new,n "Create a thing"
+sub delete,d {
+  desc "Delete a thing"
+  arg thing "The thing to delete" { opts shell "mycmd list" }
+}
+sub (do-something do-something-else,dse)
+
+---
+
+(source_file
+  (sub_statement
+    (sub_name_list (string))
+    (string)
+  )
+  (sub_statement
+    (sub_name_list (string))
+    (string)
+  )
+  (sub_statement
+    (sub_name_list (string))
+    (block
+      (desc_statement (string))
+      (arg_statement
+        (arg_type)
+        (arg_name_list (string))
+        (string)
+        (block
+          (opts_shell_statement (string))
+        )
+      )
+    )
+  )
+  (sub_statement
+    (sub_name_list
+      (string)
+      (string)
+    )
+  )
+) 
+
+===================
+Subcommands (sub) 2
+===================
+cmd foo
+arg toplevel-arg
+
+flag dryrun
+
+sub mysub1 {
+  sub mysub2 {
+    flag someopt
+    opt arg mysub2-arg
+  }
+}
+
+---
+
+(source_file
+  (cmd_statement (string))
+  (arg_statement
+    (arg_type)
+    (arg_name_list (string))
+  )
+  (flag_statement
+    (flag_name_list (string))
+  )
+  (sub_statement
+    (sub_name_list (string))
+    (block
+      (sub_statement
+        (sub_name_list (string))
+        (block
+          (flag_statement
+            (flag_name_list (string))
+          )
+          (arg_statement
+            (arg_modifier)
+            (arg_type)
+            (arg_name_list (string))
+          )
+        )
+      )
+    )
+  )
+) 
+
+========
+Includes
+========
+cmd mydeploy
+
+# Default command acts on project-and-environment
+include @project-and-environment
+
+# status command acts and project-and-environment as well
+sub status @project-and-environment @verbose
+
+# list command takes no position args, but takes an optional "env" flag
+sub list @verbose {
+  flagarg env @environment
+}
+
+defopts @environment {
+  opts const (prod beta dev)
+}
+
+defargs @verbose {
+  flag verbose "Show more info"
+}
+
+defargs @project-and-environment {
+  arg project "The project" { opts const (project1 project2) }
+  arg environment "The environment" @environment
+}
+
+---
+
+(source_file
+  (cmd_statement (string))
+  (include_statement (at_identifier))
+  (sub_statement
+    (sub_name_list (string))
+    (at_identifier)
+    (at_identifier)
+  )
+  (sub_statement
+    (sub_name_list (string))
+    (at_identifier)
+    (block
+      (flagarg_statement
+        (flag_name_list (string))
+        (at_identifier)
+      )
+    )
+  )
+  (defopts_statement
+    (at_identifier)
+    (block
+      (opts_const_statement (string) (string) (string))
+    )
+  )
+  (defargs_statement
+    (at_identifier)
+    (block
+      (flag_statement
+        (flag_name_list (string))
+        (string)
+      )
+    )
+  )
+  (defargs_statement
+    (at_identifier)
+    (block
+      (arg_statement
+        (arg_type)
+        (arg_name_list (string))
+        (string)
+        (block
+          (opts_const_statement (string) (string))
+        )
+      )
+      (arg_statement
+        (arg_type)
+        (arg_name_list (string))
+        (string)
+        (at_identifier)
+      )
+    )
+  )
+)
+
+=======================
+Multi-line descriptions
+=======================
+sub mycmd {
+  desc "
+    My command:
+      * It does stuff
+  "
+}
+
+---
+
+(source_file
+  (sub_statement
+    (sub_name_list (string))
+    (block
+      (desc_statement (string))
+    )
+  )
+) 
+

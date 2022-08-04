@@ -11,6 +11,10 @@ module Tabry
         @internals = internals
       end
 
+      def self.sub_route(prefix, cli_class)
+        (@sub_route_clis ||= {})[prefix.to_s] = cli_class
+      end
+
       def self.after_action(*method_names, only: nil, except: nil, &blk)
         [*method_names, blk].compact.each do |met|
           (@after_actions ||= []) << [met, {only: only, except: except}]

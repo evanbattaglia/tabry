@@ -15,6 +15,7 @@
     "yaml": "^2.0.0-8"
   },
   "devDependencies": {
+    "jest": "^27.5.1",
     "tree-sitter-cli": "^0.20.0"
   }
 }

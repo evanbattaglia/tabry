@@ -1,6 +1,6 @@
 #/usr/bin/env bash
 
-_tabry_bash="$( dirname "${BASH_SOURCE[0]}" )"/../bin/tabry-bash
+_tabry_bash="$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/../bin/tabry-bash
 
 _tabry_completions()
 {

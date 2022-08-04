@@ -196,7 +196,7 @@ function createArg(state, {name, desc, mods, ats, block, varargs}) {
   if (name) {
     arg.name = textFromString(name);
   }
-  setMods(arg, mods, {opt: 'optional', strict: 'strict'})
+  setMods(arg, mods, {opt: 'optional'})
 
   for (const at of ats) {
     safePush(arg, 'options', {type: 'include', value: nameFromAt(at)});
@@ -354,30 +354,41 @@ const handlers = {
   },
 }
 
-function parseFile(filename) {
+
+function parseText(text) {
   const parser = new Parser();
   parser.setLanguage(TabryGrammar);
-  const tree = parser.parse(fs.readFileSync(filename).toString());
+  const tree = parser.parse(text);
   return tree;
 }
 
-const filename = process.argv[2];
-const outputFn = process.argv[3];
-if (!filename) { die("usage: compile.js file.tabry [output.json] # or output.yml"); }
-const tree = parseFile(filename);
-
-const output = {cmd: null, main: {}};
-const state = {
-  output,
-  context: 'main', currentNode: output.main,
-};
-handleChildren(state, tree.rootNode);
-
-if (!outputFn) {
-  console.log(YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
-} else if (outputFn.match(/\.yml/)) {
-  fs.writeFileSync(outputFn, YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
-} else {
-  fs.writeFileSync(outputFn, JSON.stringify(output));
+function transformText(text) {
+  const tree = parseText(text);
+  const output = {cmd: null, main: {}};
+  const state = {
+    output,
+    context: 'main', currentNode: output.main,
+  };
+  handleChildren(state, tree.rootNode);
+  return output;
 }
 
+///// MAIN
+
+if (require.main === module) {
+  const filename = process.argv[2];
+  const outputFn = process.argv[3];
+  if (!filename) { die("usage: compile.js file.tabry [output.json] # or output.yml"); }
+  const text = fs.readFileSync(filename).toString();
+  const output = transformText(text);
+
+  if (!outputFn) {
+    console.log(YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
+  } else if (outputFn.match(/\.yml/)) {
+    fs.writeFileSync(outputFn, YAML.stringify(output, null, {aliasDuplicateObjects: false, version: '1.1'}));
+  } else {
+    fs.writeFileSync(outputFn, JSON.stringify(output));
+  }
+}
+
+module.exports = {transformText};
