@@ -1,4 +1,6 @@
 # Silly example to test various things
+# Compile with:
+# treesitter/tabry-compile.js spec/fixtures/vehicles.tabry > spec/fixtures/vehicle.yaml
 
 cmd vehicles
 desc "Build and control vehicles"
@@ -8,7 +10,7 @@ flag verbose,v "Give more details in output"
 sub move {
   sub go,g @vehicle-type-arg
   sub stop,s @vehicle-type-arg
-  sub crash @vehicle-type-arg
+  sub crash @vehicle-type-arg {
     opt arg crash-into-vehicle @vehicle-type-arg {
       desc "Crash into another vehicle, default is to crash into a fire hydrant"
     }
@@ -33,10 +35,10 @@ sub build {
   varargs vehicle-types @vehicle-type-arg
 }
 
-defargs @vehicle-type-arg
+defargs @vehicle-type-arg {
   arg vehicle-type @vehicle-type
 }
 
-defopts vehicle-type {
+defopts @vehicle-type {
   opts const (car bike)
 }

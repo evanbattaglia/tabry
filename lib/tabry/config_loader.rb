@@ -39,7 +39,7 @@ module Tabry
       if filename =~ /\.json$/
         require 'json'
         Tabry::Models::Config.new(raw: JSON.parse(File.read(filename)))
-      elsif filename =~ /\.yml$/
+      elsif filename =~ /\.ya?ml$/
         require 'yaml'
         Tabry::Models::Config.new(raw: YAML.load(File.read(filename)))
       else
