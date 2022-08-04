@@ -1,0 +1,42 @@
+# Silly example to test various things
+
+cmd vehicles
+desc "Build and control vehicles"
+
+flag verbose,v "Give more details in output"
+
+sub move {
+  sub go,g @vehicle-type-arg
+  sub stop,s @vehicle-type-arg
+  sub crash @vehicle-type-arg
+    opt arg crash-into-vehicle @vehicle-type-arg {
+      desc "Crash into another vehicle, default is to crash into a fire hydrant"
+    }
+    flagarg speed {
+      # ^ could be done with opts const, but this is just to test opts shell
+      opts shell "echo fast && echo slow"
+    }
+    flag dry-run "Don't actually crash, just simulate it"
+    flagarg output-to-file,f { opts file }
+    flagarg output-to-directory,dir,d { opts dir }
+  }
+  sub freeway-crash,pileup @vehicle-type-arg {
+    desc "Crash on the freeway (AKA a 'pile up')"
+    opt varargs crash-into-vehicles @vehicle-type-arg {
+      title "vehicle to crash into"
+      desc "List of vehicles to crash into. Optional, leave out for a '1 car pileup' -- just crashing into center divider"
+    }
+  }
+}
+
+sub build {
+  varargs vehicle-types @vehicle-type-arg
+}
+
+defargs @vehicle-type-arg
+  arg vehicle-type @vehicle-type
+}
+
+defopts vehicle-type {
+  opts const (car bike)
+}
