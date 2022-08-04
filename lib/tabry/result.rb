@@ -92,7 +92,7 @@ module Tabry
     end
 
     def help?
-      state.help || (state.args & %w[-? --help]).any?
+      state.help
     end
 
     def named_args
