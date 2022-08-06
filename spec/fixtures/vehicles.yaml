@@ -7,6 +7,14 @@ main:
         - v
       description: Give more details in output
   subs:
+    - name: build
+      args:
+        - name: vehicle-types
+          options:
+            - type: include
+              value: vehicle-type-arg
+          varargs: true
+    - name: list-vehicles
     - name: move
       subs:
         - name: go
@@ -51,6 +59,8 @@ main:
               arg: true
               options:
                 - type: file
+                - type: const
+                  value: "-"
             - name: output-to-directory
               aliases:
                 - dir
@@ -79,13 +89,35 @@ main:
           subs:
             - include: vehicle-type-arg
           description: Crash on the freeway (AKA a 'pile up')
-    - name: build
+    - name: sub-with-sub-or-arg
       args:
-        - name: vehicle-types
+        - options:
+            - type: const
+              value: x
+            - type: const
+              value: "y"
+            - type: const
+              value: z
+      subs:
+        - name: subsub
+    - name: sub-with-mandatory-flag
+      args:
+        - optional: true
           options:
-            - type: include
-              value: vehicle-type-arg
-          varargs: true
+            - type: const
+              value: a
+            - type: const
+              value: b
+            - type: const
+              value: c
+      flags:
+        - name: mandatory
+          required: true
+          arg: true
+        - name: verbose
+          aliases:
+            - v
+          arg: true
 arg_includes:
   vehicle-type-arg:
     args:

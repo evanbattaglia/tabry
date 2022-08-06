@@ -9,6 +9,8 @@ module Tabry
 
       attr_reader *FIELDS.keys
 
+      # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
+      # communicate to tabry-bash
       def options(token)
         [:file]
       end

@@ -1,3 +1,5 @@
+require 'json'
+
 module Tabry
   class OptionsFinder
     attr_reader :result

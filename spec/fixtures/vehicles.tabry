@@ -1,11 +1,17 @@
 # Silly example to test various things
 # Compile with:
-# treesitter/tabry-compile.js spec/fixtures/vehicles.tabry > spec/fixtures/vehicle.yaml
+# treesitter/tabry-compile.js spec/fixtures/vehicles.tabry > spec/fixtures/vehicles.yaml
 
 cmd vehicles
 desc "Build and control vehicles"
 
 flag verbose,v "Give more details in output"
+
+sub build {
+  varargs vehicle-types @vehicle-type-arg
+}
+
+sub list-vehicles
 
 sub move {
   sub go,g @vehicle-type-arg
@@ -19,7 +25,10 @@ sub move {
       opts shell "echo fast && echo slow"
     }
     flag dry-run "Don't actually crash, just simulate it"
-    flagarg output-to-file,f { opts file }
+    flagarg output-to-file,f {
+      opts file
+      opts const "-"
+    }
     flagarg output-to-directory,dir,d { opts dir }
   }
   sub freeway-crash,pileup @vehicle-type-arg {
@@ -31,8 +40,15 @@ sub move {
   }
 }
 
-sub build {
-  varargs vehicle-types @vehicle-type-arg
+sub sub-with-sub-or-arg {
+  arg { opts const (x y z) }
+  sub subsub
+}
+
+sub sub-with-mandatory-flag {
+  opt arg { opts const (a b c) }
+  reqd flagarg mandatory
+  flagarg verbose,v # to test overriding a flag
 }
 
 defargs @vehicle-type-arg {

@@ -2,7 +2,7 @@ require_relative '../../lib/tabry/machine.rb'
 require_relative '../../lib/tabry/config_loader.rb'
 
 describe Tabry::Machine do
-  let(:config_fixture) { "#{__dir__}/../fixtures/vehicle.yaml" }
+  let(:config_fixture) { "#{__dir__}/../fixtures/vehicles.yaml" }
   let(:config) { Tabry::ConfigLoader.load(name: config_fixture) }
 
   def expect_sub_stack_and_args(arr)
@@ -28,6 +28,10 @@ describe Tabry::Machine do
     ],
     'handles subcommands of subcommands' => [
       %w[move go],
+      subs: %w[move go],
+    ],
+    'handles subcommands aliases' => [
+      %w[move g],
       subs: %w[move go],
     ],
     'handles argsuments' => [
@@ -81,6 +85,13 @@ describe Tabry::Machine do
       subs: %w[move crash], args: %w[arg1], flags: {'dry-run' => true},
       mode: :flagarg, current_flag: 'output-to-file'
     ],
+    # TODO might want behavior to be different; currently I think if --verbose is before the
+    # subcommand it use's the main command's --verbose flag
+   "most specific sub's flag takes precedence in case of multiple matching" => [
+      %w[sub-with-mandatory-flag --verbose foo --mandatory abc],
+      subs: %w[sub-with-mandatory-flag],
+      flags: {"verbose" => "foo", "mandatory" => "abc"}
+    ]
   }
 
   EXAMPLES.each do |test_name, (tokens, expectation)|

@@ -18,7 +18,6 @@ module Tabry
       @sub_stack ||= config.dig_sub_array(state.subcommand_stack)
     end
 
-    # TODO have this return reason why invalid
     def invalid_usage_reason
       waiting_on_flag_arg? ||
         wrong_number_of_args? ||

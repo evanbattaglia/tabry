@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
+  s.add_development_dependency "pry"
   s.add_development_dependency "rspec", "~> 3.10"
   s.add_development_dependency "simplecov", "~> 0.12"
 end
