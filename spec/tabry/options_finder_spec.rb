@@ -36,6 +36,12 @@ describe Tabry::OptionsFinder do
       subs: %w[move crash],
       token: '-'
     ],
+    "doesn't suggests flags if '--' has been used" => [
+      [],
+      dashdash: true,
+      subs: %w[move crash],
+      token: '-',
+    ],
     "lists only a mandatory flag if it hasn't been given yet" => [
       %w[--mandatory],
       subs: %w[sub-with-mandatory-flag],

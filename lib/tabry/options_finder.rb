@@ -66,6 +66,7 @@ module Tabry
     end
 
     def options_subcommand_flags(token)
+      return [] if state.dashdash
       result.sub_stack.map{|sub| sub.flags.options(token, used: state.flags)}.flatten.uniq
     end
 
