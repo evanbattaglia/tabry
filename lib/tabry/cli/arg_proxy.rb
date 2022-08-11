@@ -21,14 +21,14 @@ module Tabry
         if key.is_a?(Integer)
           res = @args[key]
           if @reqd && !res
-            STDERR.puts "FATAL: Missing required argument number #{key+1}"
+            $stderr.puts "FATAL: Missing required argument number #{key+1}"
             exit 1
           end
         else
           key = key.to_s
           res = @named_args[key]
           if @reqd && !res
-            STDERR.puts "FATAL: Missing required argument #{key}"
+            $stderr.puts "FATAL: Missing required argument #{key}"
             exit 1
           end
         end

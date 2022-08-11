@@ -8,27 +8,63 @@ describe Tabry::CLI::ArgProxy do
       'ghi' => ['789', '000'],
     }
   end
-  subject { described_class.new(named_args.values, named_args) }
+  let(:args) { described_class.new(named_args.values, named_args) }
 
   describe '#[]' do
-    it 'makes args accessible by name as a hash key (string)'
-    it 'makes args accessible by name as a hash key (symbol)'
-    it 'makes args accessible by index'
+    it 'makes args accessible by name as a hash key (string)' do
+      expect(args['def']).to eq('456')
+    end
+
+    it 'makes args accessible by name as a hash key (symbol)' do
+      expect(args[:ghi]).to eq(%w[789 000])
+    end
+
+    it 'makes args accessible by index' do
+      expect(args[0]).to eq('123')
+      expect(args[1]).to eq('456')
+    end
+
+    it 'returns ungiven args as nil' do
+      expect(args['foo']).to eq(nil)
+      expect(args[:bar]).to eq(nil)
+      expect(args[3]).to eq(nil)
+    end
   end
 
   describe '#accessing as a method' do
-    it 'makes args accessible by name as a method'
-    it 'returns nil if not found'
+    it 'makes args accessible by name as a method' do
+      expect(args.def).to eq('456')
+    end
+
+    it 'returns nil if not found' do
+      expect(args.foo).to eq(nil)
+    end
   end
 
   describe '#reqd' do
-    it 'provides access to arguments through reqd'
-    it 'prints an error and exits if read thru reqd and the argument (name) is not found'
-    it 'prints an error and exits if read thru reqd and the argument (index) is not found'
+    it 'provides access to arguments through reqd' do
+      expect(args.reqd.def).to eq('456')
+    end
+
+    it 'prints an error and exits if read thru reqd and the argument (name) is not found' do
+      expect(args.reqd).to receive(:exit).with(1)
+      expect {
+        args.reqd.foo
+      }.to output(/FATAL: Missing required argument foo/).to_stderr
+    end
+
+    it 'prints an error and exits if read thru reqd and the argument (index) is not found' do
+      expect(args.reqd).to receive(:exit).with(1)
+      expect {
+        args.reqd[3]
+      }.to output(/FATAL: Missing required argument number 4/).to_stderr
+    end
   end
 
   describe '#slice' do
-    it 'returns a hash with just the arg keys'
+    it 'returns a hash with just the keys given' do
+      expect(args.slice(:abc, :ghi)).to eq(abc: '123', ghi: %w[789 000])
+    end
   end
 
   it 'is enumerable like an array' do
