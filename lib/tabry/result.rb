@@ -24,10 +24,6 @@ module Tabry
         missing_required_flags?
     end
 
-    def invalid_usage?
-      invalid_usage_reason
-    end
-
     def waiting_on_flag_arg?
       if state.mode != :subcommand
         "arg required for flag #{state.current_flag}"

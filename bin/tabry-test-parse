@@ -10,7 +10,7 @@ runner = Tabry::Runner.new(config_name: config_name)
 result = runner.parse(args)
 
 puts result.state
-if result.invalid_usage?
+if result.invalid_usage_reason
   puts "Invalid usage: #{result.invalid_usage_reason}"
 else
   puts "Valid usage"

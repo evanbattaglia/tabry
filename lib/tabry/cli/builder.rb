@@ -1,4 +1,4 @@
-require_relative '../runner'
+eequire_relative '../runner'
 require_relative '../util'
 require_relative 'internals'
 
@@ -17,7 +17,6 @@ module Tabry
         result = runner.parse(raw_args)
         check_for_correct_usage(result)
 
-        sub = result.current_sub
         state = result.state
 
         met = state.subcommand_stack.join('__').gsub('-', '_')
@@ -42,7 +41,7 @@ module Tabry
         if result.help?
           puts result.usage(File.basename($0))
           exit 0
-        elsif result.invalid_usage?
+        elsif result.invalid_usage_reason
           puts "Invalid usage: #{result.invalid_usage_reason}"
           puts
           puts result.usage(File.basename($0))
