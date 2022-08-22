@@ -79,7 +79,7 @@ module Tabry
 
     def usage(cmd_name=nil)
       cmd_name ||= config.cmd
-      Tabry::UsageGenerator.new(sub_stack, cmd_name, top_level?).usage
+      Tabry::UsageGenerator.new(sub_stack, cmd_name).usage
     end
 
     def top_level?

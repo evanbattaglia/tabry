@@ -1,4 +1,4 @@
-eequire_relative '../runner'
+require_relative '../runner'
 require_relative '../util'
 require_relative 'internals'
 
@@ -77,7 +77,7 @@ module Tabry
 
       def cli_send_met(cli, met)
         if !cli.respond_to?(met.to_sym)
-          STDERR.puts %Q{FATAL: CLI does not support command #{met}}
+          $stderr.puts %Q{FATAL: CLI does not support command #{met}}
           exit 1
         else
           run_hooks(cli, met, :@before_actions)
@@ -89,8 +89,8 @@ module Tabry
       def run_hooks(cli, met, instance_var)
         met = met.to_s
         cli.class.instance_variable_get(instance_var)&.each do |hook, opts|
-          next if opts&.dig(:exclude)&.map(&:to_s)&.include?(met.to_s)
-          next if opts[:only] && !opts[:only]&.include?(met.to_s)
+          next if Array(opts&.dig(:except))&.map(&:to_s)&.include?(met.to_s)
+          next if opts&.dig(:only) && !Array(opts[:only])&.map(&:to_s).include?(met.to_s)
           hook.is_a?(Proc) ? cli.instance_eval(&hook) : cli.send(hook.to_sym)
         end
       end

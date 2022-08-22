@@ -134,6 +134,29 @@ describe Tabry::Result do
     end
   end
 
+  describe '#usage' do
+    it 'uses UsageGenerator' do
+      state = {mode: :subcommand, args: [], flags: {}, subcommand_stack: %w[move go]}
+      expect(Tabry::UsageGenerator).to receive(:new) do |sub_stack, cmd|
+        expect(sub_stack.map(&:class)).to eq([Tabry::Models::Sub, Tabry::Models::Sub, Tabry::Models::Sub])
+        expect(cmd).to eq('vehicles')
+        instance_double(Tabry::UsageGenerator, usage: "foobar")
+      end
+      usage = described_class.new(config, Tabry::State.new(**state)).usage
+      expect(usage).to eq("foobar")
+    end
+
+    it 'passes in passed-in command to UsageGenerator' do
+      state = {mode: :subcommand, args: [], flags: {}, subcommand_stack: %w[]}
+      expect(Tabry::UsageGenerator).to receive(:new) do |sub_stack, cmd|
+        expect(cmd).to eq("customcmd")
+        instance_double(Tabry::UsageGenerator, usage: "foobar")
+      end
+      usage = described_class.new(config, Tabry::State.new(**state)).usage("customcmd")
+      expect(usage).to eq("foobar")
+    end
+  end
+
   describe '#top_level?' do
     context 'there is a subcommand' do
       let(:state) { Tabry::State.new(subcommand_stack: %w[move crash]) }

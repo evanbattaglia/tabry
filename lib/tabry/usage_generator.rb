@@ -4,16 +4,12 @@ module Tabry
   class UsageGenerator
     attr_reader :sub, :cmdline_string, :top_level, :sub_stack
 
-    def self.usage(config, sub_stack, cmdline_string, top_level)
-      new(config, sub_stack, cmdline_string, top_level).usage
-    end
-
-    def initialize(sub_stack, cmd_name, top_level)
+    def initialize(sub_stack, cmd_name)
       @sub_stack = sub_stack
       @sub = sub_stack.last
       non_main_subs = sub_stack[1..-1]
       @cmdline_string = [cmd_name, *non_main_subs.map(&:name)].join(' ')
-      @top_level = top_level
+      @top_level = sub_stack.length == 1
     end
 
     USAGE = "Usage:".bold

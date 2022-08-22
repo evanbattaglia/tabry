@@ -1,3 +1,5 @@
+require_relative '../../lib/tabry/config_loader'
+
 describe Tabry::ConfigLoader do
   it 'loads from absolute paths'
   it 'looks for json files in TABRY_IMPORTS_PATH'
