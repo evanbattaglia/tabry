@@ -4,6 +4,8 @@ module Tabry
   class ConfigLoader
     class ConfigNotFound < StandardError; end
 
+    EXTENSIONS = %w[json yml yaml]
+
     def self.load(**args)
       new(**args).load
     end
@@ -18,13 +20,13 @@ module Tabry
       return load_from_file(name) if name =~ /\.json$/i || name =~ /\.ya?ml$/i
 
       load_paths.each do |dir|
-        filename = "#{dir}/#{name}.json"
-        return load_from_file(filename) if File.exists?(filename)
-        filename = "#{dir}/#{name}.yml"
-        return load_from_file(filename) if File.exists?(filename)
+        EXTENSIONS.each do |extension|
+          filename = "#{dir}/#{name}.#{extension}"
+          return load_from_file(filename) if File.exists?(filename)
+        end
       end
 
-      raise ConfigNotFound, "Could not find Tabry config #{name}.json or #{name}.yml in paths: #{load_paths.inspect}"
+      raise ConfigNotFound, "Could not find Tabry config #{name}.(#{EXTENSIONS.join(", ")}) in paths: #{load_paths.inspect}"
     end
 
     private
