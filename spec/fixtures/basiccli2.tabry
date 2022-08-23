@@ -1,0 +1,5 @@
+cmd basiccli2
+
+sub waz {
+  arg bar
+}

@@ -1,0 +1,7 @@
+cmd: basiccli2
+main:
+  subs:
+    - name: waz
+      args:
+        - name: bar
+

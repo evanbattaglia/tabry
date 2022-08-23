@@ -73,6 +73,7 @@ main:
         - name: freeway-crash
           aliases:
             - pileup
+            - p
           args:
             - include: vehicle-type-arg
             - name: crash-into-vehicles

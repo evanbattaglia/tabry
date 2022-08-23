@@ -31,7 +31,7 @@ sub move {
     }
     flagarg output-to-directory,dir,d { opts dir }
   }
-  sub freeway-crash,pileup @vehicle-type-arg {
+  sub freeway-crash,pileup,p @vehicle-type-arg {
     desc "Crash on the freeway (AKA a 'pile up')"
     opt varargs crash-into-vehicles @vehicle-type-arg {
       title "vehicle to crash into"

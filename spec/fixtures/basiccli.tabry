@@ -1,0 +1,5 @@
+cmd basiccli
+
+sub foo {
+  arg bar
+}
