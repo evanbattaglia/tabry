@@ -1,3 +1,4 @@
+# See also files ignored by gemspec 
 build/
 log.html
 node_modules/
