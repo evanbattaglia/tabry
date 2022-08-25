@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/tabry/cli/arg_proxy"
+require_relative "../../../lib/tabry/cli/arg_proxy"
 
 describe Tabry::CLI::ArgProxy do
   let(:named_args) do

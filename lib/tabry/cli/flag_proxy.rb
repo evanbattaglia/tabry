@@ -25,12 +25,12 @@ module Tabry
         end
       end
 
-      def method_missing(met, default = nil, *args)
+      def method_missing(met, default = nil, *_args)
         self[met] || default
       end
 
-      def respond_to?(met, p2)
-        super(met, p2) || (!p2 && self[met])
+      def respond_to_missing?(*_args)
+        true
       end
 
       def inspect

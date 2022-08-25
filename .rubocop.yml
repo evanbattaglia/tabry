@@ -83,6 +83,8 @@ Security/YAMLLoad:
 
 Style:
   Severity: error
+Style/OpenStructUse:
+  Enabled: false
 Style/Alias:
   EnforcedStyle: prefer_alias_method # https://github.com/rubocop/ruby-style-guide/issues/821
 Style/Documentation:
@@ -132,8 +134,6 @@ Style/WhileUntilModifier:
   Enabled: false # nontrivial loops should look like loops
 Style/WordArray:
   MinSize: 3
-
-
 
 # the following cops have offenses in the code base that have not been fixed.
 # we should eventually either fix them, or turn them off completely (and move
@@ -286,8 +286,7 @@ Style/GlobalVars:
 Style/GuardClause:
   Enabled: false
 Style/HashAsLastArrayItem:
-  Severity: convention
-  AutoCorrect: false
+  Enabled: false
 Style/InfiniteLoop:
   Severity: convention
   AutoCorrect: false

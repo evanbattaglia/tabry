@@ -45,8 +45,8 @@ module Tabry
         @name_with_dashes ||= alias_with_dash(name)
       end
 
-      def alias_with_dash(al)
-        (al.length == 1) ? "-#{al}" : "--#{al}"
+      def alias_with_dash(ali)
+        (ali.length == 1) ? "-#{ali}" : "--#{ali}"
       end
 
       attr_reader(*FIELDS.keys)

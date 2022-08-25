@@ -55,7 +55,7 @@ module Tabry
       return false unless state.mode == :subcommand
 
       if (state.subcommand_stack.empty? && token == "help") ||
-         (!state.dashdash && (token == "--help" || token == "-?"))
+         (!state.dashdash && %w[--help -?].include?(token))
         state.help = true
         Tabry::Util.debug "MATCHED help ON token #{token.inspect}"
         return true

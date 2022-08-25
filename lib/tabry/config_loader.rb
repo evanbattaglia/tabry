@@ -46,7 +46,7 @@ module Tabry
         Tabry::Models::Config.new(raw: JSON.parse(File.read(filename)))
       elsif filename =~ /\.ya?ml$/
         require "yaml"
-        Tabry::Models::Config.new(raw: YAML.load(File.read(filename)))
+        Tabry::Models::Config.new(raw: YAML.safe_load(File.read(filename)))
       else
         raise "unknown file type"
       end

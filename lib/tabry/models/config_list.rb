@@ -5,7 +5,7 @@ require_relative "config_error"
 module Tabry
   module Models
     class ConfigList
-      attr_reader :to_a, :unflattened
+      attr_reader :unflattened
 
       include Enumerable
 

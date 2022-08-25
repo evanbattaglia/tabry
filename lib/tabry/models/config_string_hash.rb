@@ -5,11 +5,9 @@ require_relative "config_error"
 module Tabry
   module Models
     class ConfigStringHash
-      attr_reader :to_h
+      attr_reader :to_h, :_raw, :_root
 
       include Enumerable
-
-      attr_reader :_raw, :_root
 
       def initialize(raw:, root:, klass:)
         @_raw = raw

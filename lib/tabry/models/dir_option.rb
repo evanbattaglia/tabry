@@ -13,7 +13,7 @@ module Tabry
 
       # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
       # communicate to tabry-bash
-      def options(token)
+      def options(_token)
         [:directory]
       end
 

@@ -38,6 +38,10 @@ module Tabry
         def method_missing(*args)
           config.send(*args)
         end
+
+        def respond_to_missing?(*args)
+          super?(*args) || config.respond_to_missing?(*args)
+        end
       end
     end
   end

@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.summary     = "Tab completion and CLIs extraordinaire"
   s.authors     = ["Evan Battaglia"]
   s.email       = "battaglia.evan@gmail.com"
-  s.files       = ["lib/tabry/runner.rb", "lib/tabry/cli/builder.rb"]
   s.homepage    = "https://github.com/evanbattaglia/tabry"
 
   s.files         = Dir.glob("{lib,bin,sh,spec}/**/*") + %w[tabry.gemspec]

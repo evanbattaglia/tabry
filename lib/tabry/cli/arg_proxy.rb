@@ -7,12 +7,12 @@ module Tabry
     class ArgProxy
       include Enumerable
 
-      def initialize(args, named_args, reqd = false)
+      def initialize(args, named_args, reqd: false)
         @args = args
         @named_args = FlagProxy.new(named_args)
         @raw_named_args = named_args
         @reqd = reqd
-        @reqd_arg_proxy = ArgProxy.new(args, named_args, true) unless @reqd
+        @reqd_arg_proxy = ArgProxy.new(args, named_args, reqd: true) unless @reqd
       end
 
       def each(...)
@@ -47,12 +47,12 @@ module Tabry
         @args.<=>(*args)
       end
 
-      def method_missing(met, *args)
+      def method_missing(met)
         self[met]
       end
 
-      def respond_to?(met, p2)
-        super(met, p2) || @named_args.respond_to?(met, p2)
+      def respond_to_missing?(*_args)
+        true # Anything could be an arg name that we haven't set
       end
 
       def inspect

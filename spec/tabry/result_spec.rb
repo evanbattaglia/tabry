@@ -150,7 +150,7 @@ describe Tabry::Result do
 
     it "passes in passed-in command to UsageGenerator" do
       state = { mode: :subcommand, args: [], flags: {}, subcommand_stack: %w[] }
-      expect(Tabry::UsageGenerator).to receive(:new) do |sub_stack, cmd|
+      expect(Tabry::UsageGenerator).to receive(:new) do |_sub_stack, cmd|
         expect(cmd).to eq("customcmd")
         instance_double(Tabry::UsageGenerator, usage: "foobar")
       end
