@@ -13,7 +13,7 @@ describe Tabry::Machine do
     expect(subject.args).to eq(arr)
   end
 
-  EXAMPLES = {
+  examples = {
     'handles subcommands' => [
       %w[build],
       subs: %w[build], mode: :subcommand
@@ -94,7 +94,7 @@ describe Tabry::Machine do
     ]
   }
 
-  EXAMPLES.each do |test_name, (tokens, expectation)|
+  examples.each do |test_name, (tokens, expectation)|
     it test_name do
       pending unless expectation
       result = described_class.run(config, tokens)

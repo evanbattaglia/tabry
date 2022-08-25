@@ -8,7 +8,7 @@ describe Tabry::OptionsFinder do
   let(:config) { Tabry::ConfigLoader.load(name: config_fixture) }
   let(:state) { {} }
 
-  EXAMPLES = {
+  examples = {
     'lists possible subcommands of the main command' => [
       %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag],
       {}
@@ -77,7 +77,7 @@ describe Tabry::OptionsFinder do
     ],
   }
 
-  EXAMPLES.each do |name, (expected_options, hash)|
+  examples.each do |name, (expected_options, hash)|
     it name do
       token = hash.delete(:token)
       hash[:subcommand_stack] = hash.delete(:subs) || []
