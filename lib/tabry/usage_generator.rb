@@ -97,11 +97,11 @@ module Tabry
         lines << ""
         lines << "FLAGS".green.bold
         if sub != sub_stack.last
-          lines.last << if full_sub_name == ""
-                          " (global)".green.bold
-                        else
-                          " (#{full_sub_name})".green.bold
-                        end
+          lines[-1] += if full_sub_name == ""
+                         " (global)".green.bold
+                       else
+                         " (#{full_sub_name})".green.bold
+                       end
         end
 
         sub.flags.map(&:name).sort.each do |name|

@@ -6,7 +6,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = "tabry"
-  s.version     = "0.1.2"
+  s.version     = "0.1.3"
   s.summary     = "Tab completion and CLIs extraordinaire"
   s.authors     = ["Evan Battaglia"]
   s.email       = "battaglia.evan@gmail.com"
