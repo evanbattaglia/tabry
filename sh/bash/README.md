@@ -23,11 +23,12 @@ This file and bash function contained within is used in two ways:
   added on, to make tab completion specific for the program. This is generated
   for each command when the user runs "mycommand completion bash", which calls
   `Tabry::Shells::Bash.generate`. A new function for each CLI so different CLIs
-  can use different versions of tabrygq without interfering with each other.
+  can use different versions of tabry without interfering with each other.
   The name `_tabry_completions_internal_` is replaced in
   `lib/tabry/shells/bash.rb` in the `generate` method, so if modifying
   `tabry_bash_core.sh`, you should if make sure the substitution still works
   properly.
+  See also "Adding Tab Completion to your CLI" in the main README.
 * You can also use Tabry to add tab completion to other non-Tabry CLIs. In this
   case, the `_tabry_completions_internal_` function is used as-is; it is
   sourced from `tabry_bash.sh`. See `tabry_bash.sh` for details and

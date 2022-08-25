@@ -124,6 +124,11 @@ subcommands. There is a "help" subcommand (also "--help") which shows usage
 information added in automatically (usage info is also shown if invalid
 arguments are given).
 
+You may wish to experiment with using Gel, which is much faster than
+Bundler, but it often has issues. See the script for the example CLI script
+in examples/mycli/bin.
+
+## Adding Tab Completion to your CLI
 If you want to use tab completion, you have two options:
 * put a symlink to `mycli.json` in `~/.tabry` (or add on to the the
   `TABRY_IMPORTS_PATH` env var) and add the proper setup (i.e., sourcing
@@ -135,10 +140,6 @@ If you want to use tab completion, you have two options:
   ```
   Which your users can add to their `bash_profile` file. (In this future this
   will likely be added automatically to Tabry-based CLIs.)
-
-You may wish to experiment with using Gel, which is much faster than
-Bundler, but it often has issues. See the script for the example CLI script
-in examples/mycli/bin.
 
 # CLI Utils
 Tabry::CLI::Util has useful utilities which, while not required for creating a

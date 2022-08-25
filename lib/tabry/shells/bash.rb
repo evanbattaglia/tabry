@@ -1,3 +1,10 @@
+# Used to generate a tab-completion function for a Tabry CLI using absolute
+# paths to the tabry-bash script in this repo and to the Tabry JSON/YML file.
+# Using uniquely-named tab-completion functions and absolute paths means you can
+# have different Tabry-based CLIs using different versions of Tabry without any
+# conflicts.
+# See sh/bash/README.md and "Adding Tab Completion to your CLI" in main README
+
 module Tabry
   module Shells
     module Bash
