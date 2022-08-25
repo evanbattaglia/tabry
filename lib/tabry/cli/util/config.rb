@@ -1,6 +1,8 @@
-require 'ostruct'
-require 'yaml'
-require 'json'
+# frozen_string_literal: true
+
+require "ostruct"
+require "yaml"
+require "json"
 
 # Simple YAML configuration
 # Example:
@@ -8,7 +10,6 @@ require 'json'
 # module MyCli
 #   Config = Tabry::CLI::Util::Config.new('~/.mycli.yml')
 # end
-
 
 class Hash
   def to_openstruct
@@ -27,7 +28,7 @@ module Tabry
     module Util
       class Config
         def initialize(path)
-          @path = path.gsub(/^~/, ENV['HOME'])
+          @path = path.gsub(/^~/, Dir.home)
         end
 
         def config
@@ -41,4 +42,3 @@ module Tabry
     end
   end
 end
-

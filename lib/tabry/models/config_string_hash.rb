@@ -1,9 +1,12 @@
-require_relative 'config_error'
+# frozen_string_literal: true
+
+require_relative "config_error"
 
 module Tabry
   module Models
     class ConfigStringHash
       attr_reader :to_h
+
       include Enumerable
 
       attr_reader :_raw, :_root
@@ -16,19 +19,19 @@ module Tabry
         unless raw.is_a?(Hash)
           raise ConfigError, "#{self.class.name} must be a Hash. Got #{raw.class}"
         end
-        unless raw.keys.all?{|k| k.is_a?(String)}
+        unless raw.keys.all? { |k| k.is_a?(String) }
           raise ConfigError, "#{self.class.name} keys must all be string keys."
         end
 
-        @to_h = raw.transform_values{|a| klass.new(raw: a, root: root)}
+        @to_h = raw.transform_values { |a| klass.new(raw: a, root: root) }
       end
 
       def [](*args)
         to_h.[](*args)
       end
 
-      def each(*args, &blk)
-        to_h.each(*args, &blk)
+      def each(...)
+        to_h.each(...)
       end
 
       def empty?

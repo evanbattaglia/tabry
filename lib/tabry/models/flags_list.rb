@@ -1,5 +1,7 @@
-require_relative 'config_list'
-require_relative 'flag'
+# frozen_string_literal: true
+
+require_relative "config_list"
+require_relative "flag"
 
 module Tabry
   module Models
@@ -16,7 +18,7 @@ module Tabry
 
       def options(token, used:)
         to_a.map do |flag|
-          if token&.start_with?('-') && flag.name_with_dashes.start_with?(token) && !used[flag.name]
+          if token&.start_with?("-") && flag.name_with_dashes.start_with?(token) && !used[flag.name]
             flag.name_with_dashes
           end
         end.compact
@@ -37,7 +39,7 @@ module Tabry
         if flag_name.is_a?(Integer)
           to_a[flag_name]
         else
-          to_a.find{|f| f.name == flag_name}
+          to_a.find { |f| f.name == flag_name }
         end
       end
     end

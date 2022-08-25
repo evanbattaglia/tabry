@@ -1,12 +1,14 @@
-require_relative 'config_object'
-require_relative 'options_list'
-require_relative 'include_flag'
+# frozen_string_literal: true
+
+require_relative "config_object"
+require_relative "options_list"
+require_relative "include_flag"
 
 module Tabry
   module Models
     class Flag < ConfigObject
       def self.new(**args)
-        if args[:raw]['include']
+        if args[:raw]["include"]
           IncludeFlag.new(**args)
         else
           super(**args)
@@ -16,11 +18,11 @@ module Tabry
       FIELDS = {
         aliases: :string_array,
         description: :string,
-        name: :string, # TODO required
+        name: :string, # TODO: required
         required: :boolean,
         arg: :boolean,
         options: [:list_object, :OptionsList]
-      }
+      }.freeze
 
       def flatten
         self
@@ -36,7 +38,7 @@ module Tabry
       end
 
       def match(token)
-        [name, *aliases].any?{|al| token == alias_with_dash(al)}
+        [name, *aliases].any? { |al| token == alias_with_dash(al) }
       end
 
       def name_with_dashes
@@ -44,11 +46,10 @@ module Tabry
       end
 
       def alias_with_dash(al)
-        al.length == 1 ? "-#{al}" : "--#{al}"
+        (al.length == 1) ? "-#{al}" : "--#{al}"
       end
 
-      attr_reader *FIELDS.keys
+      attr_reader(*FIELDS.keys)
     end
   end
 end
-

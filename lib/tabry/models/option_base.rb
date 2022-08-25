@@ -1,4 +1,6 @@
-require_relative 'config_object'
+# frozen_string_literal: true
+
+require_relative "config_object"
 
 module Tabry
   module Models
@@ -6,9 +8,9 @@ module Tabry
       FIELDS = {
         type: :string,
         value: :string,
-      }
+      }.freeze
 
-      attr_reader *FIELDS.keys
+      attr_reader(*FIELDS.keys)
 
       def flatten
         self

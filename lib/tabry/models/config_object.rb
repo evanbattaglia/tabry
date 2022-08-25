@@ -1,4 +1,6 @@
-require_relative 'config_error'
+# frozen_string_literal: true
+
+require_relative "config_error"
 
 module Tabry
   module Models
@@ -24,23 +26,23 @@ module Tabry
 
       def initialize(raw:, root:)
         @_raw = raw
-        @_root = root or raise 'missing root'
+        @_root = root or raise "missing root"
         unknown_fields = @_raw.keys - self.class::FIELDS.keys.map(&:to_s)
-        if !unknown_fields.empty?
+        unless unknown_fields.empty?
           raise ConfigError, "Unknown field(s) #{unknown_fields.inspect} for #{self.class}"
         end
 
         raw.each do |key, val|
           type, *extra = Array(self.class::FIELDS[key.to_sym])
-          instance_variable_set :"@#{key}", self.send(:"init_field_#{type}", key, val, *extra)
+          instance_variable_set :"@#{key}", send(:"init_field_#{type}", key, val, *extra)
         end
       end
 
       # Gets fields, asserts is either nil or of given type
       def assert_of_class(key, val, klasses)
-        unless Array(klasses).any?{|klass| val.is_a?(klass)}
+        unless Array(klasses).any? { |klass| val.is_a?(klass) }
           raise ConfigError,
-            "Invalid type #{val.class} for #{self.class} field #{key.inspect}, expected #{klasses.inspect}"
+                "Invalid type #{val.class} for #{self.class} field #{key.inspect}, expected #{klasses.inspect}"
         end
       end
 

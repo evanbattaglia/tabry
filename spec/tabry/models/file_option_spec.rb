@@ -1,9 +1,11 @@
-require 'json'
-require_relative '../../../lib/tabry/models/file_option.rb'
+# frozen_string_literal: true
+
+require "json"
+require_relative "../../../lib/tabry/models/file_option"
 
 describe Tabry::Models::FileOption do
   subject do
-    described_class.new(root: double, raw: {'type' => 'file'})
+    described_class.new(root: double, raw: { "type" => "file" })
   end
 
   # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
@@ -12,4 +14,3 @@ describe Tabry::Models::FileOption do
     expect(subject.options("whatever")).to eq([:file])
   end
 end
-

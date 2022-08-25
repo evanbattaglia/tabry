@@ -1,5 +1,7 @@
-require_relative 'state'
-require_relative 'util'
+# frozen_string_literal: true
+
+require_relative "state"
+require_relative "util"
 
 # The core Tabry state machine / parser which reads tokens, figures out if it's
 # a sub/flag/arg/etc. and advances the state
@@ -30,12 +32,13 @@ module Tabry
     end
 
     private
+
     def step(token)
       send :"step_#{state.mode}", token
     end
 
     def current_sub
-      # TODO a bit of a waste to look this up every time.
+      # TODO: a bit of a waste to look this up every time.
       config.dig_sub(state.subcommand_stack)
     end
 
@@ -50,8 +53,9 @@ module Tabry
     def step_subcommand_match_help(token)
       return false if state.help
       return false unless state.mode == :subcommand
-      if (state.subcommand_stack.empty? && token == 'help') ||
-         (!state.dashdash && (token == '--help' || token == '-?'))
+
+      if (state.subcommand_stack.empty? && token == "help") ||
+         (!state.dashdash && (token == "--help" || token == "-?"))
         state.help = true
         Tabry::Util.debug "MATCHED help ON token #{token.inspect}"
         return true
@@ -61,6 +65,7 @@ module Tabry
 
     def step_subcommand_match_subcommand(token)
       return false unless state.args.empty?
+
       sub = current_sub.subs.match(token)
       return false unless sub
 
@@ -71,7 +76,7 @@ module Tabry
 
     def step_subcommand_match_dashdash(token)
       return false if state.dashdash
-      return false unless token == '--'
+      return false unless token == "--"
 
       state.dashdash = true
       true
@@ -79,6 +84,7 @@ module Tabry
 
     def step_subcommand_match_flag(token)
       return false if state.dashdash
+
       flag, arg_value = nil
       # Reverse: most specific sub's flag takes precedence in case of multiple matching
       config.dig_sub_array(state.subcommand_stack).reverse.each do |sub|

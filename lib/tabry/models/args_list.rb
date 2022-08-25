@@ -1,6 +1,7 @@
-require_relative 'arg'
-require_relative 'args_list'
-require_relative 'config_error'
+# frozen_string_literal: true
+
+require_relative "arg"
+require_relative "config_error"
 
 module Tabry
   module Models
@@ -17,8 +18,8 @@ module Tabry
           n_regular_passed_in_args = to_a.length - 1
           [n_total_passed_in_args - n_regular_passed_in_args, 0].max
         else
-          arg_names = to_a.map { |a| "#{a.name || '[unnamed]'}#{a.varargs? ? ' (varargs)' : ''}" }
-          raise ConfigError, "More than one varargs args in one sub: #{arg_names.join(', ')}"
+          arg_names = to_a.map { |a| "#{a.name || "[unnamed]"}#{a.varargs? ? " (varargs)" : ""}" }
+          raise ConfigError, "More than one varargs args in one sub: #{arg_names.join(", ")}"
         end
       end
 

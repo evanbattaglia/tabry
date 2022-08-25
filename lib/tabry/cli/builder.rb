@@ -1,17 +1,20 @@
-require_relative '../runner'
-require_relative '../util'
-require_relative 'internals'
+# frozen_string_literal: true
+
+require_relative "../runner"
+require_relative "../util"
+require_relative "internals"
 
 module Tabry
   module CLI
     class Builder
       attr_reader :config, :cli_class, :runner
+
       def initialize(config_name, cli_class)
         @cli_class = cli_class
         @runner = Tabry::Runner.new(config_name: config_name)
       end
 
-      DISALLOWED_SUBCOMMAND_NAMES = %w[args flags internals]
+      DISALLOWED_SUBCOMMAND_NAMES = %w[args flags internals].freeze
 
       def run(raw_args)
         result = runner.parse(raw_args)
@@ -19,7 +22,7 @@ module Tabry
 
         state = result.state
 
-        met = state.subcommand_stack.join('__').gsub('-', '_')
+        met = state.subcommand_stack.join("__").gsub("-", "_")
 
         ::Tabry::Util.debug "met: #{met.inspect}"
         ::Tabry::Util.debug "named_args: #{result.named_args.inspect}"
@@ -51,6 +54,7 @@ module Tabry
 
       def instantiate_cli(klass, internals)
         return klass unless klass.is_a?(Class)
+
         state = internals.state
         klass.new(state.flags, state.args, internals.result.named_args, internals)
       end
@@ -58,11 +62,11 @@ module Tabry
       # Recursively look through sub_routes for the CLI to be used
       def get_cli_object_and_met(cli, met, internals)
         if DISALLOWED_SUBCOMMAND_NAMES.include?(met)
-          STDERR.puts %Q(FATAL: Tabry does not support top-level subcommands named: #{DISALLOWED_SUBCOMMAND_NAMES.join(',')})
+          warn %(FATAL: Tabry does not support top-level subcommands named: #{DISALLOWED_SUBCOMMAND_NAMES.join(",")})
           exit 1
         end
 
-        return [cli, 'main'] if met.to_s == ''
+        return [cli, "main"] if met.to_s == ""
 
         sub_route_clis = cli.class.instance_variable_get(:@sub_route_clis)
         sub_name, rest = met.split("__", 2)
@@ -76,13 +80,13 @@ module Tabry
       end
 
       def cli_send_met(cli, met)
-        if !cli.respond_to?(met.to_sym)
-          $stderr.puts %Q{FATAL: CLI does not support command #{met}}
-          exit 1
-        else
+        if cli.respond_to?(met.to_sym)
           run_hooks(cli, met, :@before_actions)
           cli.send(met.to_sym)
           run_hooks(cli, met, :@after_actions)
+        else
+          warn %(FATAL: CLI does not support command #{met})
+          exit 1
         end
       end
 
@@ -90,11 +94,11 @@ module Tabry
         met = met.to_s
         cli.class.instance_variable_get(instance_var)&.each do |hook, opts|
           next if Array(opts&.dig(:except))&.map(&:to_s)&.include?(met.to_s)
-          next if opts&.dig(:only) && !Array(opts[:only])&.map(&:to_s).include?(met.to_s)
+          next if opts&.dig(:only) && !Array(opts[:only])&.map(&:to_s)&.include?(met.to_s)
+
           hook.is_a?(Proc) ? cli.instance_eval(&hook) : cli.send(hook.to_sym)
         end
       end
     end
   end
 end
-

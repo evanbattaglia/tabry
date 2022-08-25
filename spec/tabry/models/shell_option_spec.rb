@@ -1,11 +1,13 @@
-require 'json'
-require_relative '../../../lib/tabry/models/shell_option.rb'
+# frozen_string_literal: true
+
+require "json"
+require_relative "../../../lib/tabry/models/shell_option"
 
 describe Tabry::Models::ShellOption do
   subject do
     described_class.new(root: double, raw: {
-      'type' => 'shell', 'value' => 'echo a && echo a1 && echo b'
-    })
+                          "type" => "shell", "value" => "echo a && echo a1 && echo b"
+                        })
   end
 
   it "filters by prefix" do
@@ -15,4 +17,3 @@ describe Tabry::Models::ShellOption do
     expect(subject.options("a1 ")).to match_array(%w[])
   end
 end
-

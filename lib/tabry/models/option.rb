@@ -1,29 +1,31 @@
-require_relative 'config_error'
-require_relative 'const_option'
-require_relative 'shell_option'
-require_relative 'include_option'
-require_relative 'file_option'
-require_relative 'dir_option'
+# frozen_string_literal: true
+
+require_relative "config_error"
+require_relative "const_option"
+require_relative "shell_option"
+require_relative "include_option"
+require_relative "file_option"
+require_relative "dir_option"
 
 module Tabry
   module Models
     module Option
       def self.new(**args)
-        # TODO assert type
+        # TODO: assert type
         hash = args[:raw]
-        case hash['type']
-        when 'const'
+        case hash["type"]
+        when "const"
           ConstOption.new(**args)
-        when 'shell'
+        when "shell"
           ShellOption.new(**args)
-        when 'include'
+        when "include"
           IncludeOption.new(**args)
-        when 'file'
+        when "file"
           FileOption.new(**args)
-        when 'dir'
+        when "dir"
           DirOption.new(**args)
         else
-          raise ConfigError, "unknown option type #{hash['type']}"
+          raise ConfigError, "unknown option type #{hash["type"]}"
         end
       end
     end

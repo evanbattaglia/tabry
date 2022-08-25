@@ -1,10 +1,12 @@
-require_relative 'models/config'
+# frozen_string_literal: true
+
+require_relative "models/config"
 
 module Tabry
   class ConfigLoader
     class ConfigNotFound < StandardError; end
 
-    EXTENSIONS = %w[json yml yaml]
+    EXTENSIONS = %w[json yml yaml].freeze
 
     def self.load(**args)
       new(**args).load
@@ -22,7 +24,7 @@ module Tabry
       load_paths.each do |dir|
         EXTENSIONS.each do |extension|
           filename = "#{dir}/#{name}.#{extension}"
-          return load_from_file(filename) if File.exists?(filename)
+          return load_from_file(filename) if File.exist?(filename)
         end
       end
 
@@ -30,22 +32,23 @@ module Tabry
     end
 
     private
+
     def load_paths
       @load_paths ||= [
-        *ENV['TABRY_IMPORTS_PATH']&.split(':')&.reject(&:empty?),
-        ENV['HOME'] + "/.tabry/",
+        *ENV["TABRY_IMPORTS_PATH"]&.split(":")&.reject(&:empty?),
+        Dir.home + "/.tabry/",
       ]
     end
 
     def load_from_file(filename)
       if filename =~ /\.json$/
-        require 'json'
+        require "json"
         Tabry::Models::Config.new(raw: JSON.parse(File.read(filename)))
       elsif filename =~ /\.ya?ml$/
-        require 'yaml'
+        require "yaml"
         Tabry::Models::Config.new(raw: YAML.load(File.read(filename)))
       else
-        raise 'unknown file type'
+        raise "unknown file type"
       end
     end
   end

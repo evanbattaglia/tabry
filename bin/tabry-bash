@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
-require 'shellwords'
-require 'yaml'
-require_relative '../lib/tabry/util'
-require_relative '../lib/tabry/runner'
+# frozen_string_literal: true
+
+require "shellwords"
+require "yaml"
+require_relative "../lib/tabry/util"
+require_relative "../lib/tabry/runner"
 
 # Bash-specific entrypoint, taking COMP_WORDS and COMP_CWORDS and returning possible options
 
@@ -18,28 +20,28 @@ cmd_line, comp_point = ARGV
 cmd_line = cmd_line.dup
 cmd_line[comp_point.to_i...comp_point.to_i] = COMP_POINT_SENTINEL
 cmd, *all_args = Shellwords.split(cmd_line)
-last_arg_index = all_args.index{|arg| arg.include?(COMP_POINT_SENTINEL)}
+last_arg_index = all_args.index { |arg| arg.include?(COMP_POINT_SENTINEL) }
 args = all_args[0..last_arg_index]
-last_arg = args.pop.gsub! COMP_POINT_SENTINEL, ''
+last_arg = args.pop.gsub! COMP_POINT_SENTINEL, ""
 
-cmd_name = cmd.gsub(%r{.*/}, '')
+cmd_name = cmd.gsub(%r{.*/}, "")
 
 opts = Tabry::Runner.new(config_name: cmd_name).options(args, last_arg)
 
 if Tabry::Util.debug?
-  require 'json'
-  STDERR.puts
-  STDERR.puts "debug: got command line and comp_point: #{cmd_line.inspect}, #{comp_point}"
-  STDERR.puts "using args: #{args.inspect}"
-  STDERR.puts "using lastarg: #{last_arg.inspect}"
-  STDERR.puts "results from Tabry#options(): #{opts.inspect}"
-  STDERR.puts "--- end debug output ---"
+  require "json"
+  $stderr.puts
+  warn "debug: got command line and comp_point: #{cmd_line.inspect}, #{comp_point}"
+  warn "using args: #{args.inspect}"
+  warn "using lastarg: #{last_arg.inspect}"
+  warn "results from Tabry#options(): #{opts.inspect}"
+  warn "--- end debug output ---"
 end
 
-normal_opts = opts.select{|t| t.is_a?(String)}
-special_opts = opts.select{|t| t.is_a?(Symbol)}
+normal_opts = opts.select { |t| t.is_a?(String) }
+special_opts = opts.select { |t| t.is_a?(Symbol) }
 
-puts normal_opts.map{|t| Shellwords.escape(t)}.join("\n")
+puts normal_opts.map { |t| Shellwords.escape(t) }.join("\n")
 if special_opts.any?
   puts
   puts special_opts.join("\n")

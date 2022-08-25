@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tabry
   module CLI
     Internals = Struct.new(
@@ -6,4 +8,3 @@ module Tabry
     )
   end
 end
-

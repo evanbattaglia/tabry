@@ -1,4 +1,6 @@
-require 'json'
+# frozen_string_literal: true
+
+require "json"
 
 module Tabry
   class OptionsFinder
@@ -16,17 +18,18 @@ module Tabry
     def options(token)
       # Bit of a hack: send this down to autocomplete shell commands
       # TODO: set this only in ShellOption -- would require passing state down on thru
-      ENV['TABRY_AUTOCOMPLETE_STATE'] = {
+      ENV["TABRY_AUTOCOMPLETE_STATE"] = {
         cmd: result.config.cmd,
         flags: result.state.flags,
         args: result.state.args,
         current_flag: result.state.current_flag
       }.to_json
 
-      send(:"options_#{state.mode}", token || '')
+      send(:"options_#{state.mode}", token || "")
     end
 
     private
+
     def state
       result.state
     end
@@ -36,7 +39,7 @@ module Tabry
     end
 
     def options_subcommand(token)
-      if token.to_s == ''
+      if token.to_s == ""
         result.sub_stack.each do |sub|
           required_flag = sub.flags.first_required_flag(used: state.flags)
           if required_flag
@@ -67,15 +70,16 @@ module Tabry
 
     def options_subcommand_flags(token)
       return [] if state.dashdash
-      result.sub_stack.map{|sub| sub.flags.options(token, used: state.flags)}.flatten.uniq
+
+      result.sub_stack.map { |sub| sub.flags.options(token, used: state.flags) }.flatten.uniq
     end
 
     def options_subcommand_args(token)
-      if current_sub.args.n_passed_in_varargs(state.args.length) > 0
-        arg = current_sub.args.varargs_arg
-      else
-        arg = current_sub.args[state.args.length]
-      end
+      arg = if current_sub.args.n_passed_in_varargs(state.args.length) > 0
+              current_sub.args.varargs_arg
+            else
+              current_sub.args[state.args.length]
+            end
 
       arg&.options&.options(token) || []
     end

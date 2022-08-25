@@ -1,5 +1,7 @@
-require_relative 'config_string_hash'
-require_relative 'options_list'
+# frozen_string_literal: true
+
+require_relative "config_string_hash"
+require_relative "options_list"
 
 module Tabry
   module Models

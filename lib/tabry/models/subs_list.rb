@@ -1,5 +1,7 @@
-require_relative 'config_list'
-require_relative 'sub'
+# frozen_string_literal: true
+
+require_relative "config_list"
+require_relative "sub"
 
 module Tabry
   module Models
@@ -9,7 +11,7 @@ module Tabry
       end
 
       def by_name
-        @by_name ||= to_a.map{|sub| [sub.name, sub]}.to_h
+        @by_name ||= to_a.to_h { |sub| [sub.name, sub] }
       end
 
       def match(token)
@@ -19,7 +21,7 @@ module Tabry
       end
 
       def options(token)
-        to_a.map(&:name).select{|name| name.start_with?(token)}
+        to_a.map(&:name).select { |name| name.start_with?(token) }
       end
     end
   end

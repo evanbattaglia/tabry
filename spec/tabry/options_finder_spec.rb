@@ -1,7 +1,9 @@
-require_relative '../../lib/tabry/config_loader.rb'
-require_relative '../../lib/tabry/options_finder.rb'
-require_relative '../../lib/tabry/result.rb'
-require_relative '../../lib/tabry/state.rb'
+# frozen_string_literal: true
+
+require_relative "../../lib/tabry/config_loader"
+require_relative "../../lib/tabry/options_finder"
+require_relative "../../lib/tabry/result"
+require_relative "../../lib/tabry/state"
 
 describe Tabry::OptionsFinder do
   let(:config_fixture) { "#{__dir__}/../fixtures/vehicles.yaml" }
@@ -9,38 +11,38 @@ describe Tabry::OptionsFinder do
   let(:state) { {} }
 
   examples = {
-    'lists possible subcommands of the main command' => [
+    "lists possible subcommands of the main command" => [
       %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag],
       {}
     ],
-    'lists possible subcommands of a subcommand' => [
+    "lists possible subcommands of a subcommand" => [
       %w[go stop crash freeway-crash],
       subs: %w[move]
     ],
-    'lists possible arguments (const)' => [
+    "lists possible arguments (const)" => [
       %w[car bike],
       subs: %w[move go]
     ],
-    'lists both possible args and subs if a subcommand can take either' => [
+    "lists both possible args and subs if a subcommand can take either" => [
       %w[x y z subsub],
       subs: %w[sub-with-sub-or-arg]
     ],
-    'lists possible flags if the last token starts with a dash' => [
+    "lists possible flags if the last token starts with a dash" => [
       %w[--verbose --speed --output-to-file --output-to-directory --dry-run],
       subs: %w[move crash],
-      token: '-'
+      token: "-"
     ],
     "doesn't list a flag if it has already been given" => [
       %w[--verbose --speed --output-to-file --output-to-directory],
-      flags: {'dry-run' => true},
+      flags: { "dry-run" => true },
       subs: %w[move crash],
-      token: '-'
+      token: "-"
     ],
     "doesn't suggests flags if '--' has been used" => [
       [],
       dashdash: true,
       subs: %w[move crash],
-      token: '-',
+      token: "-",
     ],
     "lists only a mandatory flag if it hasn't been given yet" => [
       %w[--mandatory],
@@ -49,31 +51,31 @@ describe Tabry::OptionsFinder do
     "lists other args after a mandatory flag has been given" => [
       %w[a b c],
       subs: %w[sub-with-mandatory-flag],
-      flags: {'mandatory' => 'foo'}
+      flags: { "mandatory" => "foo" }
     ],
-    'lists possibilities for a flag arguments (shell)' => [
+    "lists possibilities for a flag arguments (shell)" => [
       %w[fast slow],
       subs: %w[move crash],
       mode: :flagarg,
-      current_flag: 'speed',
+      current_flag: "speed",
     ],
-    'lists possibilities for a flag arguments (file, const)' => [
+    "lists possibilities for a flag arguments (file, const)" => [
       [:file, "-"],
       subs: %w[move crash],
       mode: :flagarg,
-      current_flag: 'output-to-file',
+      current_flag: "output-to-file",
     ],
-    'lists possibilities for a flag arguments (dir)' => [
+    "lists possibilities for a flag arguments (dir)" => [
       [:directory],
       subs: %w[move crash],
       mode: :flagarg,
-      current_flag: 'output-to-directory',
+      current_flag: "output-to-directory",
     ],
-    'lists nothing if no options are defined' => [
+    "lists nothing if no options are defined" => [
       [],
       subs: %w[sub-with-sub-or-arg],
       mode: :flagarg,
-      current_flag: 'mandatory'
+      current_flag: "mandatory"
     ],
   }
 
@@ -81,10 +83,9 @@ describe Tabry::OptionsFinder do
     it name do
       token = hash.delete(:token)
       hash[:subcommand_stack] = hash.delete(:subs) || []
-      defaults = {mode: :subcommand, args: [], flags: {}, current_flag: nil, dashdash: nil}
+      defaults = { mode: :subcommand, args: [], flags: {}, current_flag: nil, dashdash: nil }
       result = Tabry::Result.new(config, Tabry::State.new(defaults.merge(hash)))
       expect(described_class.options(result, token)).to match_array expected_options
     end
   end
-
 end

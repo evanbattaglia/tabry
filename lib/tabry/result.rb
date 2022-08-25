@@ -1,10 +1,13 @@
-require_relative 'usage_generator'
+# frozen_string_literal: true
+
+require_relative "usage_generator"
 
 # Encapsulates a config and state, often representing the end state (except
 # when you call options()), and adds functionality regarding this state.
 module Tabry
   class Result
     attr_reader :config, :state
+
     def initialize(config, state)
       @config = config
       @state = state
@@ -42,7 +45,7 @@ module Tabry
         if n_args == 0
           if current_sub.max_args == 1
             msg = "missing argument"
-            msg << " #{current_sub.args[0].name.inspect}" if current_sub.args[0].name
+            msg += " #{current_sub.args[0].name.inspect}" if current_sub.args[0].name
             msg
           elsif current_sub.min_args == 1
             "missing one or more args"
@@ -50,7 +53,7 @@ module Tabry
             "missing args"
           end
         else
-          "got #{state.args.count} args, " +
+          "got #{state.args.count} args, " \
             "must be between #{current_sub.min_args} and #{current_sub.max_args}"
         end
       end
@@ -77,7 +80,7 @@ module Tabry
       nil
     end
 
-    def usage(cmd_name=nil)
+    def usage(cmd_name = nil)
       cmd_name ||= config.cmd
       Tabry::UsageGenerator.new(sub_stack, cmd_name).usage
     end

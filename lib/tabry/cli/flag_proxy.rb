@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tabry
   module CLI
     class FlagProxy
@@ -23,7 +25,7 @@ module Tabry
         end
       end
 
-      def method_missing(met, default=nil, *args)
+      def method_missing(met, default = nil, *args)
         self[met] || default
       end
 
@@ -36,9 +38,8 @@ module Tabry
       end
 
       def to_s
-        "FlagProxy: #{@hash.to_s}"
+        "FlagProxy: #{@hash}"
       end
     end
   end
 end
-

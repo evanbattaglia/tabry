@@ -1,4 +1,6 @@
-require_relative 'option_base'
+# frozen_string_literal: true
+
+require_relative "option_base"
 
 module Tabry
   module Models
@@ -12,6 +14,7 @@ module Tabry
       def flatten
         inc = _root.option_includes[value]
         raise "Bad tabry config: include #{value.inspect} not found" unless inc
+
         inc.flatten
       end
     end

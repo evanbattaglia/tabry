@@ -1,11 +1,13 @@
-require_relative 'flag_proxy'
+# frozen_string_literal: true
+
+require_relative "flag_proxy"
 
 module Tabry
   module CLI
     class ArgProxy
       include Enumerable
 
-      def initialize(args, named_args, reqd=false)
+      def initialize(args, named_args, reqd = false)
         @args = args
         @named_args = FlagProxy.new(named_args)
         @raw_named_args = named_args
@@ -13,22 +15,22 @@ module Tabry
         @reqd_arg_proxy = ArgProxy.new(args, named_args, true) unless @reqd
       end
 
-      def each(*args, &blk)
-        @args.each(*args, &blk)
+      def each(...)
+        @args.each(...)
       end
 
       def [](key)
         if key.is_a?(Integer)
           res = @args[key]
           if @reqd && !res
-            $stderr.puts "FATAL: Missing required argument number #{key+1}"
+            warn "FATAL: Missing required argument number #{key + 1}"
             exit 1
           end
         else
           key = key.to_s
           res = @named_args[key]
           if @reqd && !res
-            $stderr.puts "FATAL: Missing required argument #{key}"
+            warn "FATAL: Missing required argument #{key}"
             exit 1
           end
         end
@@ -58,13 +60,12 @@ module Tabry
       end
 
       def to_s
-        "ArgProxy: #{@args.to_s}, #{@raw_named_args.inspect}"
+        "ArgProxy: #{@args}, #{@raw_named_args.inspect}"
       end
 
       def reqd
-        @reqd_arg_proxy or raise 'no reqd.reqd'
+        @reqd_arg_proxy or raise "no reqd.reqd"
       end
     end
   end
 end
-

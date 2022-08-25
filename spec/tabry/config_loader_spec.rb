@@ -1,9 +1,11 @@
-require_relative '../../lib/tabry/config_loader'
+# frozen_string_literal: true
+
+require_relative "../../lib/tabry/config_loader"
 
 describe Tabry::ConfigLoader do
   before do
-    @old_home = ENV["HOME"]
-    @old_tabry_imports_path = ENV["TABRY_IMPORTS_PATH"]
+    @old_home = Dir.home
+    @old_tabry_imports_path = ENV.fetch("TABRY_IMPORTS_PATH", nil)
   end
 
   after do
@@ -11,7 +13,7 @@ describe Tabry::ConfigLoader do
     ENV["TABRY_IMPORTS_PATH"] = @old_tabry_imports_path
   end
 
-  it 'loads from absolute paths' do
+  it "loads from absolute paths" do
     config = described_class.load(name: "#{__dir__}/../fixtures/vehicles.yaml")
     expect(config).to be_a(Tabry::Models::Config)
     expect(config.main.subs.map(&:name)).to eq(
@@ -20,7 +22,7 @@ describe Tabry::ConfigLoader do
   end
 
   describe "use of $TABRY_IMPORTS_PATH" do
-    before { ENV["TABRY_IMPORTS_PATH"] =  "#{__dir__}/../fixtures/" }
+    before { ENV["TABRY_IMPORTS_PATH"] = "#{__dir__}/../fixtures/" }
 
     it "looks for yaml files in TABRY_IMPORTS_PATH" do
       config = described_class.load(name: "vehicles")
@@ -48,7 +50,6 @@ describe Tabry::ConfigLoader do
       ENV["TABRY_IMPORTS_PATH"] = nil
     end
 
-
     it "looks for json files in HOME/.tabry" do
       config = described_class.load(name: "basiccli")
       expect(config.main.subs.map(&:name)).to eq(%w[foo])
@@ -57,9 +58,9 @@ describe Tabry::ConfigLoader do
 
   context "when it can't find a config" do
     it "raises an error" do
-      expect {
+      expect do
         described_class.load(name: "fj093jf04309fj3490fj3490f43j90kldfsjghkljasdghklshfsdkhjagfklj")
-      }.to raise_error(
+      end.to raise_error(
         described_class::ConfigNotFound,
         /Could not find Tabry config fj093jf04309fj3490fj3490f43j90kldfsjghkljasdghklshfsdkhjagfklj\.\(json, yml, yaml\)/
       )

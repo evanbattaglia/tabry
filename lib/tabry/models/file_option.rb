@@ -1,13 +1,15 @@
-require_relative 'config_object'
+# frozen_string_literal: true
+
+require_relative "config_object"
 
 module Tabry
   module Models
     class FileOption < ConfigObject
       FIELDS = {
         type: :string,
-      }
+      }.freeze
 
-      attr_reader *FIELDS.keys
+      attr_reader(*FIELDS.keys)
 
       # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
       # communicate to tabry-bash

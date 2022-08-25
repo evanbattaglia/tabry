@@ -1,2 +1,4 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
-gem "tabry", path: "../../" # TODO point this to github tabry or rubygems tabry
+gem "tabry", path: "../../" # TODO: point this to github tabry or rubygems tabry

@@ -1,9 +1,11 @@
-require 'json'
-require_relative '../../../lib/tabry/models/dir_option.rb'
+# frozen_string_literal: true
+
+require "json"
+require_relative "../../../lib/tabry/models/dir_option"
 
 describe Tabry::Models::DirOption do
   subject do
-    described_class.new(root: double, raw: {'type' => 'dir'})
+    described_class.new(root: double, raw: { "type" => "dir" })
   end
 
   # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to

@@ -1,6 +1,8 @@
-require 'tabry/cli/base'
-require 'tabry/cli/util'
-require_relative 'config'
+# frozen_string_literal: true
+
+require "tabry/cli/base"
+require "tabry/cli/util"
+require_relative "config"
 
 module Mycli
   class CLI < Tabry::CLI::Base

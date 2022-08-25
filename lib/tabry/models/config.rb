@@ -1,7 +1,9 @@
-require_relative 'config_object'
-require_relative 'sub'
-require_relative 'option_includes'
-require_relative 'arg_includes'
+# frozen_string_literal: true
+
+require_relative "config_object"
+require_relative "sub"
+require_relative "option_includes"
+require_relative "arg_includes"
 
 module Tabry
   module Models
@@ -11,9 +13,9 @@ module Tabry
         main: [:object, :Sub],
         option_includes: [:object, :OptionIncludes],
         arg_includes: [:object, :ArgIncludes],
-      }
+      }.freeze
 
-      attr_reader *FIELDS.keys
+      attr_reader(*FIELDS.keys)
 
       def initialize(raw:)
         super(raw: raw, root: self)
@@ -32,8 +34,9 @@ module Tabry
       end
 
       def inspect
-        # TODO remove hack, but make everything in models have a hack so _root is not shown
-        return "#<Tabry::Config>" if caller.any?{|c| c.include?("in `inspect'")}
+        # TODO: remove hack, but make everything in models have a hack so _root is not shown
+        return "#<Tabry::Config>" if caller.any? { |c| c.include?("in `inspect'") }
+
         super
       end
     end

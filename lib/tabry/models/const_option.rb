@@ -1,4 +1,6 @@
-require_relative 'option_base'
+# frozen_string_literal: true
+
+require_relative "option_base"
 
 module Tabry
   module Models

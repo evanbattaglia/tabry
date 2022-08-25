@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
-require_relative '../lib/tabry/runner'
+# frozen_string_literal: true
 
-raise 'Usage: tabry-test-options config_name arg1 [arg2]...' unless ARGV.length >= 1
+require_relative "../lib/tabry/runner"
+
+raise "Usage: tabry-test-options config_name arg1 [arg2]..." unless ARGV.length >= 1
 
 config_name, *args, last = ARGV
 puts Tabry::Runner.new(config_name: config_name).options(args, last).inspect
