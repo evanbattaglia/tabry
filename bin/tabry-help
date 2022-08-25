@@ -5,7 +5,7 @@ require_relative "../lib/tabry/runner"
 
 # Show usage information stored in a tabry configuration.
 #
-# For ease of use, source sh/tabry_bash_help.sh so you can just do
+# For ease of use, source sh/bash/tabry_bash_help.sh so you can just do
 # "help mycmd"
 
 raise "Usage: tabry-help config_name [arg1 [arg2]]..." unless ARGV.length >= 1

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tabry (0.0.2)
+    tabry (0.1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -65,7 +65,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  pry-byebug
+  pry-byebug (~> 3.10)
   rspec (~> 3.10)
   rubocop (~> 1.22)
   rubocop-rspec (~> 2.6)

@@ -21,9 +21,16 @@ module Tabry
     def load
       return load_from_file(name) if name =~ /\.json$/i || name =~ /\.ya?ml$/i
 
-      load_paths.each do |dir|
+      load_paths.each do |path|
         EXTENSIONS.each do |extension|
-          filename = "#{dir}/#{name}.#{extension}"
+          basename = "/#{name}.#{extension}"
+
+          # First check if the path _is_ the file "mycmd.json", "mycmd.yml" we are looking for
+          return load_from_file(path) if path.end_with?(basename) && File.exist?(path)
+
+          # Then look for a file "mycmd.json", "mycmd.yml" etc. in the
+          # directory (assuming it is a directory)
+          filename = "#{path}/#{basename}"
           return load_from_file(filename) if File.exist?(filename)
         end
       end

@@ -24,21 +24,27 @@ describe Tabry::ConfigLoader do
   describe "use of $TABRY_IMPORTS_PATH" do
     before { ENV["TABRY_IMPORTS_PATH"] = "#{__dir__}/../fixtures/" }
 
-    it "looks for yaml files in TABRY_IMPORTS_PATH" do
+    it "looks for yaml files in directories in TABRY_IMPORTS_PATH" do
       config = described_class.load(name: "vehicles")
       expect(config.main.subs.map(&:name)).to eq(
         %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag]
       )
     end
 
-    it "looks for json files in TABRY_IMPORTS_PATH" do
+    it "looks for json files in directories in TABRY_IMPORTS_PATH" do
       config = described_class.load(name: "basiccli")
       expect(config.main.subs.map(&:name)).to eq(%w[foo])
     end
 
-    it "looks for yml files in TABRY_IMPORTS_PATH" do
+    it "looks for yml files in directories in TABRY_IMPORTS_PATH" do
       config = described_class.load(name: "basiccli2")
       expect(config.main.subs.map(&:name)).to eq(%w[waz])
+    end
+
+    it "looks for json files in TABRY_IMPORTS_PATH" do
+      ENV["TABRY_IMPORTS_PATH"] = "#{__dir__}/../fixtures/basiccli.json"
+      config = described_class.load(name: "basiccli")
+      expect(config.main.subs.map(&:name)).to eq(%w[foo])
     end
   end
 

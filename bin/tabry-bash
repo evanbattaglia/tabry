@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Run by the tabry_bash_core.sh bash tab completion function to plug into Tabry
+# to get completion options.
+
 require "shellwords"
 require "yaml"
 require_relative "../lib/tabry/util"

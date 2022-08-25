@@ -1,19 +1,14 @@
-#/usr/bin/env bash
-
-# Bash completion
-# _tabry_completions function is same for any command you use with tabry, you just need
-# to do `complete -F _tabry_completions mycmd` for your command. This calls the tabry-bash
-# ruby script. For more info see LANGUAGE_REFERENCE.md
-
-_tabry_bash="$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/../bin/tabry-bash
-
-_tabry_completions()
+# For more information, or before editing the tabry_bash_core.sh source file,
+# See sh/bash/README.md and sh/bash/tabry_bash.sh in the tabry gem
+_tabry_completions_internal()
 {
+  local tabry_bash="$1"
+
   [[ -n "$TABRY_DEBUG" ]] && echo && echo -n tabry start bash: && date +%s.%N >&2
   local saveifs="$IFS"
   IFS=$'\n'
 
-  local result=`"$_tabry_bash" "$COMP_LINE" "$COMP_POINT"`
+  local result=`ruby "$tabry_bash" "$COMP_LINE" "$COMP_POINT"`
   local specials
 
   if [[ $result == *$'\n'$'\n'* ]]; then
@@ -53,9 +48,4 @@ _tabry_completions()
   IFS="$saveifs"
   [[ -n "$TABRY_DEBUG" ]] && echo -n tabry end bash: && date +%s.%N >&2
 }
-
-# To use: put a .json/.yml tabry config file in ~/.tabry (e.g. ~/.aws.json)
-# Then, run this script in your shell startup scripts, plus (e.g.)
-#
-# complete -F _tabry_completions aws
 

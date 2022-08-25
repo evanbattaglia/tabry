@@ -31,7 +31,7 @@ To compile a tabry file into JSON:
   ```
 3. For tab-completion you may wish to put the resulting `mycli.json` in
    `~/.tabry` so it is always available to tabry. An alternative is to add the
-   path containing the `.json` or `.yml` file onto `TABRY_IMPORT_PATHS`
+   path containing the `.json` or `.yml` file onto `TABRY_IMPORTS_PATH`
    (colon-separated). For CLIs you can pass in the full path to the file in the
    main runnable file for your CLI (more below), which will make the config
    available for your CLI's commands and usage info, but will not enable tab
@@ -54,7 +54,7 @@ To add tab completion:
   run `cp examples/aws.json` `~/.tabry`
   * An alternative is to add the directory with your compile Tabry `.json` file
     to `TABRY_IMPORTS_PATH` (e.g. in your `~/.bash_profile` or `~/.zshrc`)
-* Add `source /path/to/tabry/sh/tabry_bash.sh` to your `~/.bash_profile` or
+* Add `source /path/to/tabry/sh/bash/tabry_bash.sh` to your `~/.bash_profile` or
   `~/.zshrc`. Even if you have multiple tabry completion files, this only has
   to be done once.
 * Add (e.g.) `complete -F _tabry_completions aws` for each command you want tab
@@ -124,10 +124,17 @@ subcommands. There is a "help" subcommand (also "--help") which shows usage
 information added in automatically (usage info is also shown if invalid
 arguments are given).
 
-If you want to use tab completion, don't forget to put a symlink to `mycli.json`
-in `~/.tabry` (or add on to the the `TABRY_IMPORT_PATHS` env var) and add the
-proper setup (i.e., sourcing `tabry_bash.sh` and the adding the `complete`
-command) into your `~/.bash_profile` as described above.
+If you want to use tab completion, you have two options:
+* put a symlink to `mycli.json` in `~/.tabry` (or add on to the the
+  `TABRY_IMPORTS_PATH` env var) and add the proper setup (i.e., sourcing
+  `tabry_bash.sh` and the adding the `complete` command) into your
+  `~/.bash_profile` as described above.
+* (PREFERRED) add a subcommand "completion bash" which runs and prints
+  ```
+  Tabry::Shells::Bash.generate("mycmd", relative_path_to_mycmd_json_tabry_file)
+  ```
+  Which your users can add to their `bash_profile` file. (In this future this
+  will likely be added automatically to Tabry-based CLIs.)
 
 You may wish to experiment with using Gel, which is much faster than
 Bundler, but it often has issues. See the script for the example CLI script
