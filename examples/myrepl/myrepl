@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift "#{__dir__}/../../lib"
+
+require "tabry/config_builder"
+require "tabry/replty/base"
+require "tabry/replty/builder"
+
+conf = Tabry::ConfigBuilder.build do
+  sub :foo do
+    arg :bar
+  end
+end
+
+class MyRepl < Tabry::Replty::Base
+  def foo
+    puts args.bar
+  end
+end
+
+Tabry::Replty::Builder.new(conf, MyRepl.new).run

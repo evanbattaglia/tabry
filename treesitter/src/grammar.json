@@ -79,6 +79,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "opts_method_statement"
+        },
+        {
+          "type": "SYMBOL",
           "name": "opts_file_statement"
         },
         {
@@ -386,6 +390,23 @@
         {
           "type": "STRING",
           "value": "dir"
+        }
+      ]
+    },
+    "opts_method_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "opts"
+        },
+        {
+          "type": "STRING",
+          "value": "method"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
         }
       ]
     },

@@ -5,6 +5,7 @@ Options
 arg {
   opts const a
   opts shell "ls"
+  opts method foo
   opts file
   opts dir
 }
@@ -17,5 +18,6 @@ arg {
     (block
       (opts_const_statement (string))
       (opts_shell_statement (string))
+      (opts_method_statement (string))
       (opts_file_statement)
       (opts_dir_statement))))

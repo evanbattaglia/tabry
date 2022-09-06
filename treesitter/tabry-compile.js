@@ -317,6 +317,12 @@ const handlers = {
     createOpts(state, {type: 'shell', value: textFromString(value)});
   },
 
+  handleOptsMethodStatement(state, node) {
+    checkContext(state, node, ['arg', 'flag', 'option_include']);
+    const {value} = pick(node, {value: 'string'});
+    createOpts(state, {type: 'method', value: textFromString(value)});
+  },
+
   handleOptsFileStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include']);
     createOpts(state, {type: 'file'});

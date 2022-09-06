@@ -21,6 +21,11 @@ module Tabry
         [{ "type" => "shell", "value" => cmd.to_s }]
       end
 
+      # maybe I should rename this ... and include... ?
+      def method(met_name)
+        [{ "type" => "method", "value" => met_name.to_s }]
+      end
+
       def file
         [{ "type" => "file" }]
       end
