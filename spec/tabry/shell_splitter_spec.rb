@@ -9,6 +9,10 @@ describe Tabry::ShellSplitter do
       expect(described_class.split(str, 13)).to eq(["bar", ["abc"], "def"])
     end
 
+    it "returns [] as arguments and the last argument as non-nil when there is only one arg" do
+      expect(described_class.split("foo bar", 5)).to eq(["foo", [], "bar"])
+    end
+
     it "handles quotes and backslashes like a shell" do
       expect(described_class.split('"/foo bar/waz" a\'b \'c\\ d "ef g" "hi jk" lmn', 38)).to eq(
         [
@@ -17,6 +21,14 @@ describe Tabry::ShellSplitter do
           "hi jk"
         ]
       )
+    end
+
+    it "supports tokens with argument (tab on command), yielding the last arg" do
+      expect(described_class.split("abc", 2)).to eq([nil, [], "abc"])
+    end
+
+    it "supports empty strings" do
+      expect(described_class.split("", 0)).to eq([nil, [], ""])
     end
   end
 end

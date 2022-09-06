@@ -27,6 +27,7 @@ module.exports = grammar({
       $._common_statement,
       $.opts_const_statement,
       $.opts_shell_statement,
+      $.opts_method_statement,
       $.opts_file_statement,
       $.opts_dir_statement,
       $.title_statement,
@@ -119,6 +120,12 @@ module.exports = grammar({
     opts_dir_statement: $ => seq(
       'opts',
       'dir',
+    ),
+
+    opts_method_statement: $ => seq(
+      'opts',
+      'method',
+      $.string
     ),
 
     flagarg_statement: $ => seq(

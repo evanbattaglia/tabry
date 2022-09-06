@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "config_error"
-require_relative "const_option"
-require_relative "shell_option"
-require_relative "include_option"
-require_relative "file_option"
-require_relative "dir_option"
+%w[const shell include file dir method].each do |type|
+  require_relative "#{type}_option"
+end
 
 module Tabry
   module Models
@@ -18,6 +16,8 @@ module Tabry
           ConstOption.new(**args)
         when "shell"
           ShellOption.new(**args)
+        when "method"
+          MethodOption.new(**args)
         when "include"
           IncludeOption.new(**args)
         when "file"

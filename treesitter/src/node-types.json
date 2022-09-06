@@ -102,6 +102,10 @@
           "named": true
         },
         {
+          "type": "opts_method_statement",
+          "named": true
+        },
+        {
           "type": "opts_shell_statement",
           "named": true
         },
@@ -333,6 +337,21 @@
     "fields": {}
   },
   {
+    "type": "opts_method_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "opts_shell_statement",
     "named": true,
     "fields": {},
@@ -522,6 +541,10 @@
   },
   {
     "type": "include",
+    "named": false
+  },
+  {
+    "type": "method",
     "named": false
   },
   {
