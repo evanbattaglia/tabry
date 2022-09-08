@@ -31,11 +31,6 @@ module Tabry
           @path = path.gsub(/^~/, Dir.home)
         end
 
-        def self.configs(glob)
-          glob = glob.gsub(/^~/, Dir.home)
-          Dir[glob].sort.map { |f| new(f) }
-        end
-
         def config
           @config ||= YAML.load_file(@path).to_openstruct
         end
