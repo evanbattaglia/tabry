@@ -1,4 +1,5 @@
 on: [pull_request]
+
 jobs:
   rubocop:
     runs-on: ubuntu-latest
