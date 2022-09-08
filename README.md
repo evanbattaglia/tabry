@@ -174,6 +174,14 @@ nix-shell -p bundix
 [nix-shell:]$ bundix 
 ```
 
+## Compiling tabry files with nix
+
+This flake provides a `tabryc` app which compiles `.tabry` files. To run it, use the flake url, specifying the `tabryc` target:
+
+```sh
+nix run github:evanbattaglia/tabry#tabryc path/to/file.tabry path/to/file.json
+```
+
 # Future possible improvements
 * `mycmd -ab` should be interpreted as `mycmd -a -b`
 * if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`
