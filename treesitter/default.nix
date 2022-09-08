@@ -1,15 +1,8 @@
 flake-utils: {
-  yarn2nix,
-  yarn2nix-moretea,
   mkYarnPackage,
-  nodePackages,
   python3,
   stdenv,
-  bundlerEnv,
-  ruby,
   lib,
-  coreutils,
-  fetchzip,
   xcbuild,
   nodejs-16_x,
   ...
