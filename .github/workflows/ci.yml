@@ -4,11 +4,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Run rubocop
-        run: |
-          bundle exec rubocop
+      - name: RSpec Report
+        uses: SonicGarden/rspec-report-action@v2
+      - name: RuboCop Linter Action
+        uses: andrewmcodes-archive/rubocop-linter-action@v3.3.0
