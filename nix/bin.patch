@@ -1,0 +1,10 @@
+diff --git a/examples/mycli/bin/mycli b/examples/mycli/bin/mycli
+index d35c708..546c065 100755
+--- a/examples/mycli/bin/mycli
++++ b/examples/mycli/bin/mycli
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env -S ruby --disable-gems
++#!/usr/bin/env ruby
+ # frozen_string_literal: true
+ 
+ # Attempt to use Gel if available. Need to --disable-gems because Gel has its
