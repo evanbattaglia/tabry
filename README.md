@@ -26,8 +26,8 @@ To compile a tabry file into JSON:
   and `npx node-gyp rebuild`)
 2. Compile your file:
   ```
-  # Usage: ./compile.js [inputfile] [outputfile]
-  ./compile.js /path/to/mycli.tabry /path/to/mycli.json
+  # Usage: ./tabry-compile.js [inputfile] [outputfile]
+  ./tabry-compile.js /path/to/mycli.tabry /path/to/mycli.json
   ```
 3. For tab-completion you may wish to put the resulting `mycli.json` in
    `~/.tabry` so it is always available to tabry. An alternative is to add the
