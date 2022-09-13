@@ -15,7 +15,7 @@
           let
             pkgs = nixpkgs.legacyPackages."${system}";
             tabry = import ./default.nix pkgs;
-              tabryLang = import ./treesitter flake-utils pkgs;
+            tabryLang = import ./treesitter flake-utils pkgs;
           in {
             packages = {
               default = tabry;

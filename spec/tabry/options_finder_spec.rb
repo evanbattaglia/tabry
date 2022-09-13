@@ -88,4 +88,40 @@ describe Tabry::OptionsFinder do
       expect(described_class.options(result, token)).to match_array expected_options
     end
   end
+
+  describe "TABRY_AUTOCOMPLETE_STATE" do
+    before { @env_before = ENV.fetch("TABRY_AUTOCOMPLETE_STATE", nil) }
+
+    after { ENV["TABRY_AUTOCOMPLETE_STATE"] = @env_before }
+
+    let(:state) do
+      {
+        mode: :flagarg, current_flag: "speed",
+        subcommand_stack: %w[move crash],
+        flags: {}, args: []
+      }
+    end
+    let(:result) { Tabry::Result.new(config, Tabry::State.new(state)) }
+    let(:flag) { config.dig_sub(%w[move crash]).flags["speed"] }
+
+    it "sets TABRY_AUTOCOMPLETE_STATE with information about the state" do
+      expect(flag.options).to receive(:options) do
+        expect(JSON.parse(ENV.fetch("TABRY_AUTOCOMPLETE_STATE", nil), symbolize_names: true)).to eq(
+          args: [],
+          cmd: "vehicles",
+          current_flag: "speed",
+          current_token: "abcd",
+          flags: {}
+        )
+      end
+
+      described_class.options(result, "abcd")
+    end
+
+    it "sets TABRY_AUTOCOMPLETE_STATE back to what it was before" do
+      ENV["TABRY_AUTOCOMPLETE_STATE"] = "foobar1234"
+      described_class.options(result, "foo")
+      expect(ENV.fetch("TABRY_AUTOCOMPLETE_STATE", nil)).to eq("foobar1234")
+    end
+  end
 end

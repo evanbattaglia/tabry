@@ -8,27 +8,12 @@ require "shellwords"
 require "yaml"
 require_relative "../lib/tabry/util"
 require_relative "../lib/tabry/runner"
+require_relative "../lib/tabry/shell_splitter"
 
 # Bash-specific entrypoint, taking COMP_WORDS and COMP_CWORDS and returning possible options
 
-COMP_POINT_SENTINEL = "\uFFFF"
-
-# TODO: in weird scenarios this acts weird: namely, special shell operators like <(ls), $$((1 + 1))
-# Also it crashed on unbalanced quotes, like: foo "bar<TAB>
-# however, this will handle the common scenarios of escaping with quotes, single quotes, and backslashes
-# Split up args and put the argument that comp_point is in in the `last_arg` variable.
-# Just cutting off everything after comp_point might have worked, although
-# maybe we wanted the whole arg? Not sure this is the best.
 cmd_line, comp_point = ARGV
-cmd_line = cmd_line.dup
-cmd_line[comp_point.to_i...comp_point.to_i] = COMP_POINT_SENTINEL
-cmd, *all_args = Shellwords.split(cmd_line)
-last_arg_index = all_args.index { |arg| arg.include?(COMP_POINT_SENTINEL) }
-args = all_args[0..last_arg_index]
-last_arg = args.pop.gsub! COMP_POINT_SENTINEL, ""
-
-cmd_name = cmd.gsub(%r{.*/}, "")
-
+cmd_name, args, last_arg = Tabry::ShellSplitter.split(cmd_line, comp_point)
 opts = Tabry::Runner.new(config_name: cmd_name).options(args, last_arg)
 
 if Tabry::Util.debug?

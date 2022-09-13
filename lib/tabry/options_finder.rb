@@ -18,14 +18,18 @@ module Tabry
     def options(token)
       # Bit of a hack: send this down to autocomplete shell commands
       # TODO: set this only in ShellOption -- would require passing state down on thru
+      before_env = ENV.fetch("TABRY_AUTOCOMPLETE_STATE", nil)
       ENV["TABRY_AUTOCOMPLETE_STATE"] = {
         cmd: result.config.cmd,
         flags: result.state.flags,
         args: result.state.args,
+        current_token: token,
         current_flag: result.state.current_flag
       }.to_json
 
       send(:"options_#{state.mode}", token || "")
+    ensure
+      ENV["TABRY_AUTOCOMPLETE_STATE"] = before_env
     end
 
     private
