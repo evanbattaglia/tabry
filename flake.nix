@@ -7,21 +7,28 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-        let
-          pkgs = nixpkgs.legacyPackages."${system}";
-          tabry = import ./default.nix pkgs;
+    let
+      tabryHmModule = import ./nix/tabry-hm-module.nix flake-utils;
+    in
+      flake-utils.lib.eachDefaultSystem (
+        system:
+          let
+            pkgs = nixpkgs.legacyPackages."${system}";
+            tabry = import ./default.nix pkgs;
             tabryLang = import ./treesitter flake-utils pkgs;
-        in {
-          packages = {
-            default = tabry;
-            tabry = tabry;
-            treesitterTabryBuild = tabryLang.treesitterTabryBuild;
-          };
-          apps = {
-            tabryc = tabryLang.tabryc;
-          };
-        }
-    );
+          in {
+            packages = {
+              default = tabry;
+              tabry = tabry;
+              treesitterTabryBuild = tabryLang.treesitterTabryBuild;
+            };
+            apps = {
+              tabryc = tabryLang.tabryc;
+            };
+          }
+      ) // {
+        homeModules = {
+          tabry = tabryHmModule;
+        };
+      };
 }

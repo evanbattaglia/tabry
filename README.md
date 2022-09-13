@@ -182,6 +182,39 @@ This flake provides a `tabryc` app which compiles `.tabry` files. To run it, use
 nix run github:evanbattaglia/tabry#tabryc path/to/file.tabry path/to/file.json
 ```
 
+## Configuring tabry with home-manager
+
+This flake provides a home-manager (https://github.com/nix-community/home-manager) module to make it easy to configure and use tabry completions.
+
+You can use this module by adding this to your home-manager configuration:
+
+```nix
+{
+  inputs = {
+    ...
+    tabry.url = "github:evanbattaglia/tabry";
+  };
+  
+  ...
+  home-manager.lib.homeManagerConfiguration {
+    ...
+    modules = [
+      tabry.homeModules.tabry,
+      ...
+      {
+        config.programs.tabry = {
+          enable = true;
+          enableFishIntegration = true;
+          tabryFiles = [
+            ./rapture.tabry
+          ];
+        };
+      }
+    ]
+  }
+}
+```
+
 # Future possible improvements
 * `mycmd -ab` should be interpreted as `mycmd -a -b`
 * if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`
