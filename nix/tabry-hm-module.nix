@@ -39,7 +39,7 @@ in {
 
     programs.fish.shellInit = mkIf cfg.enableFishIntegration (
       let 
-        tabryImportsPath = builtins.concatStringsSep " " (compileTabryFiles cfg.tabryFiles);
+        tabryImportsPath = builtins.concatStringsSep ":" (compileTabryFiles cfg.tabryFiles);
       in ''
         set -x TABRY_IMPORTS_PATH "${builtins.trace tabryImportsPath tabryImportsPath}:$TABRY_IMPORTS_PATH"
         source ${tabry}/sh/fish/tabry_fish.fish

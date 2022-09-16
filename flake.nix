@@ -20,10 +20,10 @@
             packages = {
               default = tabry;
               tabry = tabry;
-              treesitterTabryBuild = tabryLang.treesitterTabryBuild;
+              tabryc = tabryLang.tabryc;
             };
             apps = {
-              tabryc = tabryLang.tabryc;
+              tabryc = tabryLang.tabrycApp;
             };
           }
       ) // {

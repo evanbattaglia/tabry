@@ -33,7 +33,7 @@ flake-utils: {
 
         # for some reason, patchSheBangs points to node 18,
         # which doesn't work with treesitter
-        ${treesitterNode}/bin/node ${treesitterTabryBuild}${tabryCompilerJsPath} ${inFile} $out/${formatJsonFilename inFile}
+        ${tabryc}/bin/tabryc ${inFile} $out/${formatJsonFilename inFile}
       '';
       # by default, stdenv.mkDerivation will run `make install`
       # which we don't want to do here
@@ -41,7 +41,7 @@ flake-utils: {
     };
 
     # this derivation builds the treesitter project
-    treesitterTabryBuild = mkYarnPackage {
+    tabryc = mkYarnPackage {
       name = "tabry-lang";
       src = ./.;
       packageJSON = ./package.json;
@@ -59,14 +59,19 @@ flake-utils: {
         ${treesitterNode}/lib/node_modules/npm/bin/node-gyp-bin/node-gyp --nodedir ${treesitterNode} rebuild
         cd ../../
       '';
+      distPhase = ''
+        echo "#!/usr/bin/env bash" > $out/bin/tabryc
+        echo "${treesitterNode}/bin/node $out/libexec/tree-sitter-tabry/deps/tree-sitter-tabry/tabry-compile.js \"\$@\"" >> $out/bin/tabryc
+        chmod +x $out/bin/tabryc
+        patchShebangs $out/bin/tabryc
+      '';
     };
 
-    tabryc = flake-utils.lib.mkApp {
-      drv = treesitterTabryBuild;
+    tabrycApp = flake-utils.lib.mkApp {
+      drv = tabryc;
       name = "tabryc";
-      exePath = tabryCompilerJsPath;
     };
 
   in {
-    inherit tabryc compileTabryFile treesitterTabryBuild commandNameFromTabryFilename;
+    inherit tabryc compileTabryFile tabrycApp commandNameFromTabryFilename;
   }

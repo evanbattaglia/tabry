@@ -186,21 +186,21 @@ nix run github:evanbattaglia/tabry#tabryc path/to/file.tabry path/to/file.json
 
 This flake provides a home-manager (https://github.com/nix-community/home-manager) module to make it easy to configure and use tabry completions.
 
-You can use this module by adding this to your home-manager configuration:
+You can add autocompletion to your shell by adding this module to your home-manager configuration, and configuring it:
 
 ```nix
 {
   inputs = {
-    ...
+    # ...
     tabry.url = "github:evanbattaglia/tabry";
   };
-  
-  ...
-  home-manager.lib.homeManagerConfiguration {
-    ...
+
+  # ...
+  homeConfigurations.base = home-manager.lib.homeManagerConfiguration {
+    # ...
     modules = [
-      tabry.homeModules.tabry,
-      ...
+      tabry.homeModules.tabry
+      # ...
       {
         config.programs.tabry = {
           enable = true;
@@ -210,8 +210,27 @@ You can use this module by adding this to your home-manager configuration:
           ];
         };
       }
-    ]
-  }
+    ];
+  };
+}
+```
+
+You can also install the `tabryc` compiler using the `tabryc` package:
+
+```nix
+{
+  inputs = {
+    # ...
+    tabry.url = "github:evanbattaglia/tabry";
+  };
+
+  # ...
+  homeConfigurations.base = home-manager.lib.homeManagerConfiguration {
+    # ...
+    config.home.packages = [
+      tabry.packages.${system}.tabryc
+    ];
+  };
 }
 ```
 
