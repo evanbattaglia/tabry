@@ -9,8 +9,19 @@ module Tabry
       module_function
 
       def make_cmdline(cmdline, *args, echo: false, echo_only: false)
-        args = Array(args).flatten
-        cmdline = cmdline % args.map { |a| Shellwords.escape(a) }
+        # Allow to pass in an array, or varargs:
+        args = args.first if args.length == 1 && args.first.is_a?(Array)
+
+        args = args.map do |arg|
+          if arg.is_a?(Array)
+            # array of arguments get escaped separately and joined with strings (see specs)
+            arg.map { |a| Shellwords.escape(a) }.join(" ")
+          else
+            Shellwords.escape(arg)
+          end
+        end
+        cmdline = cmdline % args
+
         warn cmdline if echo || echo_only
         return nil if echo_only
 
