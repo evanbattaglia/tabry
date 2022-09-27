@@ -16,7 +16,7 @@ module Tabry
       if config_name.is_a?(Tabry::Models::Config)
         @config = config_name
       else
-        @config_name = ConfigLoader.load(name: config_name)
+        @config = ConfigLoader.load(name: config_name)
       end
     end
 
