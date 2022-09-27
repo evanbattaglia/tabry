@@ -2,13 +2,14 @@
 # See sh/bash/README.md and sh/bash/tabry_bash.sh in the tabry gem
 _tabry_completions_internal()
 {
-  local tabry_bash="$1"
+  local tabry_bash_executable="$1"
+  local tabry_bash_arg="$2"
 
   [[ -n "$TABRY_DEBUG" ]] && echo && echo -n tabry start bash: && date +%s.%N >&2
   local saveifs="$IFS"
   IFS=$'\n'
 
-  local result=`ruby "$tabry_bash" "$COMP_LINE" "$COMP_POINT"`
+  local result=`"$tabry_bash_executable" "$tabry_bash_arg" "$COMP_LINE" "$COMP_POINT"`
   local specials
 
   if [[ $result == *$'\n'$'\n'* ]]; then
