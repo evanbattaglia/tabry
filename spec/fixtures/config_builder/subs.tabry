@@ -1,0 +1,25 @@
+cmd substest
+
+sub list "List the things"
+sub delete,d @verbose {
+  desc "Delete a thing"
+  arg
+}
+
+# status command acts and project-and-environment as well
+sub status "foo" @project-and-environment @verbose {
+  flagarg env @environment
+}
+
+sub mysub1 {
+  sub mysub2 {
+    flag someopt
+    opt arg mysub2-arg
+  }
+}
+
+# Top-level include
+include @project-and-environment
+
+
+

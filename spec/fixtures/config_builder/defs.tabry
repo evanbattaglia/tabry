@@ -1,0 +1,21 @@
+cmd defstest
+
+defopts @bar {
+  opts const def
+}
+
+defopts @environment {
+  opts const (prod beta dev)
+}
+
+defargs @verbose {
+  flag verbose "Show more info"
+}
+
+defargs @project-and-environment {
+  arg project "The project" { opts const (project1 project2) }
+  arg environment "The environment" @environment
+}
+
+
+

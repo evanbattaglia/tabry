@@ -1,0 +1,18 @@
+cmd underscores_test
+
+arg foo-bar1 @project-and-environment
+
+flagarg foo-bar2 @project-and-environment {
+  include @waz-abc
+}
+
+sub s,status-foo "foo" @project-and-environment {
+  flagarg env @environment
+}
+
+include @project-and-environment
+
+defopts @project_and_environment {
+  opts const a
+}
+

@@ -1,0 +1,39 @@
+cmd: underscores_test
+main:
+  args:
+    - name: foo-bar1
+      options:
+        - type: include
+          value: project-and-environment
+    - include: project-and-environment
+  flags:
+    - name: foo-bar2
+      options:
+        - type: include
+          value: project-and-environment
+        - type: include
+          value: waz-abc
+      arg: true
+    - include: project-and-environment
+  subs:
+    - name: s
+      aliases:
+        - status-foo
+      description: foo
+      args:
+        - include: project-and-environment
+      flags:
+        - include: project-and-environment
+        - name: env
+          options:
+            - type: include
+              value: environment
+          arg: true
+      subs:
+        - include: project-and-environment
+    - include: project-and-environment
+option_includes:
+  project_and_environment:
+    - type: const
+      value: a
+

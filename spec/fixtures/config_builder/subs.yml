@@ -1,0 +1,46 @@
+cmd: substest
+main:
+  subs:
+    - name: list
+      description: List the things
+    - name: delete
+      aliases:
+        - d
+      args:
+        - include: verbose
+        - {}
+      flags:
+        - include: verbose
+      subs:
+        - include: verbose
+      description: Delete a thing
+    - name: status
+      description: foo
+      args:
+        - include: project-and-environment
+        - include: verbose
+      flags:
+        - include: project-and-environment
+        - include: verbose
+        - name: env
+          options:
+            - type: include
+              value: environment
+          arg: true
+      subs:
+        - include: project-and-environment
+        - include: verbose
+    - name: mysub1
+      subs:
+        - name: mysub2
+          flags:
+            - name: someopt
+          args:
+            - name: mysub2-arg
+              optional: true
+    - include: project-and-environment
+  args:
+    - include: project-and-environment
+  flags:
+    - include: project-and-environment
+

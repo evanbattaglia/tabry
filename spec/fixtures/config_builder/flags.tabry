@@ -1,0 +1,13 @@
+cmd flagstest
+
+flag foo1
+flag foo2 "Some desc"
+flag dry-run2,r "Don't act, only show what would be done"
+
+flagarg foo3
+flagarg b {
+  opts const a
+}
+
+flagarg f,format { opts const (json yml) }
+

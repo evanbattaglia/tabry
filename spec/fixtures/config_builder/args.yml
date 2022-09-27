@@ -1,0 +1,63 @@
+cmd: argstest
+main:
+  args:
+    - options:
+        - type: const
+          value: a
+        - type: shell
+          value: ls
+        - type: const
+          value: T
+        - type: const
+          value: F
+        - type: const
+          value: "true"
+        - type: const
+          value: "false"
+        - type: const
+          value: "yes"
+        - type: const
+          value: "no"
+        - type: file
+        - type: dir
+    - name: foo
+    - name: foo
+      options:
+        - type: include
+          value: whatever
+    - name: foo
+      options:
+        - type: include
+          value: whatever
+        - type: const
+          value: abc
+      description: desc
+    - optional: true
+    - name: foo
+      optional: true
+      options:
+        - type: include
+          value: whatever
+        - type: const
+          value: abc
+    - options:
+        - type: include
+          value: foo
+        - type: const
+          value: abc
+    - name: rest-args-optional
+      optional: true
+      varargs: true
+      options:
+        - type: const
+          value: foo
+        - type: const
+          value: bar
+        - type: const
+          value: waz
+    - name: thing_to_search_for
+      title: thing to search for
+    - name: files_to_load
+      varargs: true
+      title: file to load
+

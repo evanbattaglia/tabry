@@ -1,0 +1,27 @@
+cmd: flagstest
+main:
+  flags:
+    - name: foo1
+    - name: foo2
+      description: Some desc
+    - name: dry-run2
+      aliases:
+        - r
+      description: Don't act, only show what would be done
+    - name: foo3
+      arg: true
+    - name: b
+      arg: true
+      options:
+        - type: const
+          value: a
+    - name: f
+      aliases:
+        - format
+      arg: true
+      options:
+        - type: const
+          value: json
+        - type: const
+          value: yml
+

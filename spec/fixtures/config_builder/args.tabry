@@ -1,0 +1,32 @@
+cmd argstest
+
+arg {
+  opts const a
+  opts shell "ls"
+  opts const (T F true false yes no)
+  opts file
+  opts dir
+}
+
+arg foo
+arg foo @whatever
+arg foo "desc" @whatever {
+  opts const abc
+}
+
+opt arg
+opt arg foo @whatever {
+  opts const abc
+}
+
+arg {
+  include @foo
+  opts const abc
+}
+
+opt varargs rest-args-optional { opts const (foo bar waz) }
+
+arg thing_to_search_for { title "thing to search for" }
+varargs files_to_load { title "file to load" }
+
+
