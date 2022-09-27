@@ -11,11 +11,11 @@ Tabry::CLI::AllInOne.run do
     sub :things do
       sub 'list,l', "List the things"
       sub 'add,a' do
-        arg 'thing-name'
+        arg :thing_name
       end
       sub 'delete, d', :@thing_name
       sub 'rename, move, mv', :@thing_name do
-        arg 'new-thing-name'
+        arg :new_thing_name
       end
     end
 
