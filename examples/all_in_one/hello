@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 
+# TODO: maybe completion could pass along a TABRY_PATH here? so we wouldn't
+# have to run bundler until after the config block
 require_relative '../../lib/tabry/cli/all_in_one.rb'
 
 Tabry::CLI::AllInOne.run do
   config(names_underscores_to_dashes: true) do
     completion
+
     sub :things do
       sub 'list,l', "List the things"
       sub 'add,a' do
@@ -23,6 +26,8 @@ Tabry::CLI::AllInOne.run do
     end
   end
 
+  # You can but requires here if the may be expensive; things here will not get
+  # run if running completion only
   def things__list = puts(%w[foo bar waz])
   def things__add = puts("adding #{args.thing_name}")
   def things__delete = puts("deleting #{args.thing_name}")
