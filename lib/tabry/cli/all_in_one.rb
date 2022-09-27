@@ -2,6 +2,7 @@
 
 require_relative "base"
 require_relative 'builder'
+require_relative '../config_builder'
 
 module Tabry
   module CLI
@@ -20,6 +21,36 @@ module Tabry
         end
       end
 
+      def self.completion_only(cmd_name, &cmd_conf_blk)
+        cmd_conf = Tabry::ConfigBuilder.build(&cmd_conf_blk)
+
+        completer_cli = Class.new(AllInOneBase)
+
+        run_completion = catch(:run_completion) do
+          completer_cli.module_eval do
+            config do
+              completion
+              cmd cmd_name
+            end
+
+            define_method(:completion__bash) do
+              require_relative '../shells/bash'
+              puts Tabry::Shells::Bash.generate_self(cmd_name: cmd_name)
+            end
+          end
+
+          false
+        end
+
+        if run_completion
+          require_relative '../shells/bash/wrapper'
+          Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: cmd_conf)
+        else
+          completer_conf = completer_cli.instance_variable_get(:@tabry_all_in_one_config)
+          Tabry::CLI::Builder.new(completer_conf, completer_cli).run(ARGV)
+        end
+      end
+
       def self.run(cli: nil, config: nil, &blk)
         cli ||= Class.new(AllInOneBase)
         run_completion = catch(:run_completion) do
@@ -34,7 +65,8 @@ module Tabry
           Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
         end
 
-        if config.main.subs.by_name['completion']
+        # Add completion methods if not already defined by caller in the block
+        if config.main.subs.by_name['completion'] && !cli.instance_methods.include?(:completion)
           completion_mixin = Module.new do
             def completion__bash
               require_relative '../shells/bash'

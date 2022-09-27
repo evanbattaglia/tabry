@@ -17,7 +17,7 @@ class GenericBuilder
     @_obj ||= {}
   end
 
-  def _append(list_name, value_or_values)
+  def _append(list_name, *value_or_values)
     _obj[list_name.to_s] ||= []
     _obj[list_name.to_s].concat([value_or_values].flatten)
     value_or_values
