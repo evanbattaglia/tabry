@@ -7,9 +7,9 @@ module Tabry
   module CLI
     module AllInOne
       class AllInOneBase < Base
-        def self.config(&blk)
+        def self.config(opts={}, &blk)
           require_relative '../config_builder'
-          conf = Tabry::ConfigBuilder.build(&blk)
+          conf = Tabry::ConfigBuilder.build(**opts, &blk)
           instance_variable_set(:@tabry_all_in_one_config, conf)
         end
       end

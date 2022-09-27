@@ -3,7 +3,7 @@
 require_relative '../../lib/tabry/cli/all_in_one.rb'
 
 Tabry::CLI::AllInOne.run do
-  config do
+  config(names_underscores_to_dashes: true) do
     completion
     sub :things do
       sub 'list,l', "List the things"
@@ -17,7 +17,7 @@ Tabry::CLI::AllInOne.run do
     end
 
     defargs :@thing_name do
-      arg 'thing-name' do
+      arg :thing_name do
         opts shell "hello things list"
       end
     end

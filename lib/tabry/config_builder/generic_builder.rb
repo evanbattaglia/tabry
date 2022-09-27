@@ -1,8 +1,16 @@
 class GenericBuilder
-  def self.build(*args, &blk)
-    builder = new(*args)
+  attr_reader :_opts
+
+  private_class_method :new
+  def self.build(opts={}, *args, &blk)
+    builder = new(opts, *args)
     builder.instance_eval(&blk) if blk
     builder._obj.compact
+  end
+
+  # Should be used instead of MyBuilder.build to pass in opts
+  def _build(builder, *args, &blk)
+    builder.build(_opts, *args, &blk)
   end
 
   def _obj
@@ -23,10 +31,15 @@ class GenericBuilder
   def _set(key, val)
     val = val.chomp if val.is_a?(String)
     val = val.to_s if val.is_a?(Symbol)
+    if _opts[:names_underscores_to_dashes] && key.to_s == 'name'
+      val = val.gsub('_', '-') if val.is_a?(String)
+      val = val.map{|name| name.to_s.gsub('_', '-')} if val.is_a?(Array)
+    end
     _obj[key.to_s] = val
   end
 
-  def initialize(*args)
+  def initialize(opts, *args)
+    @_opts = opts
     includes, not_includes = args.partition{|arg| arg.is_a?(Symbol) && arg.to_s.start_with?('@')}
     includes.each { |arg| include(arg) }
     _init *not_includes if defined?(:_init)
@@ -41,7 +54,7 @@ class GenericBuilder
 
   def self.builder_appender(name, key, builder, merge: {})
     define_method name.to_sym do |*args, &blk|
-      value = builder.build(*args, &blk).merge(merge.transform_keys(&:to_s))
+      value = _build(builder, *args, &blk).merge(merge.transform_keys(&:to_s))
       _append key, value
     end
   end
