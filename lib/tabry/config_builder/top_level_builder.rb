@@ -15,6 +15,14 @@ module Tabry
         name = name.to_s.gsub(/^@/, '')
         _set_hash :option_includes, name, ArgOrFlagBuilder.build(&blk)['options']
       end
+
+      def completion
+        sub :completion do
+          sub :bash
+          arg :cmd_line
+          arg :comp_point
+        end
+      end
     end
   end
 end

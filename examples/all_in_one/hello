@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require_relative '../../lib/tabry/cli/all_in_one.rb'
+
+Tabry::CLI::AllInOne.run do
+  config do
+    completion
+    sub :things do
+      sub 'list,l', "List the things"
+      sub 'add,a' do
+        arg 'thing-name'
+      end
+      sub 'delete, d', :@thing_name
+      sub 'rename, move, mv', :@thing_name do
+        arg 'new-thing-name'
+      end
+    end
+
+    defargs :@thing_name do
+      arg 'thing-name' do
+        opts shell "hello things list"
+      end
+    end
+  end
+
+  def things__list = puts(%w[foo bar waz])
+  def things__add = puts("adding #{args.thing_name}")
+  def things__delete = puts("deleting #{args.thing_name}")
+  def things__rename = puts("renameing #{args.thing_name}")
+end

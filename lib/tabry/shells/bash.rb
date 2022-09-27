@@ -13,20 +13,29 @@ module Tabry
       # NOTE! This code uses sh/bash/tabry_bash_core.sh and is described in
       # sh/bash/README.md; see that README for more info
       def self.generate(cmd_name, tabry_file_path)
+        generate_internal(
+          cmd_name: cmd_name,
+          import_path: Shellwords.escape(File.expand_path(tabry_file_path)),
+          tabry_bash_executable: "ruby",
+          tabry_bash_arg: Shellwords.escape("#{path_to_tabry}/bin/tabry-bash")
+        )
+      end
+
+      def self.generate_self
+        cmd_name = File.basename($0)
+        generate_internal(
+          cmd_name: cmd_name,
+          import_path: '',
+          tabry_bash_executable: Shellwords.escape(cmd_name),
+          tabry_bash_arg: "completion"
+        )
+      end
+
+      def self.generate_internal(cmd_name:, import_path:, tabry_bash_executable:, tabry_bash_arg:)
         capitalized_cmd_name = cmd_name.upcase.gsub(/[^a-zA-Z0-9_]/, "_")
         path_to_tabry = Shellwords.escape(File.expand_path("#{__dir__}/../../../"))
-
         core = File.read("#{__dir__}/../../../sh/bash/tabry_bash_core.sh")
         core.gsub! "_tabry_completions_internal()", "_tabry_#{capitalized_cmd_name}_completions_internal()"
-
-        if tabry_file_path == :self
-          tabry_bash_executable = Shellwords.escape(cmd_name) # TODO maybe even get running ruby file path?
-          tabry_bash_arg = "completion"
-        else
-          import_path = Shellwords.escape(File.expand_path(tabry_file_path))
-          tabry_bash_executable = "ruby"
-          tabry_bash_arg = Shellwords.escape("#{path_to_tabry}/bin/tabry-bash")
-        end
 
         <<~END_BASH_CODE_TEMPLATE + core
           # The following Autocomplete is for a Tabry-powered command. It was
