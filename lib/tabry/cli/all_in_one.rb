@@ -66,7 +66,7 @@ module Tabry
         end
 
         # Add completion methods if not already defined by caller in the block
-        if config.main.subs.by_name['completion'] && !cli.instance_methods.include?(:completion)
+        if config.main.subs.by_name['completion'] && !cli.instance_methods.include?(:completion__bash)
           completion_mixin = Module.new do
             def completion__bash
               require_relative '../shells/bash'

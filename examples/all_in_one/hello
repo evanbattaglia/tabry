@@ -33,3 +33,36 @@ Tabry::CLI::AllInOne.run do
   def things__delete = puts("deleting #{args.thing_name}")
   def things__rename = puts("renameing #{args.thing_name}")
 end
+
+# One less level of "all-in-one-ness" is separating out the config, which is
+# good for code organization:
+#
+# module MyCli
+#   TabryConfig = Tabry::CLI::ConfigBuilder.build do
+#     completion
+#     sub ...
+#   en
+# end
+#
+# Tabry::CLI::AllInOne.ruin(config: TabryConfig) do
+# end
+# ...
+#
+#
+# Tabry::CLI::AllInOne will detect the "completion" sub in the config and
+# make the methods to generate bash completion and to actually run completion
+# (with just "completion").
+#
+# However this still has the problem of it being potentially slow to run the
+# completion as it probably needs to use bundler to run your "cli completion"
+# command and load tabry. A better option is to use the hash generated
+# ConfigBuilder.build and write it to a YML/JSON file and use make a completion__bash
+# command to generate a completion which uses the YML/JSON file.
+#
+# TODO: I hope to make this a little easier to use soon so generate_bash can
+# make config which uses a ruby file (which only has the
+# Tabry::ConfigBuilder.build command) instead of a YML file, and some helper
+# methods to tie this all together (e.g. something to create the
+# completion__bash method in the CLI which does the right thing, and create
+# the "completion bash" but not "completion" commands in the Tabry config)
+#
