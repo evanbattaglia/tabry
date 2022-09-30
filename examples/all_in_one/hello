@@ -41,10 +41,14 @@ end
 #   TabryConfig = Tabry::CLI::ConfigBuilder.build do
 #     completion
 #     sub ...
-#   en
+#   end
 # end
 #
-# Tabry::CLI::AllInOne.ruin(config: TabryConfig) do
+#
+# # in main cli file:
+# require_relative 'tabry_config'
+#
+# Tabry::CLI::AllInOne.run(config: TabryConfig) do
 # end
 # ...
 #
