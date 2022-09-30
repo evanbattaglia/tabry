@@ -56,5 +56,31 @@ describe Tabry::CLI::Util do
                "hello foo\\;bar waz\\;ok hi"
              )
     end
+
+    it "can merge_stderr" do
+      expect(described_class.make_cmdline(
+               "echo %s | cat", "a", merge_stderr: true
+             )).to eq(
+               "{ echo a | cat ;} 2>&1"
+             )
+    end
+  end
+
+  describe "open_web_page" do
+    it 'uses "xdg-open" when on Linux' do
+      stub_const("RUBY_PLATFORM", "x86_64-linux")
+      expect(Kernel).to receive("system") do |cmdline|
+        expect(cmdline).to include("(xdg-open ")
+      end
+      described_class.open_web_page("http://example.com")
+    end
+
+    it 'uses "open" when on Darwin' do
+      stub_const("RUBY_PLATFORM", "x86_64-darwin")
+      expect(Kernel).to receive("system") do |cmdline|
+        expect(cmdline).to include("(open ")
+      end
+      described_class.open_web_page("http://example.com")
+    end
   end
 end
