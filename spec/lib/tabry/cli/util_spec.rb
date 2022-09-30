@@ -54,5 +54,13 @@ describe Tabry::CLI::Util do
         "hello foo\\;bar waz\\;ok hi"
       )
     end
+
+    it "can merge_stderr" do
+      expect(described_class.make_cmdline(
+        "echo %s | cat", "a", merge_stderr: true)
+      ).to eq(
+        "{ echo a | cat ;} 2>&1"
+      )
+    end
   end
 end

@@ -8,7 +8,7 @@ module Tabry
     module Util
       module_function
 
-      def make_cmdline(cmdline, *args, echo: false, echo_only: false)
+      def make_cmdline(cmdline, *args, echo: false, echo_only: false, merge_stderr: false)
         # Allow to pass in an array, or varargs:
         args = args.first if args.length == 1 && args.first.is_a?(Array)
 
@@ -21,6 +21,7 @@ module Tabry
           end
         end
         cmdline = cmdline % args
+        cmdline = "{ #{cmdline} ;} 2>&1" if merge_stderr
 
         warn cmdline if echo || echo_only
         return nil if echo_only
@@ -35,10 +36,10 @@ module Tabry
 
       # TODO: would be nice to get separate STDERR and STDOUT
       def backtick_or_die(*cmdline, **opts)
-        backtick_with_process_status(*cmdline, **opts).first
+        backtick_with_status(*cmdline, valid_statuses: [0], **opts).first
       end
 
-      def backtick_with_process_status(*cmdline, valid_statuses: [0], **opts)
+      def backtick_with_status(*cmdline, valid_statuses: nil, **opts)
         cmdline = make_cmdline(*cmdline, **opts)
         return [nil, nil] unless cmdline
 
@@ -51,10 +52,13 @@ module Tabry
         [res, status]
       end
 
-      def open_web_page(url)
-        command = RUBY_PLATFORM.include?("linux") ? "xdg-open" : "open"
-        unless system("(%s %s 2>&1) >/dev/null", command, url)
-          warn "WARNING: opening web page failed: #{make_cmdline("%s %s", command, url)}"
+      def open_command
+        RUBY_PLATFORM.include?("linux") ? "xdg-open" : "open"
+      end
+
+      def open_web_page(url_or_urls)
+        unless system("(%s %s 2>&1) >/dev/null", open_command, url_or_urls)
+          warn "WARNING: opening web page failed: #{make_cmdline("%s %s", open_command, url)}"
         end
       end
     end
