@@ -9,8 +9,13 @@ module Tabry
     module AllInOne
       class AllInOneBase < Base
         def self.config(opts={}, &blk)
-          require_relative '../config_builder'
-          conf = Tabry::ConfigBuilder.build(**opts, &blk)
+          require_relative '../models/config'
+          if opts.is_a?(Tabry::Models::Config)
+            conf = opts
+          else
+            require_relative '../config_builder'
+            conf = Tabry::ConfigBuilder.build(**opts, &blk)
+          end
           instance_variable_set(:@tabry_all_in_one_config, conf)
 
           # Hack to avoid processing block any more if only running completion
@@ -51,7 +56,9 @@ module Tabry
         end
       end
 
-      def self.run(cli: nil, config: nil, &blk)
+      # Instead of passing in config, you can also run `config` with a block or a config option
+      # in inside blk. This triggers the "run completion fast" (see config method)
+      def self.build(cli: nil, config: nil, &blk)
         cli ||= Class.new(AllInOneBase)
         run_completion = catch(:run_completion) do
           cli.module_eval(&blk) if blk
@@ -83,7 +90,11 @@ module Tabry
           cli.instance_variable_set :@tabry_all_in_one_config, config
         end
 
-        Tabry::CLI::Builder.new(config, cli).run(ARGV)
+        Tabry::CLI::Builder.new(config, cli)
+      end
+
+      def run(**kwargs, &blk)
+        build(**kwargs, &blk).run(ARGV)
       end
     end
   end
