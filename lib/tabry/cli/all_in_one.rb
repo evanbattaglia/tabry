@@ -93,7 +93,7 @@ module Tabry
         Tabry::CLI::Builder.new(config, cli)
       end
 
-      def run(**kwargs, &blk)
+      def self.run(**kwargs, &blk)
         build(**kwargs, &blk).run(ARGV)
       end
     end
