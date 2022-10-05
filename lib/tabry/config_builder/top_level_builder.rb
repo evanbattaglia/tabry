@@ -1,5 +1,7 @@
-require_relative 'arg_or_flag_builder'
-require_relative 'sub_builder'
+# frozen_string_literal: true
+
+require_relative "arg_or_flag_builder"
+require_relative "sub_builder"
 
 module Tabry
   module ConfigBuilder
@@ -7,13 +9,13 @@ module Tabry
       simple_setter :cmd
 
       def defargs(name, &blk)
-        name = name.to_s.gsub(/^@/, '')
+        name = name.to_s.gsub(/^@/, "")
         _set_hash :arg_includes, name, _build(SubBuilder, &blk)
       end
 
       def defopts(name, &blk)
-        name = name.to_s.gsub(/^@/, '')
-        _set_hash :option_includes, name, _build(ArgOrFlagBuilder, &blk)['options']
+        name = name.to_s.gsub(/^@/, "")
+        _set_hash :option_includes, name, _build(ArgOrFlagBuilder, &blk)["options"]
       end
 
       def completion

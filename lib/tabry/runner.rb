@@ -11,13 +11,13 @@ module Tabry
   class Runner
     attr_reader :config
 
-    # TODO rename config_name -> config
+    # TODO: rename config_name -> config
     def initialize(config_name:)
-      if config_name.is_a?(Tabry::Models::Config)
-        @config = config_name
-      else
-        @config = ConfigLoader.load(name: config_name)
-      end
+      @config = if config_name.is_a?(Tabry::Models::Config)
+                  config_name
+                else
+                  ConfigLoader.load(name: config_name)
+                end
     end
 
     def options(args, last = nil)

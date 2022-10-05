@@ -1,20 +1,21 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # TODO: maybe completion could pass along a TABRY_PATH here? so we wouldn't
 # have to run bundler until after the config block
-require_relative '../../lib/tabry/cli/all_in_one.rb'
+require_relative "../../lib/tabry/cli/all_in_one"
 
 Tabry::CLI::AllInOne.run do
   config(names_underscores_to_dashes: true) do
     completion
 
     sub :things do
-      sub 'list,l', "List the things"
-      sub 'add,a' do
+      sub "list,l", "List the things"
+      sub "add,a" do
         arg :thing_name
       end
-      sub 'delete, d', :@thing_name
-      sub 'rename, move, mv', :@thing_name do
+      sub "delete, d", :@thing_name
+      sub "rename, move, mv", :@thing_name do
         arg :new_thing_name
       end
     end
@@ -28,10 +29,21 @@ Tabry::CLI::AllInOne.run do
 
   # You can but requires here if the may be expensive; things here will not get
   # run if running completion only
-  def things__list = puts(%w[foo bar waz])
-  def things__add = puts("adding #{args.thing_name}")
-  def things__delete = puts("deleting #{args.thing_name}")
-  def things__rename = puts("renameing #{args.thing_name}")
+  def things__list
+    puts(%w[foo bar waz])
+  end
+
+  def things__add
+    puts("adding #{args.thing_name}")
+  end
+
+  def things__delete
+    puts("deleting #{args.thing_name}")
+  end
+
+  def things__rename
+    puts("renameing #{args.thing_name}")
+  end
 end
 
 # One less level of "all-in-one-ness" is separating out the config, which is
@@ -69,4 +81,6 @@ end
 # methods to tie this all together (e.g. something to create the
 # completion__bash method in the CLI which does the right thing, and create
 # the "completion bash" but not "completion" commands in the Tabry config)
+# TODO: need to update, some of this might be solved with using the new
+# 'config TabryConfig' usage in the MyCli
 #

@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
 require_relative "base"
-require_relative 'builder'
-require_relative '../config_builder'
+require_relative "builder"
+require_relative "../config_builder"
 
 module Tabry
   module CLI
     module AllInOne
       class AllInOneBase < Base
-        def self.config(opts={}, &blk)
-          require_relative '../models/config'
+        def self.config(opts = {}, &blk)
+          require_relative "../models/config"
           if opts.is_a?(Tabry::Models::Config)
             conf = opts
           else
-            require_relative '../config_builder'
+            require_relative "../config_builder"
             conf = Tabry::ConfigBuilder.build(**opts, &blk)
           end
           instance_variable_set(:@tabry_all_in_one_config, conf)
 
           # Hack to avoid processing block any more if only running completion
           # That way you an have expensive requires after the include
-          if ARGV.first == "completion" and ARGV.length == 3 && ARGV[2].to_s =~ /^[0-9]+$/
+          if (ARGV.first == "completion") && ARGV.length == 3 && ARGV[2].to_s =~ /^[0-9]+$/
             throw :run_completion, true
           end
         end
@@ -39,7 +39,7 @@ module Tabry
             end
 
             define_method(:completion__bash) do
-              require_relative '../shells/bash'
+              require_relative "../shells/bash"
               puts Tabry::Shells::Bash.generate_self(cmd_name: cmd_name)
             end
           end
@@ -48,7 +48,7 @@ module Tabry
         end
 
         if run_completion
-          require_relative '../shells/bash/wrapper'
+          require_relative "../shells/bash/wrapper"
           Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: cmd_conf)
         else
           completer_conf = completer_cli.instance_variable_get(:@tabry_all_in_one_config)
@@ -68,20 +68,20 @@ module Tabry
         config ||= cli.instance_variable_get(:@tabry_all_in_one_config)
 
         if run_completion
-          require_relative '../shells/bash/wrapper'
+          require_relative "../shells/bash/wrapper"
           Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
         end
 
         # Add completion methods if not already defined by caller in the block
-        if config.main.subs.by_name['completion'] && !cli.instance_methods.include?(:completion__bash)
+        if config.main.subs.by_name["completion"] && !cli.instance_methods.include?(:completion__bash)
           completion_mixin = Module.new do
             def completion__bash
-              require_relative '../shells/bash'
+              require_relative "../shells/bash"
               puts Tabry::Shells::Bash.generate_self
             end
 
             def completion
-              require_relative '../shells/bash/wrapper'
+              require_relative "../shells/bash/wrapper"
               config = self.class.instance_variable_get(:@tabry_all_in_one_config)
               Tabry::Bash::Wrapper.run(args.cmd_line, args.comp_point, config: config)
             end

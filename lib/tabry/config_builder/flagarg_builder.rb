@@ -1,4 +1,6 @@
-require_relative 'arg_or_flag_builder'
+# frozen_string_literal: true
+
+require_relative "arg_or_flag_builder"
 
 module Tabry
   module ConfigBuilder

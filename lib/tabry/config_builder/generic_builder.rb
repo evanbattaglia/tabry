@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class GenericBuilder
   attr_reader :_opts
 
   private_class_method :new
-  def self.build(opts={}, *args, &blk)
+  def self.build(opts = {}, *args, &blk)
     builder = new(opts, *args)
     builder.instance_eval(&blk) if blk
     builder._obj.compact
@@ -31,21 +33,21 @@ class GenericBuilder
   def _set(key, val)
     val = val.chomp if val.is_a?(String)
     val = val.to_s if val.is_a?(Symbol)
-    if _opts[:names_underscores_to_dashes] && key.to_s == 'name'
-      val = val.gsub('_', '-') if val.is_a?(String)
-      val = val.map{|name| name.to_s.gsub('_', '-')} if val.is_a?(Array)
+    if _opts[:names_underscores_to_dashes] && key.to_s == "name"
+      val = val.gsub("_", "-") if val.is_a?(String)
+      val = val.map { |name| name.to_s.gsub("_", "-") } if val.is_a?(Array)
     end
     _obj[key.to_s] = val
   end
 
   def initialize(opts, *args)
     @_opts = opts
-    includes, not_includes = args.partition{|arg| arg.is_a?(Symbol) && arg.to_s.start_with?('@')}
+    includes, not_includes = args.partition { |arg| arg.is_a?(Symbol) && arg.to_s.start_with?("@") }
     includes.each { |arg| include(arg) }
-    _init *not_includes if defined?(:_init)
+    _init(*not_includes) if defined?(:_init)
   end
 
-  def self.simple_setter(name, key=nil)
+  def self.simple_setter(name, key = nil)
     define_method name do |value|
       value = value.chomp if value.is_a?(String)
       _set (key || name), value
@@ -61,16 +63,17 @@ class GenericBuilder
 
   def include(inc)
     inc = inc.to_s
-    raise "include must be a start with @" unless inc.start_with?('@')
-    _include inc[1..-1]
+    raise "include must be a start with @" unless inc.start_with?("@")
+
+    _include inc[1..]
   end
 
-  def _include(inc)
+  def _include(_inc)
     raise "_include not implemented for #{self.class}"
   end
 
-  def _augment_list_item(list_name, item, &blk)
-    item = _obj[list_name].find{|i| i.object_id == item.object_id}
+  def _augment_list_item(list_name, item)
+    item = _obj[list_name].find { |i| i.equal?(item) }
     yield item
     item
   end
@@ -85,10 +88,10 @@ class GenericBuilder
   end
 
   def _split_name_to_aliases
-    name = _obj['name']
+    name = _obj["name"]
     if name
       name = name.split(/[ ,]{1,2}/) unless name.is_a?(Array)
-      _obj['name'], *aliases = name
+      _obj["name"], *aliases = name
       aliases.each { |a| _append :aliases, a }
     end
   end

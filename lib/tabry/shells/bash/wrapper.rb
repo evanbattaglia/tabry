@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "shellwords"
 require "yaml"
 require_relative "../../util"
@@ -34,4 +36,3 @@ module Tabry
     end
   end
 end
-

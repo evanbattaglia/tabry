@@ -7,7 +7,7 @@
 # conflicts.
 # See sh/bash/README.md and "Adding Tab Completion to your CLI" in main README
 
-require 'shellwords'
+require "shellwords"
 
 module Tabry
   module Shells
@@ -27,7 +27,7 @@ module Tabry
         cmd_name ||= File.basename($0)
         generate_internal(
           cmd_name: cmd_name,
-          import_path: '',
+          import_path: "",
           tabry_bash_executable: File.expand_path($0),
           tabry_bash_arg: "completion"
         )
