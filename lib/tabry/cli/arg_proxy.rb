@@ -15,8 +15,8 @@ module Tabry
         @reqd_arg_proxy = ArgProxy.new(args, named_args, reqd: true) unless @reqd
       end
 
-      def each(...)
-        @args.each(...)
+      def each(&blk)
+        @args.each(&blk)
       end
 
       def [](key)
