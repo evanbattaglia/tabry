@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use Shellwords.split() to split a command line + comp point (index of the
 # cursor in the command line) into the args up to the current token plus
 # current token
