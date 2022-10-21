@@ -35,7 +35,11 @@ module Tabry
 
     def wrong_number_of_args?
       n_args = state.args.length
-      if n_args == 0 && current_sub.subs.any?
+      # This could use some tweaking. I'm not at which point a subcommand
+      # should be considered to be invalid with no arguments... if it has a
+      # subcommand it's a good sign, but if it also has an optional argument
+      # that means it's OK. Probably need another "no_args" construct.
+      if n_args == 0 && current_sub.subs.any? && !(current_sub.args.any? && current_sub.min_args == 0)
         if current_sub.args.any?
           "missing subcommand or arg(s)"
         else

@@ -101,6 +101,11 @@ main:
               value: z
       subs:
         - name: subsub
+    - name: sub-with-sub-or-opt-arg
+      subs:
+        - name: subsub
+      args:
+        - optional: true
     - name: sub-with-mandatory-flag
       args:
         - optional: true

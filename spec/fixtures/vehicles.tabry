@@ -45,6 +45,11 @@ sub sub-with-sub-or-arg {
   sub subsub
 }
 
+sub sub-with-sub-or-opt-arg{
+  sub subsub
+  opt arg
+}
+
 sub sub-with-mandatory-flag {
   opt arg { opts const (a b c) }
   reqd flagarg mandatory

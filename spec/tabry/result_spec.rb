@@ -70,6 +70,10 @@ describe Tabry::Result do
              )).to be_nil
     end
 
+    it "doesn't complain if given no args to a subcommand with subcommands and optional args" do
+      expect(reason(subcommand_stack: %w[sub-with-sub-or-opt-arg])).to be_nil
+    end
+
     it "complains if mandatory varargs are not given" do
       expect(reason(
                subcommand_stack: %w[build]
