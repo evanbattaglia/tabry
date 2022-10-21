@@ -72,8 +72,12 @@ module Tabry
         sub_name, rest = met.split("__", 2)
 
         if sub_route_clis&.dig(sub_name)
+          # Instantiate CLI if it hasn't already (and store instantiation)
           sub_route_clis[sub_name] = instantiate_cli(sub_route_clis[sub_name], internals)
-          get_cli_object_and_met(sub_route_clis[sub_name], rest, internals)
+          opts = cli.class.instance_variable_get(:@sub_route_clis_opts)[sub_name]
+
+          new_met_name = opts[:full_method_name] ? met : rest
+          get_cli_object_and_met(sub_route_clis[sub_name], new_met_name, internals)
         else
           [cli, met]
         end

@@ -28,7 +28,33 @@ class Tabry::CLI::Builder
   end
 
   class TestCliFoo < Tabry::CLI::Base
-    sub_route :bar, TestCliFooBar
+    sub_route :bar, to: TestCliFooBar
+  end
+
+  class TestCli2 < Tabry::CLI::Base
+    class << self
+      attr_accessor :actions_run, :cli_object
+    end
+
+    after_action :my_after_action, except: :build2
+
+    def build2
+      self.class.actions_run << :build2
+    end
+
+    def sub__sub_sub
+      self.class.actions_run << :sub__sub_sub
+    end
+
+    def my_before_action
+      self.class.actions_run << :before_action
+      self.class.cli_object = self
+    end
+
+    def my_after_action
+      self.class.actions_run << :after_action
+      self.class.cli_object = self
+    end
   end
 
   class TestCli < Tabry::CLI::Base
@@ -37,9 +63,10 @@ class Tabry::CLI::Builder
     end
 
     before_action :my_before_action, only: :build
-    after_action :my_after_action, except: :build2
+    after_action :my_after_action
 
-    sub_route :foo, TestCliFoo
+    sub_route :foo, to: TestCliFoo
+    sub_route :sub, :build2, to: TestCli2, full_method_name: true
 
     def main
       self.class.actions_run << :main
@@ -49,16 +76,8 @@ class Tabry::CLI::Builder
       self.class.actions_run << :build
     end
 
-    def build2
-      self.class.actions_run << :build2
-    end
-
     def my_action
       self.class.actions_run << :my_action
-    end
-
-    def sub__sub_sub
-      self.class.actions_run << :sub__sub_sub
     end
 
     def my_before_action
@@ -99,7 +118,8 @@ describe Tabry::CLI::Builder do
   let(:builder) { described_class.new("theconfigname", Tabry::CLI::Builder::TestCli) }
 
   let(:cli_class) { Tabry::CLI::Builder::TestCli }
-  let(:cli_class2) { Tabry::CLI::Builder::TestCliFooBar }
+  let(:cli_class2) { Tabry::CLI::Builder::TestCli2 }
+  let(:cli_class_foo_bar) { Tabry::CLI::Builder::TestCliFooBar }
   let(:actions_run) { cli_class.actions_run }
   let(:cli_object) { cli_class.cli_object }
 
@@ -108,6 +128,8 @@ describe Tabry::CLI::Builder do
     cli_class.cli_object = nil
     cli_class2.actions_run = []
     cli_class2.cli_object = nil
+    cli_class_foo_bar.actions_run = []
+    cli_class_foo_bar.cli_object = nil
   end
 
   describe "successful runs" do
@@ -132,7 +154,7 @@ describe Tabry::CLI::Builder do
     describe "except on actions" do
       let(:state) { { subcommand_stack: %w[build2] } }
 
-      it { expect(actions_run).to eq %i[build2] }
+      it { expect(cli_class2.actions_run).to eq %i[build2] }
     end
 
     describe "handling multiple levels of subcommand routing" do
@@ -143,14 +165,23 @@ describe Tabry::CLI::Builder do
       end
 
       it "maps to the sub-CLI" do
-        expect(cli_class2.actions_run).to eq(%i[before_action waz])
+        expect(cli_class_foo_bar.actions_run).to eq(%i[before_action waz])
+      end
+    end
+
+    describe "subcommand routing with full_method_name: true" do
+      let(:state) { { subcommand_stack: %i[sub sub_sub] } }
+
+      it "preserves the full method name" do
+        expect(cli_class.actions_run).to eq(%i[])
+        expect(cli_class2.actions_run).to eq(%i[sub__sub_sub after_action])
       end
     end
 
     describe "handling multiple levels of subcommand routing (main method)" do
       let(:state) { { subcommand_stack: %i[foo bar] } }
 
-      it { expect(cli_class2.actions_run).to eq(%i[before_action main]) }
+      it { expect(cli_class_foo_bar.actions_run).to eq(%i[before_action main]) }
     end
 
     describe "providing an ArgProxy in TestCLI#args" do

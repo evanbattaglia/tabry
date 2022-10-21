@@ -12,7 +12,7 @@ describe Tabry::OptionsFinder do
 
   examples = {
     "lists possible subcommands of the main command" => [
-      %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag],
+      %w[build list-vehicles move sub-with-sub-or-arg sub-with-sub-or-opt-arg sub-with-mandatory-flag],
       {}
     ],
     "lists possible subcommands of a subcommand" => [

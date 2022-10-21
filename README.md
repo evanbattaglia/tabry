@@ -79,6 +79,7 @@ sub things {
     flagarg waz,w
   }
 }
+sub bar
 ```
 ```
 class MyCLI < Tabry::CLI:Base
@@ -90,21 +91,30 @@ class MyCLI < Tabry::CLI:Base
     puts flags.bar # boolean
     puts flags.waz # string
   end
+
+  def bar
+    puts "bar"
+  end
 end
 ```
 
 You can also send some things to a sub-cli:
 ```
 class ThingsCLI < Tabry::CLI::Base
-  def things__delete = puts(flags.bar)
+  def delete = puts(flags.bar)
+
+  def bar = puts("bar")
 end
 
 class MyCLI < Tabry::CLI::Base
-  sub_route :things, ThingsCLI
+  sub_route :things, to: ThingsCLI
+  # You can also send multiple things to the same sub-cli, and keep the prefix:
+  sub_route :bar, to: ThingsCLI, full_method_name: true
+  # If ThingsCLI had method things__delete instead things delete, you could use:
+  # sub_route :things, :bar, to: ThingsCLI, full_method_name: true
   def main = puts(args.foo)
 end
 ```
-end
 
 To run your CLI, now you just have to use `Tabry::CLI::Builder`, which links
 the config file, the CLI class, and the actual command-line arguments. For

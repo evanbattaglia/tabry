@@ -17,7 +17,7 @@ describe Tabry::ConfigLoader do
     config = described_class.load(name: "#{__dir__}/../fixtures/vehicles.yaml")
     expect(config).to be_a(Tabry::Models::Config)
     expect(config.main.subs.map(&:name)).to eq(
-      %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag]
+      %w[build list-vehicles move sub-with-sub-or-arg sub-with-sub-or-opt-arg sub-with-mandatory-flag]
     )
   end
 
@@ -27,7 +27,7 @@ describe Tabry::ConfigLoader do
     it "looks for yaml files in directories in TABRY_IMPORTS_PATH" do
       config = described_class.load(name: "vehicles")
       expect(config.main.subs.map(&:name)).to eq(
-        %w[build list-vehicles move sub-with-sub-or-arg sub-with-mandatory-flag]
+        %w[build list-vehicles move sub-with-sub-or-arg sub-with-sub-or-opt-arg sub-with-mandatory-flag]
       )
     end
 

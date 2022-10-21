@@ -14,8 +14,11 @@ module Tabry
         @internals = internals
       end
 
-      def self.sub_route(prefix, cli_class)
-        (@sub_route_clis ||= {})[prefix.to_s] = cli_class
+      def self.sub_route(*prefixes, to:, **opts)
+        prefixes.map(&:to_s).each do |prefix|
+          (@sub_route_clis ||= {})[prefix] = to
+          (@sub_route_clis_opts ||= {})[prefix] = opts
+        end
       end
 
       def self.after_action(*method_names, only: nil, except: nil, &blk)
