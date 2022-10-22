@@ -32,8 +32,8 @@ module Tabry
         to_a.[](*args)
       end
 
-      def each(...)
-        to_a.each(...)
+      def each(&blk)
+        to_a.each(&blk)
       end
 
       def length

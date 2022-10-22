@@ -28,8 +28,8 @@ module Tabry
         to_h.[](*args)
       end
 
-      def each(...)
-        to_h.each(...)
+      def each(&blk)
+        to_h.each(&blk)
       end
 
       def empty?
