@@ -17,6 +17,6 @@
 
 source "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/tabry_bash_core.sh
 _tabry_completions() {
-  _tabry_completions_internal "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/../../bin/tabry-bash
+  _tabry_completions_internal ruby "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )"/../../bin/tabry-bash
 }
 

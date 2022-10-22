@@ -4,10 +4,12 @@ require_relative "../runner"
 require_relative "../util"
 require_relative "internals"
 
+# Responsible for building the CLI object, making a Runner to parse the
+# arguments, and running the proper action method of the CLI object.
 module Tabry
   module CLI
     class Builder
-      attr_reader :config, :cli_class, :runner
+      attr_reader :cli_class, :runner
 
       def initialize(config_name, cli_class)
         @cli_class = cli_class
@@ -28,7 +30,7 @@ module Tabry
         ::Tabry::Util.debug "named_args: #{result.named_args.inspect}"
 
         internals = Internals.new(
-          runner: runner, config: config, raw_args: raw_args,
+          runner: runner, raw_args: raw_args,
           state: state, met: met, result: result
         )
 

@@ -7,9 +7,7 @@ require_relative "config"
 module Mycli
   class CLI < Tabry::CLI::Base
     def things__list
-      %w[foo bar waz].each do |thing|
-        puts thing
-      end
+      puts %w[foo bar waz]
     end
 
     def things__add

@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# TODO: maybe completion could pass along a TABRY_PATH here? so we wouldn't
+# have to run bundler until after the config block
+require_relative "../../lib/tabry/cli/all_in_one"
+
+Tabry::CLI::AllInOne.run do
+  config(names_underscores_to_dashes: true) do
+    completion
+
+    sub :things do
+      sub "list,l", "List the things"
+      sub "add,a" do
+        arg :thing_name
+      end
+      sub "delete, d", :@thing_name
+      sub "rename, move, mv", :@thing_name do
+        arg :new_thing_name
+      end
+    end
+
+    defargs :@thing_name do
+      arg :thing_name do
+        opts shell "hello things list"
+      end
+    end
+  end
+
+  # You can but requires here if the may be expensive; things here will not get
+  # run if running completion only
+  def things__list
+    puts(%w[foo bar waz])
+  end
+
+  def things__add
+    puts("adding #{args.thing_name}")
+  end
+
+  def things__delete
+    puts("deleting #{args.thing_name}")
+  end
+
+  def things__rename
+    puts("renameing #{args.thing_name}")
+  end
+end
+
+# One less level of "all-in-one-ness" is separating out the config, which is
+# good for code organization:
+#
+# module MyCli
+#   TabryConfig = Tabry::CLI::ConfigBuilder.build do
+#     completion
+#     sub ...
+#   end
+# end
+#
+#
+# # in main cli file:
+# require_relative 'tabry_config'
+#
+# Tabry::CLI::AllInOne.run(config: TabryConfig) do
+# end
+# ...
+#
+#
+# Tabry::CLI::AllInOne will detect the "completion" sub in the config and
+# make the methods to generate bash completion and to actually run completion
+# (with just "completion").
+#
+# This has the downside of needing to load your CLI (which may need bundler and
+# require other projects) by to load completions. This can be somewhat
+# allieviated by using gel or a bundling cache hack to lower bundle time, and
+# by moving all your requires so AFTER the call to config; AllInOne has a hack
+# which will exit the block if it has the config loaded and it knows it's going
+# to run a completion..
+#
+# * the tab completion shell code could, instead of calling your CLI, call
+#   tabry ruby code (similar to how things were before AllInOne) but pass either
+#   the path to your ruby config (which would be kept without dependencies), or
+#   the path to a YML/JSON file which is compiled from the config. Either
+#   option has some downsides.
+# * Similar to the last idea -- the least intrusive but still quick way is
+#   probably to keep the "compilation" step idea for the tab completion. Just
+#   running your CLI could make Tabry ensure the YML/JSON is up to date, and
+#   completion__bash would generate shell code that (like before AllInOne)
+#   references the YML/JSON.
+#

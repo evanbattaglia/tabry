@@ -41,6 +41,13 @@ See the `LANGUAGE.md` file for a guide on making your own config. See
 `examples/tabry` for some example configs for tab completion for existing
 commands.
 
+## Ruby DSL
+Tabry now supports a near-identical Ruby DSL for making configs which does not
+require compilation. The old custom language will probably be phased out (even
+if you wanted to compile to YML/JSON, the Ruby version could be compiled.) See
+`examples/all_in_one/hello` for an example which uses this (it also uses the
+AllInOne class to create a one-file CLI with tab completion)
+
 # Tab completion (for existing commands)
 Tab completion works by telling your shell to run a ruby script which calls
 tabry code every time it wants to get completion suggestions. The tabry script

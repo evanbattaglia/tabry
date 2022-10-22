@@ -3,34 +3,7 @@
 
 # Run by the tabry_bash_core.sh bash tab completion function to plug into Tabry
 # to get completion options.
-
-require "shellwords"
-require "yaml"
-require_relative "../lib/tabry/util"
-require_relative "../lib/tabry/runner"
-require_relative "../lib/tabry/shell_splitter"
-
 # Bash-specific entrypoint, taking COMP_WORDS and COMP_CWORDS and returning possible options
 
-cmd_line, comp_point = ARGV
-cmd_name, args, last_arg = Tabry::ShellSplitter.split(cmd_line, comp_point)
-opts = Tabry::Runner.new(config_name: cmd_name).options(args, last_arg)
-
-if Tabry::Util.debug?
-  require "json"
-  $stderr.puts
-  warn "debug: got command line and comp_point: #{cmd_line.inspect}, #{comp_point}"
-  warn "using args: #{args.inspect}"
-  warn "using lastarg: #{last_arg.inspect}"
-  warn "results from Tabry#options(): #{opts.inspect}"
-  warn "--- end debug output ---"
-end
-
-normal_opts = opts.select { |t| t.is_a?(String) }
-special_opts = opts.select { |t| t.is_a?(Symbol) }
-
-puts normal_opts.map { |t| Shellwords.escape(t) }.join("\n")
-if special_opts.any?
-  puts
-  puts special_opts.join("\n")
-end
+require_relative "../lib/tabry/shells/bash/wrapper"
+Tabry::Bash::Wrapper.run(*ARGV)
