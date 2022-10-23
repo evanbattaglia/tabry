@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../../../lib/tabry/cli/util"
+require_relative "../../../lib/tabry/cli/util"
 
 describe Tabry::CLI::Util do
   describe ".make_cmdline" do
