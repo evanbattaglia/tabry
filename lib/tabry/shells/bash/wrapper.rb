@@ -12,7 +12,7 @@ module Tabry
     module Wrapper
       def self.run(cmd_line, comp_point, config: nil)
         cmd_name, args, last_arg = Tabry::ShellSplitter.split(cmd_line, comp_point)
-        opts = Tabry::Runner.new(config_name: config || cmd_name).options(args, last_arg)
+        opts = Tabry::Runner.new(config: config || cmd_name).options(args, last_arg)
 
         if Tabry::Util.debug?
           require "json"

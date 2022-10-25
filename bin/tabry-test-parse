@@ -8,7 +8,7 @@ require_relative "../lib/tabry/runner"
 raise "Usage: tabry-test-parse config_name arg1 [arg2]..." unless ARGV.length >= 1
 
 config_name, *args = ARGV
-runner = Tabry::Runner.new(config_name: config_name)
+runner = Tabry::Runner.new(config: config_name)
 result = runner.parse(args)
 
 puts result.state

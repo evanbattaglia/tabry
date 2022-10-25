@@ -41,8 +41,8 @@ describe Tabry::ConfigBuilder do
         "description" => "Get tab completion shell config",
         "name" => "completion",
         "args" => [
-            "description" => "(for internal usage, when used instead of subcommand) full command line for getting completion options",
           {
+            "description" => "(for internal usage, when used instead of subcommand) full command line for getting completion options",
             "name" => "cmd_line"
           },
           {

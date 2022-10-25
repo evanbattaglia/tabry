@@ -4,7 +4,7 @@ require_relative "../../lib/tabry/runner"
 
 describe Tabry::Runner do
   subject do
-    described_class.new(config_name: "configname")
+    described_class.new(config: "configname")
   end
 
   let(:config) { instance_double(Tabry::Models::Config) }

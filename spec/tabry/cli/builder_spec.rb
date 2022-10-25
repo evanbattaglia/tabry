@@ -97,7 +97,7 @@ describe Tabry::CLI::Builder do
 
   before do
     runner = instance_double(Tabry::Runner)
-    allow(Tabry::Runner).to receive(:new).with(config_name: "theconfigname").and_return runner
+    allow(Tabry::Runner).to receive(:new).with(config: "theconfigname").and_return runner
     allow(runner).to receive(:parse).with(%w[the raw args]).and_return result
   end
 

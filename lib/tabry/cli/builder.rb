@@ -13,7 +13,7 @@ module Tabry
 
       def initialize(config_name, cli_class)
         @cli_class = cli_class
-        @runner = Tabry::Runner.new(config_name: config_name)
+        @runner = Tabry::Runner.new(config: config_name)
       end
 
       DISALLOWED_SUBCOMMAND_NAMES = %w[args flags internals].freeze
