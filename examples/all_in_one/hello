@@ -50,7 +50,7 @@ end
 # good for code organization:
 #
 # module MyCli
-#   TabryConfig = Tabry::CLI::ConfigBuilder.build do
+#   TabryConfig = Tabry::ConfigBuilder.build do
 #     completion
 #     sub ...
 #   end
