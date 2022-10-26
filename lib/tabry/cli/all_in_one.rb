@@ -33,7 +33,7 @@ module Tabry
 
       # Creates and runs a CLI whose only purpose is to create a completion
       # wrapper for another program
-      def self.completion_only(completion_conf=nil, **opts, &cmd_conf_blk)
+      def self.completion_only(completion_conf = nil, **opts, &cmd_conf_blk)
         completion_conf ||= Tabry::ConfigBuilder.build(**opts, &cmd_conf_blk)
         cmd_name = completion_conf.cmd or raise "cmd is mandatory for completion_only configs"
 
@@ -60,7 +60,7 @@ module Tabry
       # Instead of passing in config, you can also run `config` with a block or a config option
       # in inside blk. Doing this will also enable the "run completion fast" (see config method)
       def self.build(cli: nil, config: nil, &blk)
-      # def self.build(cli: nil, config: nil, &blk)
+        # def self.build(cli: nil, config: nil, &blk)
         cli ||= Class.new(AllInOneBase)
 
         # If block given. run it to define the CLI methods and/or setting the config

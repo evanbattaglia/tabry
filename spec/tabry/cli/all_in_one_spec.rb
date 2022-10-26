@@ -4,17 +4,17 @@ require_relative "../../../lib/tabry/cli/all_in_one"
 require_relative "../../../lib/tabry/shells/bash"
 require_relative "../../../lib/tabry/shells/bash/wrapper"
 
-describe Tabry::CLI::AllInOne do
-  module Tabry::Spec
-    module Cli
-      module AllInOneSpec
-        class << self
-          attr_accessor :log
-        end
+module Tabry::Spec
+  module Cli
+    module AllInOneSpec
+      class << self
+        attr_accessor :log
       end
     end
   end
+end
 
+describe Tabry::CLI::AllInOne do
   before do
     Tabry::Spec::Cli::AllInOneSpec.log = []
     allow(Kernel).to receive(:exit).and_raise(StandardError.new("exit called"))
@@ -115,7 +115,7 @@ describe Tabry::CLI::AllInOne do
   describe "#completion_only" do
     it "creates a #completion__bash method which generates completion" do
       stub_const("ARGV", %w[completion bash])
-      expect(Tabry::Shells::Bash).to receive(:generate_self).with(cmd_name: 'foo').and_return("bash completion stuff")
+      expect(Tabry::Shells::Bash).to receive(:generate_self).with(cmd_name: "foo").and_return("bash completion stuff")
       expect_any_instance_of(Kernel).to receive(:puts).with("bash completion stuff")
 
       described_class.completion_only do
@@ -129,8 +129,8 @@ describe Tabry::CLI::AllInOne do
       expect(Tabry::Bash::Wrapper).to receive(:run) do |cmd_line, comp_point, config:|
         expect(cmd_line).to eq("cmd line")
         expect(comp_point).to eq("6")
-        expect(config.cmd).to eq('foo')
-        expect(config.main.subs.by_name.keys).to eq(['bar'])
+        expect(config.cmd).to eq("foo")
+        expect(config.main.subs.by_name.keys).to eq(["bar"])
       end
       described_class.completion_only do
         cmd :foo
