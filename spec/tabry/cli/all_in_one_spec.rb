@@ -71,13 +71,13 @@ describe Tabry::CLI::AllInOne do
 
     it "creates a #completion__bash method which generates completion" do
       expect(Tabry::Shells::Bash).to receive(:generate_self).and_return("bash completion stuff")
-      expect_any_instance_of(cli.cli_class).to receive(:puts).with("bash completion stuff")
+      expect_any_instance_of(Kernel).to receive(:puts).with("bash completion stuff")
       cli.run(["completion", "bash"])
     end
 
     it "creates a #completion method which generates options" do
-      expect(Tabry::Bash::Wrapper).to receive(:run).with("cmd line", "1", config: instance_of(Tabry::Models::Config))
-      cli.run(["completion", "cmd line", "1"])
+      expect(Tabry::Bash::Wrapper).to receive(:run).with("cmd line", "6", config: instance_of(Tabry::Models::Config))
+      cli.run(["completion", "cmd line", "6"])
     end
 
     it "quits the block early after loading config and the subcommand to be run is #complete" do
@@ -90,8 +90,7 @@ describe Tabry::CLI::AllInOne do
       cli = described_class.build do
         config conf
 
-        def bar
-        end
+        def bar; end
       end
 
       expect(cli.runner.config).to eq(conf)
@@ -99,26 +98,44 @@ describe Tabry::CLI::AllInOne do
   end
 
   describe "#run" do
-    it 'runs build and then runs the builder with ARGV' do
+    it "runs build and then runs the builder with ARGV" do
       stub_const("ARGV", ["abc", "def"])
       test_blk = proc { completion }
       test_builder = instance_double(Tabry::CLI::Builder)
       expect(described_class).to receive(:build) do |**kwargs, &blk|
         expect(blk).to eql(test_blk)
-        expect(kwargs).to eq({cli: 'fake cli', config: 'fake config'})
+        expect(kwargs).to eq({ cli: "fake cli", config: "fake config" })
         test_builder
       end
       expect(test_builder).to receive(:run).with(%w[abc def])
-      described_class.run(cli: 'fake cli', config: 'fake config', &test_blk)
+      described_class.run(cli: "fake cli", config: "fake config", &test_blk)
     end
   end
 
-  # TODO: can't remember why this is necessary, why we can't just use run() e.g.
-  # def completion_only = run { config { completion; yield } }
   describe "#completion_only" do
-    it "defines a completion method"
-    it "defines a complete__bash method"
+    it "creates a #completion__bash method which generates completion" do
+      stub_const("ARGV", %w[completion bash])
+      expect(Tabry::Shells::Bash).to receive(:generate_self).with(cmd_name: 'foo').and_return("bash completion stuff")
+      expect_any_instance_of(Kernel).to receive(:puts).with("bash completion stuff")
+
+      described_class.completion_only do
+        cmd :foo
+        sub :bar
+      end
+    end
+
+    it "creates a #completion method which generates options" do
+      stub_const("ARGV", ["completion", "cmd line", "6"])
+      expect(Tabry::Bash::Wrapper).to receive(:run) do |cmd_line, comp_point, config:|
+        expect(cmd_line).to eq("cmd line")
+        expect(comp_point).to eq("6")
+        expect(config.cmd).to eq('foo')
+        expect(config.main.subs.by_name.keys).to eq(['bar'])
+      end
+      described_class.completion_only do
+        cmd :foo
+        sub :bar
+      end
+    end
   end
-
-
 end

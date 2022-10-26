@@ -4,6 +4,9 @@ require_relative "base"
 require_relative "builder"
 require_relative "../config_builder"
 
+# Define a Tabry Config + CLI in one call to build or run. The block passed in should define
+# your CLI methods and include a call to `config` with a tabry config or block that defines
+# one (passed on to Tabry::ConfigBuilder)
 module Tabry
   module CLI
     module AllInOne
@@ -16,6 +19,8 @@ module Tabry
             require_relative "../config_builder"
             conf = Tabry::ConfigBuilder.build(**opts, &blk)
           end
+
+          # Set it in the CLI class itself so AllInOne.build can find it
           instance_variable_set(:@tabry_all_in_one_config, conf)
 
           # Hack to avoid processing block any more if only running completion
@@ -26,68 +31,60 @@ module Tabry
         end
       end
 
-      def self.completion_only(cmd_name, &cmd_conf_blk)
-        cmd_conf = Tabry::ConfigBuilder.build(&cmd_conf_blk)
+      # Creates and runs a CLI whose only purpose is to create a completion
+      # wrapper for another program
+      def self.completion_only(completion_conf=nil, **opts, &cmd_conf_blk)
+        completion_conf ||= Tabry::ConfigBuilder.build(**opts, &cmd_conf_blk)
+        cmd_name = completion_conf.cmd or raise "cmd is mandatory for completion_only configs"
 
-        completer_cli = Class.new(AllInOneBase)
+        cli_class = Class.new(Tabry::CLI::Base)
+        cli_conf = Tabry::ConfigBuilder.build { completion }
+        define_completion_methods(cli_class, completion_conf, cmd_name: cmd_name)
+        Tabry::CLI::Builder.new(cli_conf, cli_class).run(ARGV)
+      end
 
-        run_completion = catch(:run_completion) do
-          completer_cli.module_eval do
-            config do
-              completion
-              cmd cmd_name
-            end
-
-            define_method(:completion__bash) do
-              require_relative "../shells/bash"
-              puts Tabry::Shells::Bash.generate_self(cmd_name: cmd_name)
-            end
+      def self.define_completion_methods(cli_class, config, cmd_name: nil)
+        cli_class.module_eval do
+          define_method :completion__bash do
+            require_relative "../shells/bash"
+            Kernel.puts Tabry::Shells::Bash.generate_self(cmd_name: cmd_name)
           end
 
-          false
-        end
-
-        if run_completion
-          require_relative "../shells/bash/wrapper"
-          Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: cmd_conf)
-        else
-          completer_conf = completer_cli.instance_variable_get(:@tabry_all_in_one_config)
-          Tabry::CLI::Builder.new(completer_conf, completer_cli).run(ARGV)
+          define_method :completion do
+            require_relative "../shells/bash/wrapper"
+            Tabry::Bash::Wrapper.run(args.cmd_line, args.comp_point, config: config)
+          end
         end
       end
 
       # Instead of passing in config, you can also run `config` with a block or a config option
-      # in inside blk. This triggers the "run completion fast" (see config method)
+      # in inside blk. Doing this will also enable the "run completion fast" (see config method)
       def self.build(cli: nil, config: nil, &blk)
+      # def self.build(cli: nil, config: nil, &blk)
         cli ||= Class.new(AllInOneBase)
-        run_completion = catch(:run_completion) do
-          cli.module_eval(&blk) if blk
-          nil
+
+        # If block given. run it to define the CLI methods and/or setting the config
+        # with a call to AllInOneBase.config
+        if blk
+          run_completion = catch(:run_completion) do
+            cli.module_eval(&blk)
+            nil
+          end
         end
 
         config ||= cli.instance_variable_get(:@tabry_all_in_one_config)
 
+        # If we recognize command is going to be a completion command, fast track and
+        # run completion now
         if run_completion
           require_relative "../shells/bash/wrapper"
           Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
         end
 
-        # Add completion methods if not already defined by caller in the block
+        # If we recognize there is a "completion" subcommand, add completion
+        # methods -- if not already defined by caller in the block
         if config.main.subs.by_name["completion"] && !cli.instance_methods.include?(:completion__bash)
-          completion_mixin = Module.new do
-            def completion__bash
-              require_relative "../shells/bash"
-              puts Tabry::Shells::Bash.generate_self
-            end
-
-            def completion
-              require_relative "../shells/bash/wrapper"
-              config = self.class.instance_variable_get(:@tabry_all_in_one_config)
-              Tabry::Bash::Wrapper.run(args.cmd_line, args.comp_point, config: config)
-            end
-          end
-          cli.include completion_mixin
-          cli.instance_variable_set :@tabry_all_in_one_config, config
+          define_completion_methods(cli, config)
         end
 
         Tabry::CLI::Builder.new(config, cli)

@@ -36,27 +36,27 @@ describe Tabry::ConfigBuilder do
       completion
     end
 
-    expect(config._raw.dig('main', 'subs')).to eq([
-      {
-        "description" => "Get tab completion shell config",
-        "name" => "completion",
-        "args" => [
-          {
-            "description" => "(for internal usage, when used instead of subcommand) full command line for getting completion options",
-            "name" => "cmd_line"
-          },
-          {
-            "description" => "(for internal usage, when used instead of subcommand) comp point",
-            "name" => "comp_point"
-          }
-        ],
-        "subs" => [
-          {
-            "description" => "Get tab completion for bash or zsh",
-            "name" => "bash"
-          }
-        ]
-      }
-    ])
+    expect(config._raw.dig("main", "subs")).to eq([
+                                                    {
+                                                      "description" => "Get tab completion shell config",
+                                                      "name" => "completion",
+                                                      "args" => [
+                                                        {
+                                                          "description" => "(for internal usage, when used instead of subcommand) full command line for getting completion options",
+                                                          "name" => "cmd_line"
+                                                        },
+                                                        {
+                                                          "description" => "(for internal usage, when used instead of subcommand) comp point",
+                                                          "name" => "comp_point"
+                                                        }
+                                                      ],
+                                                      "subs" => [
+                                                        {
+                                                          "description" => "Get tab completion for bash or zsh",
+                                                          "name" => "bash"
+                                                        }
+                                                      ]
+                                                    }
+                                                  ])
   end
 end
