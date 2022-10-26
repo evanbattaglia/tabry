@@ -45,12 +45,12 @@ module Tabry
       def check_for_correct_usage(result)
         if result.help?
           puts result.usage(File.basename($0))
-          exit 0
+          Kernel.exit 0
         elsif result.invalid_usage_reason
           puts "Invalid usage: #{result.invalid_usage_reason}"
           puts
           puts result.usage(File.basename($0))
-          exit(1)
+          Kernel.exit(1)
         end
       end
 
@@ -65,7 +65,7 @@ module Tabry
       def get_cli_object_and_met(cli, met, internals)
         if DISALLOWED_SUBCOMMAND_NAMES.include?(met)
           warn %(FATAL: Tabry does not support top-level subcommands named: #{DISALLOWED_SUBCOMMAND_NAMES.join(",")})
-          exit 1
+          Kernel.exit 1
         end
 
         return [cli, "main"] if met.to_s == ""
@@ -92,7 +92,7 @@ module Tabry
           run_hooks(cli, met, :@after_actions)
         else
           warn %(FATAL: CLI does not support command #{met})
-          exit 1
+          Kernel.exit 1
         end
       end
 

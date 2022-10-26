@@ -49,14 +49,14 @@ describe Tabry::CLI::ArgProxy do
     end
 
     it "prints an error and exits if read thru reqd and the argument (name) is not found" do
-      expect(args.reqd).to receive(:exit).with(1)
+      expect(Kernel).to receive(:exit).with(1)
       expect do
         args.reqd.foo
       end.to output(/FATAL: Missing required argument foo/).to_stderr
     end
 
     it "prints an error and exits if read thru reqd and the argument (index) is not found" do
-      expect(args.reqd).to receive(:exit).with(1)
+      expect(Kernel).to receive(:exit).with(1)
       expect do
         args.reqd[3]
       end.to output(/FATAL: Missing required argument number 4/).to_stderr

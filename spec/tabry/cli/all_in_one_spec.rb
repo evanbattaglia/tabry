@@ -2,6 +2,7 @@
 
 require_relative "../../../lib/tabry/cli/all_in_one"
 require_relative "../../../lib/tabry/shells/bash"
+require_relative "../../../lib/tabry/shells/bash/wrapper"
 
 describe Tabry::CLI::AllInOne do
   module Tabry::Spec
@@ -16,6 +17,7 @@ describe Tabry::CLI::AllInOne do
 
   before do
     Tabry::Spec::Cli::AllInOneSpec.log = []
+    allow(Kernel).to receive(:exit).and_raise(StandardError.new("exit called"))
   end
 
   describe ".build" do
@@ -73,10 +75,14 @@ describe Tabry::CLI::AllInOne do
       cli.run(["completion", "bash"])
     end
 
-    it "creates a #complete method which generates options" do
+    it "creates a #completion method which generates options" do
+      expect(Tabry::Bash::Wrapper).to receive(:run).with("cmd line", "1", config: instance_of(Tabry::Models::Config))
+      cli.run(["completion", "cmd line", "1"])
     end
 
     it "quits the block early after loading config and the subcommand to be run is #complete" do
+      allow(Tabry::Bash::Wrapper).to receive(:run)
+      expect(Tabry::Spec::Cli::AllInOneSpec.log).to eq([])
     end
 
     it "can take a config object passed in to config" do
@@ -93,7 +99,18 @@ describe Tabry::CLI::AllInOne do
   end
 
   describe "#run" do
-    it 'runs build and then runs the builder with ARGV'
+    it 'runs build and then runs the builder with ARGV' do
+      stub_const("ARGV", ["abc", "def"])
+      test_blk = proc { completion }
+      test_builder = instance_double(Tabry::CLI::Builder)
+      expect(described_class).to receive(:build) do |**kwargs, &blk|
+        expect(blk).to eql(test_blk)
+        expect(kwargs).to eq({cli: 'fake cli', config: 'fake config'})
+        test_builder
+      end
+      expect(test_builder).to receive(:run).with(%w[abc def])
+      described_class.run(cli: 'fake cli', config: 'fake config', &test_blk)
+    end
   end
 
   # TODO: can't remember why this is necessary, why we can't just use run() e.g.

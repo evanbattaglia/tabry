@@ -215,7 +215,7 @@ describe Tabry::CLI::Builder do
 
       it "quits and shows an error and usage info if there is incorrect usage" do
         expect(result).to receive(:usage).and_return "example command usage"
-        expect(builder).to receive(:exit).with(1)
+        expect(Kernel).to receive(:exit).with(1)
         expect do
           subject
         end.to output(
@@ -229,7 +229,7 @@ describe Tabry::CLI::Builder do
 
       it "quits and shows usage if help is passed in" do
         expect(result).to receive(:usage).and_return "example command usage"
-        expect(builder).to receive(:exit).with(0)
+        expect(Kernel).to receive(:exit).with(0)
         expect { subject }.to output(/example command usage/).to_stdout
       end
     end
@@ -239,7 +239,7 @@ describe Tabry::CLI::Builder do
         let(:state) { { subcommand_stack: %w[wombat] } }
 
         it "quits and shows an error if there is the command is valid but the CLI class doesn't implement it" do
-          expect(builder).to receive(:exit).with(1)
+          expect(Kernel).to receive(:exit).with(1)
           expect { subject }.to output(/FATAL: CLI does not support command wombat/).to_stderr
         end
       end
@@ -248,7 +248,7 @@ describe Tabry::CLI::Builder do
         let(:state) { { subcommand_stack: %w[foo] } }
 
         it "quits and shows an error" do
-          expect(builder).to receive(:exit).with(1)
+          expect(Kernel).to receive(:exit).with(1)
           expect { subject }.to output(/FATAL: CLI does not support command main/).to_stderr
         end
       end

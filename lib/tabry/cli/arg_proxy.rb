@@ -24,14 +24,14 @@ module Tabry
           res = @args[key]
           if @reqd && !res
             warn "FATAL: Missing required argument number #{key + 1}"
-            exit 1
+            Kernel.exit 1
           end
         else
           key = key.to_s
           res = @named_args[key]
           if @reqd && !res
             warn "FATAL: Missing required argument #{key}"
-            exit 1
+            Kernel.exit 1
           end
         end
         res

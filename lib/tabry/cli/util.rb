@@ -47,7 +47,7 @@ module Tabry
         status = $?
         if valid_statuses && !valid_statuses.include?(status.exitstatus)
           warn "COMMAND FAILED with exit code #{status.exitstatus}: #{cmdline}"
-          exit 1
+          Kernel.exit 1
         end
         [res, status]
       end
