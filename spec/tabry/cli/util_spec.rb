@@ -83,4 +83,43 @@ describe Tabry::CLI::Util do
       described_class.open_web_page("http://example.com")
     end
   end
+
+  describe "backtick_or_die" do
+    before do
+      allow(Kernel).to receive(:exit)
+      allow(Kernel).to receive(:warn)
+    end
+
+    context "when the command returns a non-zero status code" do
+      before do
+        described_class.backtick_or_die("echo abc && echo def && echo ghi && false")
+      end
+
+      it "prints out the output" do
+        expect(Kernel).to have_received(:warn).with(
+          a_string_including("\ndef\n")
+        )
+      end
+
+      it "exits with a non-zero status code" do
+        expect(Kernel).to have_received(:exit).with(1)
+      end
+    end
+
+    context "when the command does not exist" do
+      before do
+        described_class.backtick_or_die("theresnowayanyonehasthiscommandinstalled-randomstuff-2390832190832jk4398190fdlksjhfdsalkjlkfdsaj43098432908fd")
+      end
+
+      it "exits with a non-zero status code" do
+        expect(Kernel).to have_received(:exit).with(1)
+      end
+
+      it "says that the command does not exist" do
+        expect(Kernel).to have_received(:warn).with(
+          a_string_including("command does not exist")
+        )
+      end
+    end
+  end
 end

@@ -43,10 +43,19 @@ module Tabry
         cmdline = make_cmdline(*cmdline, **opts)
         return [nil, nil] unless cmdline
 
-        res = `#{cmdline}`
+        enoent_error = false
+        begin
+          res = `#{cmdline}`
+        rescue Errno::ENOENT
+          enoent_error = true
+        end
+
         status = $?
         if valid_statuses && !valid_statuses.include?(status.exitstatus)
-          warn "COMMAND FAILED with exit code #{status.exitstatus}: #{cmdline}"
+          msg = "COMMAND FAILED with exit code #{status.exitstatus}"
+          msg += " (command does not exist)" if enoent_error
+          Kernel.warn "#{msg}: #{cmdline}"
+          Kernel.warn "Command output:\n#{res}"
           Kernel.exit 1
         end
         [res, status]
