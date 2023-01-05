@@ -2,19 +2,22 @@
 
 require "shellwords"
 
-# Use Shellwords.split() to split a command line + comp point (index of the
-# cursor in the command line) into the args up to the current token plus
-# current token
+# Code to tokenize whole command lines into command and argument
+# This may be adjustable in some cases
 module Tabry
-  module ShellSplitter
+  module ShellTokenizer
     module_function
 
     COMP_POINT_SENTINEL = "\uFFFF"
 
-    def split(cmd_line, comp_point)
-      # Returns [cmd_name, args, last_arg]
-      # cmd_name is the basename of the command run
-      #
+    # Use Shellwords.split() to split a command line + comp point (index of the
+    # cursor in the command line) into the args up to the current token plus
+    # current token
+    #
+    # Returns [cmd_name, args, last_arg]
+    # cmd_name is the basename of the command run
+    #
+    def split_with_comppoint(cmd_line, comp_point)
       # TODO: in weird scenarios this acts weird: namely, special shell operators like <(ls), $$((1 + 1))
       # Also it crashed on unbalanced quotes, like: foo "bar<TAB>
       # however, this will handle the common scenarios of escaping with quotes, single quotes, and backslashes
@@ -38,6 +41,10 @@ module Tabry
       cmd_name = cmd&.gsub(%r{.*/}, "")
 
       [cmd_name, all_tokens, last_arg]
+    end
+
+    def split(str)
+      Shellwords.split(str)
     end
   end
 end
