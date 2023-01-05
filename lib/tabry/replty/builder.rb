@@ -2,7 +2,7 @@
 
 require "readline"
 require_relative "../cli/internals" # TODO: bring out of cli if shared code now, probably
-require_relative "../shell_splitter"
+require_relative "../shell_tokenizer"
 require_relative "../runner"
 
 module Tabry
@@ -46,12 +46,12 @@ module Tabry
         end
       end
 
-      def run(history_file: nil)
+      def run(history_file: nil, tokenizer: ShellTokenizer)
         history_file = history_file&.gsub(%r{^~/}, "#{Dir.home}/")
         load_history(history_file)
 
         Readline.completion_proc = proc do
-          cmd, args, last_arg = ShellSplitter.split(Readline.line_buffer, Readline.point)
+          cmd, args, last_arg = tokenizer.split_with_comppoint(Readline.line_buffer, Readline.point)
           options = runner.options([cmd, *args].compact, last_arg)
           options.map do |opt|
             # TODO: a bit weird since args/flags are wrong/old when completion method is run
@@ -61,7 +61,7 @@ module Tabry
         end
 
         while (cmdline = readline)
-          raw_args = Shellwords.split(cmdline)
+          raw_args = tokenizer.split(cmdline)
           next if raw_args.empty?
 
           result = runner.parse(raw_args)

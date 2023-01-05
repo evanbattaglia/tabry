@@ -4,14 +4,14 @@ require "shellwords"
 require "yaml"
 require_relative "../../util"
 require_relative "../../runner"
-require_relative "../../shell_splitter"
+require_relative "../../shell_tokenizer"
 
 # Bash-specific entrypoint, taking COMP_WORDS and COMP_CWORDS and returning possible options
 module Tabry
   module Bash
     module Wrapper
       def self.run(cmd_line, comp_point, config: nil)
-        cmd_name, args, last_arg = Tabry::ShellSplitter.split(cmd_line, comp_point)
+        cmd_name, args, last_arg = Tabry::ShellTokenizer.split_with_comppoint(cmd_line, comp_point)
         opts = Tabry::Runner.new(config: config || cmd_name).options(args, last_arg)
 
         if Tabry::Util.debug?
