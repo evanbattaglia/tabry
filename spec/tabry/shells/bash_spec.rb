@@ -28,12 +28,17 @@ describe Tabry::Shells::Bash do
   end
 
   describe '.generate' do
-    subject { described_class.generate("my-cmd", "/path/to/mycmd.tabry") }
+    it 'tells bash to use tabry-bash with a import path to get completion options' do
+      result = described_class.generate("my-cmd", "/path/to/mycmd.tabry")
+      expect(result).to include("TABRY_IMPORTS_PATH=/path/to/mycmd.tabry _tabry_MY_CMD_completions_internal ruby /home/evan/dev/tabry/bin/tabry-bash\n")
+      expect(result).to include("complete -F _tabry_MY_CMD_completions my-cmd\n")
+    end
 
-
-    it 'tesll bash to use tabry-bash with a import path to get completion options' do
-      expect(subject).to include("TABRY_IMPORTS_PATH=/path/to/mycmd.tabry _tabry_MY_CMD_completions_internal ruby /home/evan/dev/tabry/bin/tabry-bash\n")
-      expect(subject).to include("complete -F _tabry_MY_CMD_completions my-cmd\n")
+    it "takes a uniq_fn_id parameter to override the default function names" do
+      result = described_class.generate("my-cmd", "/path/to/mycmd.tabry", uniq_fn_id: "MY_CMD_TABRYV0_2_0")
+      expect(result).to include("TABRY_IMPORTS_PATH=/path/to/mycmd.tabry _tabry_MY_CMD_TABRYV0_2_0_completions_internal ruby /home/evan/dev/tabry/bin/tabry-bash\n")
+      expect(result).to include("complete -F _tabry_MY_CMD_TABRYV0_2_0_completions my-cmd\n")
+      expect(result).to include("_tabry_MY_CMD_TABRYV0_2_0_completions_internal()")
     end
   end
 end

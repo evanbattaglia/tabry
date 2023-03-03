@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/tabry/cli/all_in_one"
+require_relative "../lib/tabry/shells/bash"
+
+Tabry::CLI::AllInOne.run do
+  config(names_underscores_to_dashes: true) do
+    desc <<~DESC
+      Generates bash completion for the tabry relative to this script
+      for the given command name and tabry JSON/YML file. Generates
+      bash functions unique to the command name to avoid conflicting with
+      other potential tabry installations.
+    DESC
+    arg :command_name, "Name of the command, e.g. 'mycli'"
+    arg :tabry_json_path, "Path to the mycli.json or mycli.yml compiled tabry file"
+    flagarg "uniq-fn-id,i", <<~DESC
+      Unique identifier to use for the unique tabry completion bash functions
+      (default is the capitalized command name)
+    DESC
+    flagarg "ruby-path,ruby,r", "Path to ruby (default is just the 'ruby' in the path)"
+  end
+
+  def main
+    puts Tabry::Shells::Bash.generate(
+      args.command_name,
+      args.tabry_json_path,
+      uniq_fn_id: flags.uniq_fn_id,
+      ruby_path: flags.ruby
+    )
+  end
+end
+
+
