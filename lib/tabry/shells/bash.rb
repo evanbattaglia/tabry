@@ -23,6 +23,10 @@ module Tabry
         )
       end
 
+      # Generate bash completion code that will run the currently running
+      # command ($0) with "completion" to get completion options. "cmd_name"
+      # is used to tell bash which command to make options for (and
+      # for naming of the _tabry_CMD_NAME_completions_internal bash function)
       def self.generate_self(cmd_name: nil)
         cmd_name ||= File.basename($0)
         generate_internal(
@@ -33,9 +37,12 @@ module Tabry
         )
       end
 
+      def self.path_to_tabry
+        Shellwords.escape(File.expand_path("#{__dir__}/../../../"))
+      end
+
       def self.generate_internal(cmd_name:, import_path:, tabry_bash_executable:, tabry_bash_arg:)
         capitalized_cmd_name = cmd_name.upcase.gsub(/[^a-zA-Z0-9_]/, "_")
-        path_to_tabry = Shellwords.escape(File.expand_path("#{__dir__}/../../../"))
         core = File.read("#{__dir__}/../../../sh/bash/tabry_bash_core.sh")
         core.gsub! "_tabry_completions_internal()", "_tabry_#{capitalized_cmd_name}_completions_internal()"
 
