@@ -14,7 +14,8 @@ module Tabry
     module Bash
       # NOTE! This code uses sh/bash/tabry_bash_core.sh and is described in
       # sh/bash/README.md; see that README for more info
-      def self.generate(cmd_name, tabry_file_path, uniq_fn_id: nil, ruby_path: "ruby")
+      def self.generate(cmd_name, tabry_file_path, uniq_fn_id: nil, ruby_path: nil)
+        ruby_path ||= "ruby"
         generate_internal(
           cmd_name: cmd_name,
           import_path: Shellwords.escape(File.expand_path(tabry_file_path)),

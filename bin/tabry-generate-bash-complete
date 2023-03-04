@@ -25,7 +25,7 @@ Tabry::CLI::AllInOne.run do
       args.command_name,
       args.tabry_json_path,
       uniq_fn_id: flags.uniq_fn_id,
-      ruby_path: flags.ruby
+      ruby_path: flags.ruby_path
     )
   end
 end
