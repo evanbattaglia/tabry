@@ -8,22 +8,27 @@
 
   outputs = { self, nixpkgs, flake-utils, ... }:
     let
-      tabryHmModule = import ./nix/tabry-hm-module.nix flake-utils;
+      tabryHmModule = import ./nix/tabry-hm-module.nix;
     in
       flake-utils.lib.eachDefaultSystem (
         system:
           let
             pkgs = nixpkgs.legacyPackages."${system}";
-            tabry = import ./default.nix pkgs;
-            tabryLang = import ./treesitter flake-utils pkgs;
+            tabry = pkgs.callPackage ./default.nix {};
+            tabryLang = pkgs.callPackage ./treesitter {};
+            withTabry = pkgs.callPackage ./nix/withTabry.nix {};
           in {
             packages = {
               default = tabry;
               tabry = tabry;
               tabryc = tabryLang.tabryc;
             };
+            inherit withTabry;
             apps = {
-              tabryc = tabryLang.tabrycApp;
+              tabryc = flake-utils.lib.mkApp {
+                drv = tabryLang.tabryc;
+                name = "tabryc";
+              };
             };
           }
       ) // {

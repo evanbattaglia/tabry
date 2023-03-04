@@ -1,4 +1,4 @@
-flake-utils: { config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,8 +6,8 @@ let
 
   cfg = config.programs.tabry;
 
-  tabry = import ../default.nix pkgs;
-  tabryLang = import ../treesitter flake-utils pkgs;
+  tabry = lib.callPackage ../default.nix {};
+  tabryLang = lib.callPackage ../treesitter {};
 
   mkInitFish = fileName: let
     commandName = tabryLang.commandNameFromTabryFilename fileName;

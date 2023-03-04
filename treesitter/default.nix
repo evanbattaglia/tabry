@@ -1,4 +1,4 @@
-flake-utils: {
+{
   mkYarnPackage,
   python3,
   stdenv,
@@ -6,7 +6,7 @@ flake-utils: {
   xcbuild,
   nodejs-16_x,
   ...
-} @pkgs:
+}:
 
   let
     # treesitter doesn't work with node 17/18
@@ -67,11 +67,6 @@ flake-utils: {
       '';
     };
 
-    tabrycApp = flake-utils.lib.mkApp {
-      drv = tabryc;
-      name = "tabryc";
-    };
-
   in {
-    inherit tabryc compileTabryFile tabrycApp commandNameFromTabryFilename;
+    inherit tabryc compileTabryFile commandNameFromTabryFilename;
   }
