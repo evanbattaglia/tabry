@@ -20,7 +20,7 @@ module Tabry
 
     def initialize(config)
       @config = config
-      @state = State.new(mode: :subcommand, subcommand_stack: [], args: [], flags: {})
+      @state = State.new(mode: :subcommand, subcommand_stack: [], args: [], flags: {}, help: false, dashdash: false)
     end
 
     def run(tokens)

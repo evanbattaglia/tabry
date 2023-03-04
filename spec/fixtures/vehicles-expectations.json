@@ -196,7 +196,8 @@
         "arg2",
         "arg3"
       ],
-      "mode": "subcommand"
+      "mode": "subcommand",
+      "dashdash": true
     }
   ],
   "handles unknown long flags as args": [
@@ -302,7 +303,8 @@
         "--",
         "-"
       ],
-      "help": null
+      "help": false,
+      "dashdash": true
     }
   ],
   "sets mode to flagarg when waiting for a flag argument": [
@@ -347,4 +349,3 @@
     }
   ]
 }
-
