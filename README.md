@@ -251,6 +251,31 @@ You can also install the `tabryc` compiler using the `tabryc` package:
 }
 ```
 
+
+## Packaging nix derivations with tabry completions
+
+You can wrap a nix package with tabry completions using the `withTabry` helper function.
+
+```nix
+{
+  foo = withTabry ./foo.tabry (
+    pkgs.writeScriptBin "foo" ''
+      echo "$1";
+    ''
+  );
+}
+```
+
+where ./foo.tabry is a normal tabry file:
+
+```
+cmd foo
+
+sub foo
+sub bar
+sub baz
+```
+
 # Future possible improvements
 * `mycmd -ab` should be interpreted as `mycmd -a -b`
 * if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`
