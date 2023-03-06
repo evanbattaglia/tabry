@@ -35,7 +35,7 @@ describe Tabry::Shells::Bash do
     end
 
     it "takes a uniq_fn_id parameter to override the default function names" do
-      result = described_class.generate("my-cmd", "/path/to/mycmd.tabry", uniq_fn_id: "MY_CMD_TABRYV0_2_0")
+      result = described_class.generate("my-cmd", "/path/to/mycmd.tabry", uniq_fn_id: "my cmd tabryv0.2.0")
       expect(result).to include("TABRY_IMPORTS_PATH=/path/to/mycmd.tabry _tabry_MY_CMD_TABRYV0_2_0_completions_internal ruby /home/evan/dev/tabry/bin/tabry-bash\n")
       expect(result).to include("complete -F _tabry_MY_CMD_TABRYV0_2_0_completions my-cmd\n")
       expect(result).to include("_tabry_MY_CMD_TABRYV0_2_0_completions_internal()")

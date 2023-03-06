@@ -46,7 +46,8 @@ module Tabry
       def self.generate_internal(cmd_name:, import_path:, tabry_bash_executable:, tabry_bash_arg:, uniq_fn_id: nil)
         # uniq_fn_id is added to the bash functions to ensure they are unique
         # -- by default this is the capitalized command name
-        uniq_fn_id ||= cmd_name.upcase.gsub(/[^a-zA-Z0-9_]/, "_")
+        uniq_fn_id ||= cmd_name
+        uniq_fn_id = uniq_fn_id.upcase.gsub(/[^A-Z0-9_]/, "_")
         core = File.read("#{__dir__}/../../../sh/bash/tabry_bash_core.sh")
         core.gsub! "_tabry_completions_internal()", "_tabry_#{uniq_fn_id}_completions_internal()"
 
