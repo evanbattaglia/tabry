@@ -16,7 +16,7 @@ in
 
         ${tabry}/bin/tabry-generate-bash-complete ${cmd} \
           ${tabryLang.compileTabryFile tabryFile}/${cmd}.json \
-          -r ${ruby}/bin/ruby --uniq-fn-id NIX_${lib.toUpper package.name} >> ${cmd}.bash
+          --uniq-fn-id NIX_${lib.toUpper package.name} >> ${cmd}.bash
 
         installShellCompletion ${cmd}.bash
       '';

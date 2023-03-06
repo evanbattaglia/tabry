@@ -17,7 +17,6 @@ Tabry::CLI::AllInOne.run do
       Unique identifier to use for the unique tabry completion bash functions
       (default is the capitalized command name)
     DESC
-    flagarg "ruby-path,ruby,r", "Path to ruby (default is just the 'ruby' in the path)"
   end
 
   def main
@@ -25,7 +24,6 @@ Tabry::CLI::AllInOne.run do
       args.command_name,
       args.tabry_json_path,
       uniq_fn_id: flags.uniq_fn_id,
-      ruby_path: flags.ruby_path
     )
   end
 end
