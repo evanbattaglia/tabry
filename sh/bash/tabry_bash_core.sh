@@ -9,7 +9,7 @@ _tabry_completions_internal()
   local saveifs="$IFS"
   IFS=$'\n'
 
-  local result=`"$tabry_bash_executable" "$tabry_bash_arg" "$COMP_LINE" "$COMP_POINT"`
+  local result=`"$tabry_bash_executable" ${tabry_bash_arg:+"$tabry_bash_arg"} "$COMP_LINE" "$COMP_POINT"`
   local specials
 
   if [[ $result == *$'\n'$'\n'* ]]; then
