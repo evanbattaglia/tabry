@@ -39,7 +39,7 @@ module Tabry
         backtick_with_status(*cmdline, valid_statuses: [0], **opts).first
       end
 
-      def backtick_with_status(*cmdline, valid_statuses: nil, **opts)
+      def backtick_with_status(*cmdline, valid_statuses: nil, extra_error_message: nil, **opts)
         cmdline = make_cmdline(*cmdline, **opts)
         return [nil, nil] unless cmdline
 
@@ -56,6 +56,7 @@ module Tabry
           msg += " (command does not exist)" if enoent_error
           Kernel.warn "#{msg}: #{cmdline}"
           Kernel.warn "Command output:\n#{res}"
+          Kernel.warn extra_error_message if extra_error_message
           Kernel.exit 1
         end
         [res, status]
