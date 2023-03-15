@@ -10,7 +10,6 @@ module Tabry
     class Builder
       attr_reader :runner, :repl
 
-      # TODO: dry up with CLI builder if appropriate
       # TODO: implement before_action, after_action, sub-REPLs; share code in run_result with CLI::Builder
 
       def initialize(config, repl)
@@ -59,7 +58,8 @@ module Tabry
           cmd, args, last_arg = tokenizer.split_with_comppoint(Readline.line_buffer, Readline.point)
           options = runner.options([cmd, *args].compact, last_arg)
           options.map do |opt|
-            # TODO: a bit weird since args/flags are wrong/old when completion method is run
+            # if opt is a symbol, it's a "opts method" option type -- where a REPL method returns the options.
+            # TODO: a bit weird since the REPL's "args" and "flags" are wrong/old when that completion method is run
             # also filter to start_with? is more appropriate in tabry, not here, but whatever
             opt.is_a?(Symbol) ? repl.send(opt)&.select { |x| x.start_with?(last_arg) } : opt
           end.flatten
