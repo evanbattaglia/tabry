@@ -10,11 +10,13 @@ module Tabry
 
       def defargs(name, &blk)
         name = name.to_s.gsub(/^@/, "")
+        name = name.gsub("_", "-") if _opts[:names_underscores_to_dashes]
         _set_hash :arg_includes, name, _build(SubBuilder, &blk)
       end
 
       def defopts(name, &blk)
         name = name.to_s.gsub(/^@/, "")
+        name = name.gsub("_", "-") if _opts[:names_underscores_to_dashes]
         _set_hash :option_includes, name, _build(ArgOrFlagBuilder, &blk)["options"]
       end
 

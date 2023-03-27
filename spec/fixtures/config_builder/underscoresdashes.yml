@@ -33,7 +33,7 @@ main:
         - include: project-and-environment
     - include: project-and-environment
 option_includes:
-  project_and_environment:
+  project-and-environment:
     - type: const
       value: a
 
