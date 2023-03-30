@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tabry (0.2.2)
+    tabry (0.2.3)
 
 GEM
   remote: https://rubygems.org/
