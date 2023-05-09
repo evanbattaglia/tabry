@@ -1,16 +1,9 @@
-{ stdenv, bundlerEnv, ruby, ... }:
-
-  let
-    gems = bundlerEnv {
-      name = "tabry-env";
-      inherit ruby;
-      gemdir  = ./.;
-    };
-  in stdenv.mkDerivation {
+{ stdenv, ruby, ... }:
+  stdenv.mkDerivation {
     name = "tabry";
     src = ./.;
     patches = [./nix/bin.patch];
-    buildInputs = [gems gems.wrappedRuby];
+    buildInputs = [ruby];
     installPhase = ''
       mkdir -p $out
       cp -R ./* $out
