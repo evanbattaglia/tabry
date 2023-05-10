@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.programs.tabry;
 
-  tabry = lib.callPackage ../default.nix {};
-  tabryLang = lib.callPackage ../treesitter {};
+  tabry = pkgs.callPackage ../default.nix {};
+  tabryLang = pkgs.callPackage ../treesitter {};
 
   mkInitFish = fileName: let
     commandName = tabryLang.commandNameFromTabryFilename fileName;
@@ -20,10 +18,10 @@ let
 in {
 
   options.programs.tabry = {
-    enable = mkEnableOption "tabry, a tab completion library";
-    enableFishIntegration = mkEnableOption "enables fish completions";
-    tabryFiles = mkOption {
-      type = with types; listOf path;
+    enable = lib.mkEnableOption "tabry, a tab completion library";
+    enableFishIntegration = lib.mkEnableOption "enables fish completions";
+    tabryFiles = lib.mkOption {
+      type = with lib.types; listOf path;
       default = { };
       description = ''
         *.tabry files to be compiled to completion json
@@ -31,13 +29,13 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     home.packages = [tabry];
 
     # for each file, compile it to json
     # then add the dir to $TABRY_IMPORTS_PATH
 
-    programs.fish.shellInit = mkIf cfg.enableFishIntegration (
+    programs.fish.shellInit = lib.mkIf cfg.enableFishIntegration (
       let 
         tabryImportsPath = builtins.concatStringsSep ":" (compileTabryFiles cfg.tabryFiles);
       in ''
