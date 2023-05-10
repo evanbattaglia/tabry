@@ -29,7 +29,7 @@ function __fish_tabry_check_only_args
   set args      (echo "$result"|sed 's/  .*//')
   set specials  (echo "$result"|grep -o '  file')
 
-  # https://github.com/fish-shell/fish-shell/issues/5186#issuecomment-421244106
+  # https://github.com/fish-shell/fish-shell/issues/5186#issuecomment-421244106 (the random "x")
   if test "x$args" != "x" -a "$specials" != "  file"
     # echo "confirming only args:  [$result,$args,$specials]" 1>&2
     return 0;
@@ -45,7 +45,8 @@ function __fish_tabry_check_only_file
 
   set args      (echo "$result"|sed 's/  .*//')
 
-  if test "x$args" = "x" -a (string match -ra '  file' $result)
+  # The '--' arg is needed in case $result contains flag-like strings
+  if test "x$args" = "x" -a (string match -ra -- '  file' $result)
     # echo "confirming only file" 1>&2
     return 0;
   else
@@ -59,7 +60,8 @@ function __fish_tabry_check_args_and_file
 
   set args      (echo "$result"|sed 's/  .*//')
 
-  if test "x$args" != "x" -a (string match -ra '  file' $result)
+  # The '--' arg is needed in case $result contains flag-like strings
+  if test "x$args" != "x" -a (string match -ra -- '  file' $result)
     # echo "confirming args and file" 1>&2
     return 0;
   else
@@ -73,7 +75,8 @@ function __fish_tabry_completions
 
   set args      (echo "$result"|sed 's/  .*//')
 
-  set args_parsed (string split ' ' $args)
+  # The '--' arg is needed in case $result contains flag-like strings
+  set args_parsed (string split -- ' ' $args)
 
   if test "x$args" = "x"
     # Don't offer anything if we don't have any completions
