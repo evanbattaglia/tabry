@@ -24,6 +24,7 @@ module Tabry
         sub :completion do
           desc "Get tab completion shell config"
           sub :bash, "Get tab completion for bash or zsh"
+          sub :fish, "Get tab completion for fish"
           arg :cmd_line, "(for internal usage, when used instead of subcommand) full command line for getting completion options"
           arg :comp_point, "(for internal usage, when used instead of subcommand) comp point"
         end

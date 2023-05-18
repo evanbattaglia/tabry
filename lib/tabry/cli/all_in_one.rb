@@ -45,9 +45,15 @@ module Tabry
 
       def self.define_completion_methods(cli_class, config, cmd_name: nil)
         cli_class.module_eval do
+
           define_method :completion__bash do
             require_relative "../shells/bash"
             Kernel.puts Tabry::Shells::Bash.generate_self(cmd_name: cmd_name)
+          end
+
+          define_method :completion__fish do
+            require_relative "../shells/fish"
+            Kernel.puts Tabry::Shells::Fish.generate_self(cmd_name: cmd_name)
           end
 
           define_method :completion do
@@ -83,7 +89,7 @@ module Tabry
 
         # If we recognize there is a "completion" subcommand, add completion
         # methods -- if not already defined by caller in the block
-        if config.main.subs.by_name["completion"] && !cli.instance_methods.include?(:completion__bash)
+        if config.main.subs.by_name["completion"] && !cli.instance_methods.include?(:completion__bash) && !cli.instance_methods.include?(:completion__fish)
           define_completion_methods(cli, config)
         end
 

@@ -19,5 +19,11 @@ in
           --uniq-fn-id NIX_${lib.toUpper package.name} >> ${cmd}.bash
 
         installShellCompletion ${cmd}.bash
+
+        ${tabry}/bin/tabry-generate-fish-complete ${cmd} \
+          ${tabryLang.compileTabryFile tabryFile}/${cmd}.json \
+          --uniq-fn-id NIX_${lib.toUpper package.name} >> ${cmd}.fish
+
+        installShellCompletion ${cmd}.fish
       '';
     }

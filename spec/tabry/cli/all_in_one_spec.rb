@@ -3,6 +3,7 @@
 require_relative "../../../lib/tabry/cli/all_in_one"
 require_relative "../../../lib/tabry/shells/bash"
 require_relative "../../../lib/tabry/shells/bash/wrapper"
+require_relative "../../../lib/tabry/shells/fish"
 
 module Tabry::Spec
   module Cli
@@ -117,6 +118,17 @@ describe Tabry::CLI::AllInOne do
       stub_const("ARGV", %w[completion bash])
       expect(Tabry::Shells::Bash).to receive(:generate_self).with(cmd_name: "foo").and_return("bash completion stuff")
       expect_any_instance_of(Kernel).to receive(:puts).with("bash completion stuff")
+
+      described_class.completion_only do
+        cmd :foo
+        sub :bar
+      end
+    end
+
+    it "creates a #completion__fish method which generates completion" do
+      stub_const("ARGV", %w[completion fish])
+      expect(Tabry::Shells::Fish).to receive(:generate_self).with(cmd_name: "foo").and_return("fish completion stuff")
+      expect_any_instance_of(Kernel).to receive(:puts).with("fish completion stuff")
 
       described_class.completion_only do
         cmd :foo
