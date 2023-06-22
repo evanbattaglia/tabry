@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Run by the tabry_fish.sh fish tab completion function to plug into Tabry
+# to get completion options.
+# Fish-specific entrypoint
+
+require_relative "../lib/tabry/shells/fish/wrapper"
+Tabry::Fish::Wrapper.run(*ARGV)

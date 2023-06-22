@@ -20,9 +20,20 @@ module Tabry
         end
       end
 
-      def options(token)
-        to_a.map(&:name).select { |name| name.start_with?(token) }
+      def options(token, params)
+        ::Tabry::Util.debug "checking:::: #{token}"
+        to_a
+          .select { |sub| sub.name.start_with?(token) }
+          .map do |sub|
+            if params[:descriptions]
+              [sub.name, sub.description]
+            else
+              sub.name
+            end
+          end
+          .compact
       end
+
     end
   end
 end

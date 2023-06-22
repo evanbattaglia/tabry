@@ -4,15 +4,16 @@ require "json"
 
 module Tabry
   class OptionsFinder
-    attr_reader :result
+    attr_reader :result, :params
 
     # Returns an array of options
-    def self.options(result, token)
-      new(result).options(token)
+    def self.options(result, token, params)
+      new(result, params).options(token)
     end
 
-    def initialize(result)
+    def initialize(result, params)
       @result = result
+      @params = params
     end
 
     def options(token)
@@ -59,7 +60,7 @@ module Tabry
 
     def options_flagarg(token)
       result.sub_stack.map do |sub|
-        sub.flags[state.current_flag]&.options&.options(token)
+        sub.flags[state.current_flag]&.options&.options(token, params)
       end.compact.flatten.uniq
     end
 
@@ -68,14 +69,18 @@ module Tabry
         # once an arg has been given, can no longer use a subcommand
         []
       else
-        current_sub.subs.options(token)
+        current_sub.subs.options(token, params)
       end
     end
 
     def options_subcommand_flags(token)
       return [] if state.dashdash
 
-      result.sub_stack.map { |sub| sub.flags.options(token, used: state.flags) }.flatten.uniq
+      result
+        .sub_stack
+        .map { |sub| sub.flags.options(token, used: state.flags, params: params) }
+        .flatten(1)
+        .uniq
     end
 
     def options_subcommand_args(token)
@@ -85,7 +90,7 @@ module Tabry
               current_sub.args[state.args.length]
             end
 
-      arg&.options&.options(token) || []
+      arg&.options&.options(token, params) || []
     end
   end
 end

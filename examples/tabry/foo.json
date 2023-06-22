@@ -1,0 +1,1 @@
+{"cmd":"foo","main":{"subs":[{"name":"bar","description":"This is the bar command"},{"name":"baz"},{"name":"qux"}]}}

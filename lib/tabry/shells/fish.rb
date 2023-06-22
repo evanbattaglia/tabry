@@ -18,8 +18,8 @@ module Tabry
         generate_internal(
           cmd_name: cmd_name,
           import_path: File.expand_path(tabry_file_path),
-          tabry_bash_executable: File.expand_path("#{path_to_tabry}/bin/tabry-bash"),
-          tabry_bash_arg: nil,
+          tabry_fish_executable: File.expand_path("#{path_to_tabry}/bin/tabry-fish"),
+          tabry_fish_arg: nil,
           uniq_fn_id: uniq_fn_id
         )
       end
@@ -32,8 +32,8 @@ module Tabry
         generate_internal(
           cmd_name: cmd_name,
           import_path: "",
-          tabry_bash_executable: File.expand_path($0),
-          tabry_bash_arg: "completion",
+          tabry_fish_executable: File.expand_path($0),
+          tabry_fish_arg: "completion",
         )
       end
 
@@ -49,7 +49,7 @@ module Tabry
         str.gsub! pattern, "#{pattern}_#{uniq_id}"
       end
 
-      def self.generate_internal(cmd_name:, import_path:, tabry_bash_executable:, tabry_bash_arg:, uniq_fn_id: nil)
+      def self.generate_internal(cmd_name:, import_path:, tabry_fish_executable:, tabry_fish_arg:, uniq_fn_id: nil)
         # uniq_fn_id is added to the bash functions to ensure they are unique
         # -- by default this is the capitalized command name
         uniq_fn_id ||= cmd_name
@@ -64,9 +64,9 @@ module Tabry
         add_uniq_id(script, "__fish_tabry_completions", uniq_fn_id)
 
         script.gsub! "# TABRY_IMPORT_PATH_REPLACE (DO NOT REMOVE)", "set TABRY_IMPORTS_PATH #{esc import_path}"
-        script.gsub! "# TABRY_EXECUTABLE_REPLACE (DO NOT REMOVE)", "set TABRY_EXECUTABLE #{esc tabry_bash_executable}"
-        if !tabry_bash_arg.nil?
-          script.gsub! "# TABRY_ARG_REPLACE (DO NOT REMOVE)", "set TABRY_ARG #{esc tabry_bash_arg}"
+        script.gsub! "# TABRY_EXECUTABLE_REPLACE (DO NOT REMOVE)", "set TABRY_EXECUTABLE #{esc tabry_fish_executable}"
+        if !tabry_fish_arg.nil?
+          script.gsub! "# TABRY_ARG_REPLACE (DO NOT REMOVE)", "set TABRY_ARG #{esc tabry_fish_arg}"
         end
 
         <<~END_FISH_CODE_TEMPLATE
