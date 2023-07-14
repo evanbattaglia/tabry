@@ -40,6 +40,7 @@ in {
         tabryImportsPath = builtins.concatStringsSep ":" (compileTabryFiles cfg.tabryFiles);
       in ''
         set -x TABRY_IMPORTS_PATH "${builtins.trace tabryImportsPath tabryImportsPath}:$TABRY_IMPORTS_PATH"
+        set -x TABRY_PATH ${tabry}
         source ${tabry}/sh/fish/tabry_fish.fish
         ${builtins.concatStringsSep "\n" (map mkInitFish cfg.tabryFiles)}
       ''

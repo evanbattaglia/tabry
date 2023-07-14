@@ -2,8 +2,9 @@ This directory includes fish completions for Tabry
 
 There are two steps to add to your ~/.config/fish/config.fish to use:
 
-1. Source this file
+1. Source `tabry_fish.fish`
 2. Add a call to `tabry_completion_init`, for each command
+3. Ensure the `TABRY_IMPORTS_PATH` environment variable is defined and points to where your compiled tabry files are located.
 
 ```sh
 source tabry_fish.fish
