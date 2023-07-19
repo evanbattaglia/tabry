@@ -25,7 +25,7 @@ module Tabry
 
           # Hack to avoid processing block any more if only running completion
           # That way you an have expensive requires after the include
-          if (ARGV.first == "completion") && ARGV.length == 3 && ARGV[2].to_s =~ /^[0-9]+$/
+          if ((ARGV.first == "completion")) && ARGV.length == 3 && ARGV[2].to_s =~ /^[0-9]+$/
             throw :run_completion, true
           end
         end
@@ -57,8 +57,14 @@ module Tabry
           end
 
           define_method :completion do
-            require_relative "../shells/bash/wrapper"
-            Tabry::Bash::Wrapper.run(args.cmd_line, args.comp_point, config: config)
+            fish_mode = ENV.fetch("TABRY_FISH_MODE", false)
+            if fish_mode
+              require_relative "../shells/fish/wrapper"
+              Tabry::Fish::Wrapper.run(args.cmd_line, args.comp_point, config: config)
+            else
+              require_relative "../shells/bash/wrapper"
+              Tabry::Bash::Wrapper.run(args.cmd_line, args.comp_point, config: config)
+            end
           end
         end
       end
@@ -83,8 +89,17 @@ module Tabry
         # If we recognize command is going to be a completion command, fast track and
         # run completion now
         if run_completion
-          require_relative "../shells/bash/wrapper"
-          Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
+          if ARGV.first == "completion"
+            fish_mode = ENV.fetch("TABRY_FISH_MODE", false)
+            if fish_mode
+              require_relative "../shells/fish/wrapper"
+              Tabry::Fish::Wrapper.run(ARGV[1], ARGV[2], config: config)
+            else
+              require_relative "../shells/bash/wrapper"
+              Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
+            end
+            exit
+          end
         end
 
         # If we recognize there is a "completion" subcommand, add completion

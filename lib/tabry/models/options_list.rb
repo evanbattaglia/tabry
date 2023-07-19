@@ -10,8 +10,8 @@ module Tabry
         super(**args, klass: Option)
       end
 
-      def options(token)
-        to_a.map { |option| option.options(token) }.inject(&:|)
+      def options(token, params)
+        to_a.map { |option| option.options(token, params) }.inject(&:|)
       end
     end
   end

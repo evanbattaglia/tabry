@@ -1,0 +1,7 @@
+cmd foo
+
+sub bar {
+  desc "This is the bar command"
+}
+sub baz
+sub qux

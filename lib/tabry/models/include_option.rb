@@ -7,8 +7,8 @@ module Tabry
     class IncludeOption < OptionBase
       attr_reader :include_name, :_root
 
-      def options(token)
-        flatten.options(token)
+      def options(token, params)
+        flatten.options(token, params)
       end
 
       def flatten

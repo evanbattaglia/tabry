@@ -10,13 +10,28 @@ Tabry::CLI::AllInOne.run do
     completion
 
     sub :things do
-      sub "list,l", "List the things"
-      sub "add,a" do
+      sub "list,l", "List the things" do
+        flag "n" do
+          desc "Count of things in list"
+        end
+        flag "a"
+        flagarg "b" do
+          opts const %w[json yml]
+        end
+      end
+      sub "add,a", "Add things to the current user's list This is a really long description with some usages here and there\n here's a new line character!" do
         arg :thing_name
       end
       sub "delete, d", :@thing_name
       sub "rename, move, mv", :@thing_name do
         arg :new_thing_name
+        flagarg "foo3"
+        flagarg :b do
+          opts const :a
+          desc "the b flag"
+        end
+        flag "bar"
+        sub "yes,y", "yes"
       end
     end
 

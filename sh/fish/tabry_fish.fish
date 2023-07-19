@@ -15,13 +15,16 @@ function __fish_tabry_internal_invoke
   # TABRY_IMPORT_PATH_REPLACE (DO NOT REMOVE)
   # TABRY_EXECUTABLE_REPLACE (DO NOT REMOVE)
   # TABRY_ARG_REPLACE (DO NOT REMOVE)
+  set -x TABRY_FISH_MODE true
 
   # -C "Get cursor position"
   set cursor_position (commandline -C)
   set cmd (commandline)
 
   set result ($TABRY_EXECUTABLE $TABRY_ARG "$cmd" "$cursor_position")
-  echo $result
+  for arg in $result
+    echo $arg
+  end
 end
 
 # return true if tabry only reports file
@@ -77,16 +80,14 @@ function __fish_tabry_completions
 
   set args      (echo "$result"|sed 's/  .*//')
 
-  # The '--' arg is needed in case $result contains flag-like strings
-  set args_parsed (string split -- ' ' $args)
-
   if test "x$args" = "x"
     # Don't offer anything if we don't have any completions
     return 1;
   else
-    # $args_parsed will be something like: ["foo" "bar" "baz" "" "file"]
+    # $result will be something like: ["foo 'this is foo'" "bar" "baz" "" "file"]
     #   where "file" is special, since it's after the space.
-    for arg in $args_parsed
+    for arg in $result
+      set clean_arg (echo "$arg"|sed 's/  .*//')
       if test "x$arg" != "x"
         echo "$arg"
       else

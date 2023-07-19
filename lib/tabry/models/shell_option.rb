@@ -5,7 +5,7 @@ require_relative "option_base"
 module Tabry
   module Models
     class ShellOption < OptionBase
-      def options(token)
+      def options(token, _params)
         `#{value}`.chomp.split("\n").select { |opt| opt.start_with?(token) }
       end
     end

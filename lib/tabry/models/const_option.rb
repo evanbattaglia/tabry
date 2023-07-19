@@ -5,7 +5,7 @@ require_relative "option_base"
 module Tabry
   module Models
     class ConstOption < OptionBase
-      def options(token)
+      def options(token, _params)
         if value.start_with?(token)
           [value]
         else
