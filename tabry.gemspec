@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-# TODO: these 2 lines are cargo cult
-lib = File.expand_path("lib", __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require_relative './lib/tabry/version'
 
 Gem::Specification.new do |s|
   s.name        = "tabry"
-  s.version     = "0.2.3"
+  s.version     = Tabry::VERSION
   s.summary     = "Tab completion and CLIs extraordinaire"
   s.authors     = ["Evan Battaglia"]
   s.email       = "battaglia.evan@gmail.com"
