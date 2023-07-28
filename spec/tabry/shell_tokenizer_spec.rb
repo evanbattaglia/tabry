@@ -23,6 +23,11 @@ describe Tabry::ShellTokenizer do
       )
     end
 
+    it "uses comppoint to correctly figures out whether we are still on the last token" do
+      expect(described_class.split_with_comppoint("jir add ", 7)).to eq(["jir", [], "add"])
+      expect(described_class.split_with_comppoint("jir add ", 8)).to eq(["jir", ["add"], ""])
+    end
+
     it "supports tokens with argument (tab on command), yielding the last arg" do
       expect(described_class.split_with_comppoint("abc", 2)).to eq([nil, [], "abc"])
     end
