@@ -85,7 +85,7 @@ describe Tabry::OptionsFinder do
       hash[:subcommand_stack] = hash.delete(:subs) || []
       defaults = { mode: :subcommand, args: [], flags: {}, current_flag: nil, dashdash: nil }
       result = Tabry::Result.new(config, Tabry::State.new(defaults.merge(hash)))
-      expect(described_class.options(result, token)).to match_array expected_options
+      expect(described_class.options(result, token, {})).to match_array expected_options
     end
   end
 
@@ -115,12 +115,12 @@ describe Tabry::OptionsFinder do
         )
       end
 
-      described_class.options(result, "abcd")
+      described_class.options(result, "abcd", {})
     end
 
     it "sets TABRY_AUTOCOMPLETE_STATE back to what it was before" do
       ENV["TABRY_AUTOCOMPLETE_STATE"] = "foobar1234"
-      described_class.options(result, "foo")
+      described_class.options(result, "foo", {})
       expect(ENV.fetch("TABRY_AUTOCOMPLETE_STATE", nil)).to eq("foobar1234")
     end
   end

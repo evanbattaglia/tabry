@@ -9,9 +9,9 @@ describe Tabry::Models::ConstOption do
   end
 
   it "filters by prefix" do
-    expect(subject.options("")).to eq(%w[foobar])
-    expect(subject.options("f")).to eq(%w[foobar])
-    expect(subject.options("foo")).to eq(%w[foobar])
-    expect(subject.options("w")).to eq(%w[])
+    expect(subject.options("", {})).to eq(%w[foobar])
+    expect(subject.options("f", {})).to eq(%w[foobar])
+    expect(subject.options("foo", {})).to eq(%w[foobar])
+    expect(subject.options("w", {})).to eq(%w[])
   end
 end

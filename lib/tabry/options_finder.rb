@@ -78,7 +78,7 @@ module Tabry
 
       result
         .sub_stack
-        .map { |sub| sub.flags.options(token, used: state.flags, params: params) }
+        .map { |sub| sub.flags.options(token, params, used: state.flags) }
         .flatten(1)
         .uniq
     end

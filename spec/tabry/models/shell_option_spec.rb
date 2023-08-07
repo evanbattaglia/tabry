@@ -11,9 +11,9 @@ describe Tabry::Models::ShellOption do
   end
 
   it "filters by prefix" do
-    expect(subject.options("")).to match_array(%w[a a1 b])
-    expect(subject.options("a")).to match_array(%w[a a1])
-    expect(subject.options("a1")).to match_array(%w[a1])
-    expect(subject.options("a1 ")).to match_array(%w[])
+    expect(subject.options("", {})).to match_array(%w[a a1 b])
+    expect(subject.options("a", {})).to match_array(%w[a a1])
+    expect(subject.options("a1", {})).to match_array(%w[a1])
+    expect(subject.options("a1 ", {})).to match_array(%w[])
   end
 end

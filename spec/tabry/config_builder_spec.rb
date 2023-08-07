@@ -55,6 +55,10 @@ describe Tabry::ConfigBuilder do
             {
               "description" => "Get tab completion for bash or zsh",
               "name" => "bash"
+            },
+            {
+              "description" => "Get tab completion for fish",
+              "name" => "fish"
             }
           ]
         }

@@ -16,7 +16,7 @@ module Tabry
         end
       end
 
-      def options(token, used:, params:)
+      def options(token, params, used:)
         to_a.map do |flag|
           if token&.start_with?("-") && flag.name_with_dashes.start_with?(token) && !used[flag.name]
             if params[:descriptions]

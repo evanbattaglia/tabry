@@ -11,6 +11,6 @@ describe Tabry::Models::DirOption do
   # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
   # communicate to tabry-bash
   it "returns a array with a symbol" do
-    expect(subject.options("whatever")).to eq([:directory])
+    expect(subject.options("whatever", {})).to eq([:directory])
   end
 end

@@ -28,7 +28,7 @@ describe Tabry::Runner do
     it "runs OptionsFinder" do
       res = instance_double(Tabry::Result)
       expect(subject).to receive(:parse).with(%w[foo bar]).and_return res
-      expect(Tabry::OptionsFinder).to receive(:options).with(res, "waz").and_return %w[a b c]
+      expect(Tabry::OptionsFinder).to receive(:options).with(res, "waz", {}).and_return %w[a b c]
       expect(subject.options(%w[foo bar], "waz")).to eq(%w[a b c])
     end
   end

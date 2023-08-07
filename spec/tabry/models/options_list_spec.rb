@@ -39,9 +39,9 @@ describe Tabry::Models::OptionsList do
         %w[d c b a]
       ]
       subject.each_with_index do |opt, i|
-        expect(opt).to receive(:options).with("some-token").and_return(opts_results[i])
+        expect(opt).to receive(:options).with("some-token", {}).and_return(opts_results[i])
       end
-      expect(subject.options("some-token")).to match_array(%w[a b c d foo bar waz ok 1])
+      expect(subject.options("some-token", {})).to match_array(%w[a b c d foo bar waz ok 1])
     end
   end
 end

@@ -11,9 +11,9 @@ module Tabry
 
       attr_reader(*FIELDS.keys)
 
-      # Handled by tabru=bash/tabry-bash.sh/shell, we just return a symbol to
+      # Handled by tabry-bash/tabry-bash.sh/shell, we just return a symbol to
       # communicate to tabry-bash
-      def options(_token)
+      def options(_token, _params)
         [:directory]
       end
 
