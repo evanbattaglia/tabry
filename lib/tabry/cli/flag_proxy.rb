@@ -19,6 +19,10 @@ module Tabry
         nil
       end
 
+      def to_hash
+        @hash
+      end
+
       def slice(*keys)
         [keys].flatten.each_with_object({}) do |key, result_hash|
           result_hash[key] = self[key]
