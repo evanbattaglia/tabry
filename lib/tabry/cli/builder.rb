@@ -3,6 +3,7 @@
 require_relative "../runner"
 require_relative "../util"
 require_relative "internals"
+require_relative "base"
 
 # Responsible for building the CLI object, making a Runner to parse the
 # arguments, and running the proper action method of the CLI object.
@@ -56,6 +57,7 @@ module Tabry
 
       def instantiate_cli(klass, internals)
         return klass unless klass.is_a?(Class)
+        raise "CLI class must inherit from Tabry::CLI::Base" unless klass < Tabry::CLI::Base
 
         state = internals.state
         klass.new(state.flags, state.args, internals.result.named_args, internals)
