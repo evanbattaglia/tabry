@@ -26,4 +26,7 @@ in
 
         installShellCompletion ${cmd}.fish
       '';
+      meta = {
+        mainProgram = cmd;
+      };
     }
