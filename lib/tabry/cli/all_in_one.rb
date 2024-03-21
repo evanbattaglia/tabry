@@ -45,6 +45,10 @@ module Tabry
 
       def self.define_completion_methods(cli_class, config, cmd_name: nil)
         cli_class.module_eval do
+          define_method :completion__json do
+            require 'json'
+            puts config.as_json.to_json
+          end
 
           define_method :completion__bash do
             require_relative "../shells/bash"

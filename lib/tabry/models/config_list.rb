@@ -24,6 +24,11 @@ module Tabry
         flatten
       end
 
+      def as_json
+        val = to_a.map { ConfigObject.as_json(_1) }
+        val.empty? ? nil : val
+      end
+
       def flatten
         @flatten ||= unflattened.map(&:flatten).flatten
       end

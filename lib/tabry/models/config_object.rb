@@ -73,6 +73,23 @@ module Tabry
         assert_of_class(key, val, [TrueClass, FalseClass])
         val
       end
+
+      def as_json
+        self.class::FIELDS.map do |k, _|
+          raw_val = send(k)
+          [k, ConfigObject.as_json(raw_val)]
+        end.to_h.compact
+      end
+
+      def self.as_json(val)
+        if [ ConfigObject, ConfigList, ConfigStringHash ].any? { val.is_a?(_1) }
+          val.as_json
+        elsif val.is_a?(Array)
+          val.map { as_json(_1) }
+        else
+          val
+        end
+      end
     end
   end
 end

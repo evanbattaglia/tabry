@@ -23,6 +23,7 @@ module Tabry
       def completion
         sub :completion do
           desc "Get tab completion shell config"
+          sub :json, "Get tabry JSON config for command (experimental)"
           sub :bash, "Get tab completion for bash or zsh"
           sub :fish, "Get tab completion for fish"
           arg :cmd_line, "(for internal usage, when used instead of subcommand) full command line for getting completion options"

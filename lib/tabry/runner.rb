@@ -16,6 +16,7 @@ module Tabry
                   config
                 else
                   ConfigLoader.load(name: config)
+
                 end
     end
 

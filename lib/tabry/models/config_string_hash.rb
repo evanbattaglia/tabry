@@ -39,6 +39,11 @@ module Tabry
       def keys
         to_h.keys
       end
+
+      def as_json
+        val = to_h.transform_values { ConfigObject.as_json(_1) }
+        val.empty? ? nil : val
+      end
     end
   end
 end
