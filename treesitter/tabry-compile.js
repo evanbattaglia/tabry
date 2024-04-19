@@ -317,6 +317,12 @@ const handlers = {
     createOpts(state, {type: 'shell', value: textFromString(value)});
   },
 
+  handleOptsDelegateStatement(state, node) {
+    checkContext(state, node, ['arg', 'flag', 'option_include']);
+    const {value} = pick(node, {value: 'string'});
+    createOpts(state, {type: 'delegate', value: textFromString(value)});
+  },
+
   handleOptsMethodStatement(state, node) {
     checkContext(state, node, ['arg', 'flag', 'option_include']);
     const {value} = pick(node, {value: 'string'});

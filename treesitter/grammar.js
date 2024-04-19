@@ -30,6 +30,7 @@ module.exports = grammar({
       $.opts_method_statement,
       $.opts_file_statement,
       $.opts_dir_statement,
+      $.opts_delegate_statement,
       $.title_statement,
     ),
 
@@ -109,6 +110,12 @@ module.exports = grammar({
     opts_shell_statement: $ => seq(
       'opts',
       'shell',
+      $.string,
+    ),
+
+    opts_delegate_statement: $ => seq(
+      'opts',
+      'delegate',
       $.string,
     ),
 

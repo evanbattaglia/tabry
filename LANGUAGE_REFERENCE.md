@@ -132,6 +132,17 @@ are defined, all are used as possible tab completion values.
 * `opts file`. This uses the shell's file completion to give a list of files.
 * `opts dir`. This uses the shell's directory completion to give a list of
   directories.
+* `opts delegate`. This uses the shell to delegate completion options to
+  another command's completion. This is useful when you your command's arguments
+  are the same as an existing command which the user will have completion for.
+  For example, if you want your command to have the list of docker-compose
+  services as possible arguments, and you know "docker compose run" has completion
+  for this, you can use
+  ```
+  opts delegate "docker compose run"
+  ```
+  This is experimental/WIP. Also, note that the user's shell must have completion
+  for the command you are delegating to.
 
 Note that options are only used for tab-completion; they are not validated when
 running a CLI built on the Tabry CLI gem.

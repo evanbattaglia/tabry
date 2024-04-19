@@ -20,5 +20,7 @@ main:
           value: "no"
         - type: shell
           value: mycmd list-things
+        - type: delegate
+          value: docker compose run
         - type: file
         - type: dir

@@ -96,6 +96,7 @@ arg {
   opts const "hello \"world\""
   opts const (T F true false yes no)
   opts shell "mycmd list-things"
+  opts delegate "docker compose run"
   opts file
   opts dir
 }
@@ -110,6 +111,7 @@ arg {
       (opts_const_statement (string))
       (opts_const_statement (string) (string) (string) (string) (string) (string))
       (opts_shell_statement (string))
+      (opts_delegate_statement (string))
       (opts_file_statement)
       (opts_dir_statement)
     )

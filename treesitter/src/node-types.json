@@ -94,6 +94,10 @@
           "named": true
         },
         {
+          "type": "opts_delegate_statement",
+          "named": true
+        },
+        {
           "type": "opts_dir_statement",
           "named": true
         },
@@ -327,6 +331,21 @@
     }
   },
   {
+    "type": "opts_delegate_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "opts_dir_statement",
     "named": true,
     "fields": {}
@@ -517,6 +536,10 @@
   },
   {
     "type": "defopts",
+    "named": false
+  },
+  {
+    "type": "delegate",
     "named": false
   },
   {
