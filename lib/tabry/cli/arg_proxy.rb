@@ -44,7 +44,7 @@ module Tabry
       end
 
       def <=>(*args)
-        @args.<=>(*args)
+        @args.send(:<=>, *args)
       end
 
       def method_missing(met)

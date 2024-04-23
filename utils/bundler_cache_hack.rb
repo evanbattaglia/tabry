@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # This is useful helper for speeding up your CLIs by caching the paths bundler.
 # To use, copy to the same directory your Gemfile is in, and require_relative
@@ -36,17 +37,17 @@ module BundlerCacheHack
   end
 
   def bundler_setup!
-    require 'rubygems'
-    ENV['BUNDLE_GEMFILE'] = BUNDLER_FILE
-    require 'bundler/setup'
+    require "rubygems"
+    ENV["BUNDLE_GEMFILE"] = BUNDLER_FILE
+    require "bundler/setup"
   end
 
   def bundle!
-    if ENV['BUNDLERCACHEHACK_ALWAYS_USE_BUNDLER']
+    if ENV["BUNDLERCACHEHACK_ALWAYS_USE_BUNDLER"]
       bundler_setup!
     elsif File.exist?(BUNDLE_CACHE_FILE) &&
-        File.mtime(BUNDLE_CACHE_FILE) > File.mtime(BUNDLER_FILE) &&
-        File.mtime(BUNDLE_CACHE_FILE) > File.mtime(BUNDLER_LOCK_FILE)
+          File.mtime(BUNDLE_CACHE_FILE) > File.mtime(BUNDLER_FILE) &&
+          File.mtime(BUNDLE_CACHE_FILE) > File.mtime(BUNDLER_LOCK_FILE)
       $LOAD_PATH.clear
       $LOAD_PATH.concat File.read(BUNDLE_CACHE_FILE).chomp.split("\n")
     else
@@ -57,11 +58,11 @@ module BundlerCacheHack
   def install!
     success = Dir.chdir(__dir__) { system "bundle install" }
     if success
-      File.unlink(BUNDLE_CACHE_FILE) if File.exist?(BUNDLE_CACHE_FILE)
+      FileUtils.rm_f(BUNDLE_CACHE_FILE)
       BundlerCacheHack.compile_bundle_hack_file
       exit 0
     else
-      $stderr.puts "Bundle failed!"
+      warn "Bundle failed!"
       exit 1
     end
   end
@@ -71,5 +72,5 @@ if __FILE__ == $0 && ARGV == ["install"]
   BundlerCacheHack.install!
 else
   BundlerCacheHack.bundle!
-  include BundlerCacheHack::OverrideRubyGemsRequire
+  include BundlerCacheHack::OverrideRubyGemsRequire # rubocop:disable Style/MixinUsage
 end

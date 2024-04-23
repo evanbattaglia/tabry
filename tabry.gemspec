@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './lib/tabry/version'
+require_relative "lib/tabry/version"
 
 Gem::Specification.new do |s|
   s.name        = "tabry"

@@ -35,7 +35,7 @@ module Tabry
       rescue Errno::ENOENT # rubocop:disable Lint/SuppressedException
       end
 
-      def save_history(file, max_size = 10000)
+      def save_history(file, max_size = 10_000)
         return unless file
 
         history = Readline::HISTORY.each

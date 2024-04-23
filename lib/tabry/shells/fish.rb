@@ -33,7 +33,7 @@ module Tabry
           cmd_name: cmd_name,
           import_path: "",
           tabry_fish_executable: File.expand_path($0),
-          tabry_fish_arg: "completion",
+          tabry_fish_arg: "completion"
         )
       end
 
@@ -41,8 +41,8 @@ module Tabry
         File.expand_path("#{__dir__}/../../../")
       end
 
-      def self.esc(s)
-        Shellwords.escape(s)
+      def self.esc(str)
+        Shellwords.escape(str)
       end
 
       def self.add_uniq_id(str, pattern, uniq_id)
@@ -65,7 +65,7 @@ module Tabry
 
         script.gsub! "# TABRY_IMPORT_PATH_REPLACE (DO NOT REMOVE)", "set TABRY_IMPORTS_PATH #{esc import_path}"
         script.gsub! "# TABRY_EXECUTABLE_REPLACE (DO NOT REMOVE)", "set TABRY_EXECUTABLE #{esc tabry_fish_executable}"
-        if !tabry_fish_arg.nil?
+        unless tabry_fish_arg.nil?
           script.gsub! "# TABRY_ARG_REPLACE (DO NOT REMOVE)", "set TABRY_ARG #{esc tabry_fish_arg}"
         end
 

@@ -75,14 +75,14 @@ module Tabry
       end
 
       def as_json
-        self.class::FIELDS.map do |k, _|
+        self.class::FIELDS.to_h do |k, _|
           raw_val = send(k)
           [k, ConfigObject.as_json(raw_val)]
-        end.to_h.compact
+        end.compact
       end
 
       def self.as_json(val)
-        if [ ConfigObject, ConfigList, ConfigStringHash ].any? { val.is_a?(_1) }
+        if [ConfigObject, ConfigList, ConfigStringHash].any? { val.is_a?(_1) }
           val.as_json
         elsif val.is_a?(Array)
           val.map { as_json(_1) }

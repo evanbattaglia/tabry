@@ -5,6 +5,7 @@ require_relative "../../../lib/tabry/shells/bash"
 describe Tabry::Shells::Bash do
   describe ".generate_self" do
     before { @backup, $0 = $0, "/bla/waz/abc" }
+
     after { $0 = @backup }
 
     it "tells bash to use the currently running command plus 'completion' to get completion options" do
@@ -19,7 +20,7 @@ describe Tabry::Shells::Bash do
     end
 
     it "defaults cmd_name to the basename of the currently running command" do
-      result = described_class.generate_self(cmd_name: 'wombat')
+      result = described_class.generate_self(cmd_name: "wombat")
       expect(result).to match(
         %r{^ *TABRY_IMPORTS_PATH='' _tabry_WOMBAT_completions_internal /bla/waz/abc completion$}
       )
@@ -27,8 +28,8 @@ describe Tabry::Shells::Bash do
     end
   end
 
-  describe '.generate' do
-    it 'tells bash to use tabry-bash with a import path to get completion options' do
+  describe ".generate" do
+    it "tells bash to use tabry-bash with a import path to get completion options" do
       result = described_class.generate("my-cmd", "/path/to/mycmd.tabry")
       expect(result).to include("TABRY_IMPORTS_PATH=/path/to/mycmd.tabry _tabry_MY_CMD_completions_internal /")
       expect(result).to include("complete -F _tabry_MY_CMD_completions my-cmd\n")

@@ -45,8 +45,8 @@ module Tabry
         File.expand_path("#{__dir__}/../../../")
       end
 
-      def self.esc(s)
-        Shellwords.escape(s)
+      def self.esc(str)
+        Shellwords.escape(str)
       end
 
       def self.generate_internal(cmd_name:, import_path:, tabry_bash_executable:, tabry_bash_arg:, uniq_fn_id: nil)

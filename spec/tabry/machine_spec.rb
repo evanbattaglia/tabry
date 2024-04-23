@@ -22,7 +22,7 @@ describe Tabry::Machine do
       pending unless expectation
       result = described_class.run(config, tokens)
       expectation.each do |key, val|
-        key = 'subcommand_stack' if key == 'subs'
+        key = "subcommand_stack" if key == "subs"
         res = result.send(key.to_sym)
         res = res.to_s if res.is_a?(Symbol)
         expect(res).to eq(val)

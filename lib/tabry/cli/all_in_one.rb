@@ -46,7 +46,7 @@ module Tabry
       def self.define_completion_methods(cli_class, config, cmd_name: nil)
         cli_class.module_eval do
           define_method :completion__json do
-            require 'json'
+            require "json"
             puts config.as_json.to_json
           end
 
@@ -92,18 +92,16 @@ module Tabry
 
         # If we recognize command is going to be a completion command, fast track and
         # run completion now
-        if run_completion
-          if ARGV.first == "completion"
-            fish_mode = ENV.fetch("TABRY_FISH_MODE", false)
-            if fish_mode
-              require_relative "../shells/fish/wrapper"
-              Tabry::Fish::Wrapper.run(ARGV[1], ARGV[2], config: config)
-            else
-              require_relative "../shells/bash/wrapper"
-              Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
-            end
-            exit
+        if run_completion && (ARGV.first == "completion")
+          fish_mode = ENV.fetch("TABRY_FISH_MODE", false)
+          if fish_mode
+            require_relative "../shells/fish/wrapper"
+            Tabry::Fish::Wrapper.run(ARGV[1], ARGV[2], config: config)
+          else
+            require_relative "../shells/bash/wrapper"
+            Tabry::Bash::Wrapper.run(ARGV[1], ARGV[2], config: config)
           end
+          exit
         end
 
         # If we recognize there is a "completion" subcommand, add completion
@@ -115,8 +113,8 @@ module Tabry
         Tabry::CLI::Builder.new(config, cli)
       end
 
-      def self.run(**kwargs, &blk)
-        build(**kwargs, &blk).run(ARGV)
+      def self.run(...)
+        build(...).run(ARGV)
       end
     end
   end

@@ -20,7 +20,7 @@ module Tabry
             Shellwords.escape(arg)
           end
         end
-        cmdline = cmdline % args
+        cmdline %= args
         cmdline = "{ #{cmdline} ;} 2>&1" if merge_stderr
 
         warn cmdline if echo || echo_only

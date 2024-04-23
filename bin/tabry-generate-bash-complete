@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require_relative "../lib/tabry/cli/all_in_one"
 require_relative "../lib/tabry/shells/bash"
@@ -23,9 +24,7 @@ Tabry::CLI::AllInOne.run do
     puts Tabry::Shells::Bash.generate(
       args.command_name,
       args.tabry_json_path,
-      uniq_fn_id: flags.uniq_fn_id,
+      uniq_fn_id: flags.uniq_fn_id
     )
   end
 end
-
-

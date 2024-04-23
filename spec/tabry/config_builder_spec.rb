@@ -31,7 +31,7 @@ describe Tabry::ConfigBuilder do
     end
   end
 
-  it "defines a 'completion' shortcut with 'completion' and 'completion__bash' subs" do
+  it "defines a 'completion' shortcut with 'completion' and completion__bash, __fish, __json subs" do
     config = described_class.build do
       completion
     end
@@ -52,6 +52,10 @@ describe Tabry::ConfigBuilder do
             }
           ],
           "subs" => [
+            {
+              "description" => "Get tabry JSON config for command (experimental)",
+              "name" => "json"
+            },
             {
               "description" => "Get tab completion for bash or zsh",
               "name" => "bash"

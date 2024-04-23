@@ -1,6 +1,8 @@
-require_relative '../../../lib/tabry/replty/builder'
-require_relative '../../../lib/tabry/replty/base'
-require_relative '../../../lib/tabry/config_builder'
+# frozen_string_literal: true
+
+require_relative "../../../lib/tabry/replty/builder"
+require_relative "../../../lib/tabry/replty/base"
+require_relative "../../../lib/tabry/config_builder"
 
 module Tabry
   module Specs
@@ -21,8 +23,8 @@ module Tabry
 end
 
 describe Tabry::Replty::Builder do
-  it 'calls the repl method for the subcommand' do
-    conf = Tabry::ConfigBuilder.build do |c|
+  it "calls the repl method for the subcommand" do
+    conf = Tabry::ConfigBuilder.build do |_c|
       sub :foo
       sub :bar do
         arg :waz

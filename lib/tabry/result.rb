@@ -81,7 +81,7 @@ module Tabry
           return "missing required flag #{flag.name}"
         end
       end
-      nil
+      false
     end
 
     def usage(cmd_name = nil)

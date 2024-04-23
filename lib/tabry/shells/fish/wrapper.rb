@@ -14,7 +14,7 @@ module Tabry
 
       def self.run(cmd_line, comp_point, config: nil)
         cmd_name, args, last_arg = Tabry::ShellTokenizer.split_with_comppoint(cmd_line, comp_point)
-        opts = Tabry::Runner.new(config: config || cmd_name).options(args, last_arg, {descriptions: true})
+        opts = Tabry::Runner.new(config: config || cmd_name).options(args, last_arg, { descriptions: true })
 
         if Tabry::Util.debug?
           $stderr.puts
@@ -38,12 +38,10 @@ module Tabry
       def self.format_description(description)
         if description.nil?
           ""
+        elsif description.length > DESCRIPTION_MAX_LENGTH
+          "#{description[0..(DESCRIPTION_MAX_LENGTH - 3)]}..."
         else
-          if description.length > DESCRIPTION_MAX_LENGTH
-            "#{description[0..(DESCRIPTION_MAX_LENGTH - 3)]}..."
-          else
-            description
-          end
+          description
         end
       end
     end

@@ -33,7 +33,6 @@ module Tabry
           end
           .compact
       end
-
     end
   end
 end
