@@ -11,7 +11,9 @@ module Tabry
       end
 
       def flatten
-        _root.arg_includes[include_name].args.flatten
+        inc = _root.arg_includes[include_name]
+        raise "no include found for #{include_name}" unless inc
+        inc.args.flatten
       end
     end
   end

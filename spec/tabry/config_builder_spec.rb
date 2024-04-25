@@ -53,7 +53,7 @@ describe Tabry::ConfigBuilder do
           ],
           "subs" => [
             {
-              "description" => "Get tabry JSON config for command (experimental)",
+              "description" => "Get flattened tabry JSON config for command (experimental)",
               "name" => "json"
             },
             {

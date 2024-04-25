@@ -47,7 +47,8 @@ module Tabry
         cli_class.module_eval do
           define_method :completion__json do
             require "json"
-            puts config.as_json.to_json
+            # Result is flattened/includes squashed (ConfigList#to_a I think calls flatten), so remove the includes
+            puts config.as_json.except(:arg_includes, :option_includes).to_json
           end
 
           define_method :completion__bash do
