@@ -19,7 +19,7 @@ module Tabry
     end
 
     def load
-      return load_from_file(name) if name =~ /\.json$/i || name =~ /\.ya?ml$/i
+      return load_from_file(name) if name =~ /json$/i || name =~ /\.ya?ml$/i
 
       load_paths.each do |path|
         EXTENSIONS.each do |extension|
@@ -48,7 +48,7 @@ module Tabry
     end
 
     def load_from_file(filename)
-      if filename =~ /\.json$/
+      if filename =~ /json$/
         require "json"
         Tabry::Models::Config.new(raw: JSON.parse(File.read(filename)))
       elsif filename =~ /\.ya?ml$/
