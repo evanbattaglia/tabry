@@ -28,9 +28,44 @@ module Tabry
         current_flag: result.state.current_flag
       }.to_json
 
+      send(
+        { subcommand: :options_subcommand, flagarg: :options_flagarg }[state.mode],
+        token || ""
+      )
       send(:"options_#{state.mode}", token || "")
     ensure
       ENV["TABRY_AUTOCOMPLETE_STATE"] = before_env
+    end
+
+    # Descriptions of what is expected; particularly, argument names and descriptions
+    # returns an array, each can be one of three things:
+    #   symbol :flag or :subcommand
+    #   array [name, description]
+    #   array [:flagarg, flag_description]
+    def summary_descriptions
+      send({
+        subcommand: :summary_descriptions_subcommand,
+        flagarg: :summary_descriptions_flagarg
+      }[state.mode])
+    end
+
+    def summary_descriptions_flagarg
+      result.current_flags_for_flagargs.map do |flag|
+        [:flagarg, flag.description]
+      end.compact
+    end
+
+    def summary_descriptions_subcommand
+      descriptions = []
+      if result.expected_arg
+        descriptions << [
+          result.expected_arg.title || result.expected_arg.name,
+          result.expected_arg.description
+        ]
+      end
+      descriptions << :subcommand if options_subcommand_subs(nil).any?
+      descriptions << :flag if options_subcommand_flags(nil).any?
+      descriptions
     end
 
     private
@@ -59,8 +94,8 @@ module Tabry
     end
 
     def options_flagarg(token)
-      result.sub_stack.map do |sub|
-        sub.flags[state.current_flag]&.options&.options(token, params)
+      result.current_flags_for_flagargs.map do |flag|
+        flag.options&.options(token, params)
       end.compact.flatten.uniq
     end
 
@@ -84,13 +119,7 @@ module Tabry
     end
 
     def options_subcommand_args(token)
-      arg = if current_sub.args.n_passed_in_varargs(state.args.length) > 0
-              current_sub.args.varargs_arg
-            else
-              current_sub.args[state.args.length]
-            end
-
-      arg&.options&.options(token, params) || []
+      result.expected_arg&.options&.options(token, params) || []
     end
   end
 end

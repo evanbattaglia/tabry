@@ -21,7 +21,11 @@ module Tabry
     end
 
     def options(args, last = nil, params = {})
-      Tabry::OptionsFinder.options(parse(args), last, params)
+      options_finder(args, params).options(last)
+    end
+
+    def options_finder(args, params = {})
+      Tabry::OptionsFinder.new(parse(args), params)
     end
 
     def parse(args)

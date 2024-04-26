@@ -110,5 +110,20 @@ module Tabry
         end
       end
     end
+
+    def current_flags_for_flagargs
+      sub_stack.map do |sub|
+        flag = sub.flags[state.current_flag]
+        flag if flag&.arg
+      end.compact
+    end
+
+    def expected_arg
+      if current_sub.args.n_passed_in_varargs(state.args.length) > 0
+        current_sub.args.varargs_arg
+      else
+        current_sub.args[state.args.length]
+      end
+    end
   end
 end
