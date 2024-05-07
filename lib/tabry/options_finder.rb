@@ -63,8 +63,8 @@ module Tabry
           result.expected_arg.description
         ]
       end
-      descriptions << :subcommand if options_subcommand_subs(nil).any?
-      descriptions << :flag if options_subcommand_flags(nil).any?
+      descriptions << :subcommand if options_subcommand_subs("").any?
+      descriptions << :flag if options_subcommand_flags("").any?
       descriptions
     end
 
