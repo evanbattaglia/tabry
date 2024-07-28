@@ -12,7 +12,7 @@ main:
         - name: vehicle-types
           options:
             - type: include
-              value: vehicle-type-arg
+              value: vehicle-type
           varargs: true
     - name: list-vehicles
     - name: move

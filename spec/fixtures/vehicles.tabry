@@ -8,7 +8,7 @@ desc "Build and control vehicles"
 flag verbose,v "Give more details in output"
 
 sub build {
-  varargs vehicle-types @vehicle-type-arg
+  varargs vehicle-types @vehicle-type
 }
 
 sub list-vehicles

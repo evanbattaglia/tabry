@@ -4,6 +4,7 @@ require_relative "../../lib/tabry/config_loader"
 require_relative "../../lib/tabry/options_finder"
 require_relative "../../lib/tabry/result"
 require_relative "../../lib/tabry/state"
+require_relative "../../lib/tabry/util"
 
 describe Tabry::OptionsFinder do
   let(:config_fixture) { "#{__dir__}/../fixtures/vehicles.yaml" }
@@ -22,6 +23,10 @@ describe Tabry::OptionsFinder do
     "lists possible arguments (const)" => [
       %w[car bike],
       subs: %w[move go]
+    ],
+    "lists options for varargs" => [
+      %w[car bike],
+      subs: %w[build],
     ],
     "lists both possible args and subs if a subcommand can take either" => [
       %w[x y z subsub],
