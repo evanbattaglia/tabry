@@ -33,6 +33,12 @@ describe Tabry::Models::Config do
     }
   end
 
+  describe "#as_json" do
+    it "returns the config as a hash" do
+      expect(subject.as_json).to eq(config_hash)
+    end
+  end
+
   describe "#dig_sub_array" do
     it "returns the array of subcommands leading up to the specified subcommand" do
       res = subject.dig_sub_array(%w[sub1 sub1.1])

@@ -32,7 +32,6 @@ module Tabry
         { subcommand: :options_subcommand, flagarg: :options_flagarg }[state.mode],
         token || ""
       )
-      send(:"options_#{state.mode}", token || "")
     ensure
       ENV["TABRY_AUTOCOMPLETE_STATE"] = before_env
     end

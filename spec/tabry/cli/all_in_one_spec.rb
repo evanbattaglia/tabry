@@ -76,6 +76,13 @@ describe Tabry::CLI::AllInOne do
       cli.run(["completion", "bash"])
     end
 
+    it "creates a #completion__json method which generates tabry JSON" do
+      expect_any_instance_of(Kernel).to receive(:puts) do |_, json|
+        expect(JSON.parse(json)).to eq(JSON.parse(cli.runner.config.as_json.to_json))
+      end
+      cli.run(["completion", "json"])
+    end
+
     it "creates a #completion method which generates options" do
       expect(Tabry::Bash::Wrapper).to receive(:run).with("cmd line", "6", config: instance_of(Tabry::Models::Config))
       cli.run(["completion", "cmd line", "6"])

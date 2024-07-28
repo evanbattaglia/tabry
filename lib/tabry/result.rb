@@ -24,7 +24,8 @@ module Tabry
     def invalid_usage_reason
       waiting_on_flag_arg? ||
         wrong_number_of_args? ||
-        missing_required_flags?
+        missing_required_flags? ||
+        nil
     end
 
     def waiting_on_flag_arg?
