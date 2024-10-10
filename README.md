@@ -15,59 +15,22 @@ terse and expressive Tabry language and compile it into JSON from
 there. This compilation process is done with a Javascript script using
 Treesitter, in the treesitter/ directory.
 
-To compile a tabry file into JSON:
-1. Get up the treesitter parser/compiler running:
-  ```
-  cd treesitter
-  npm install
-  ```
-  (Note that if you want to modify the tabry grammar itself, after changing
-  grammar.js you should run `npx tree-sitter generate`, `npx tree-sitter test`,
-  and `npx node-gyp rebuild`)
-2. Compile your file:
-  ```
-  # Usage: ./tabry-compile.js [inputfile] [outputfile]
-  ./tabry-compile.js /path/to/mycli.tabry /path/to/mycli.json
-  ```
-3. For tab-completion you may wish to put the resulting `mycli.json` in
-   `~/.tabry` so it is always available to tabry. An alternative is to add the
-   path containing the `.json` or `.yml` file onto `TABRY_IMPORTS_PATH`
-   (colon-separated). For CLIs you can pass in the full path to the file in the
-   main runnable file for your CLI (more below), which will make the config
-   available for your CLI's commands and usage info, but will not enable tab
-   completion.
+To compile a tabry file into JSON, please use `tabry compile` from [tabry-rs](https://github.com/evanbattaglia/tabry-rs). The resulting JSON file can be used with the Tabry Ruby gem for tab completion and to build a CLI.
 
 See the `LANGUAGE.md` file for a guide on making your own config. See
 `examples/tabry` for some example configs for tab completion for existing
 commands.
 
-## Ruby DSL
+## Ruby DSL and Tabry::CLI::AllInOne
 Tabry now supports a near-identical Ruby DSL for making configs which does not
-require compilation. The old custom language will probably be phased out (even
-if you wanted to compile to YML/JSON, the Ruby version could be compiled.) See
+require compilation. The old custom language may be phased out for use with CLIs (although it is still useful for creating completions for 3rd-party programs, see [tabry-rs](https://github.com/evanbattaglia/tabry-rs). See
 `examples/all_in_one/hello` for an example which uses this (it also uses the
 AllInOne class to create a one-file CLI with tab completion)
 
-# Tab completion (for existing commands)
-Tab completion works by telling your shell to run a ruby script which calls
-tabry code every time it wants to get completion suggestions. The tabry script
-will then use the tabry configuration for the proper command. Both the shell
-code and the ruby script are specific to the shell. Currently only bash is
-supported.
+The AllInOne class is a simple way to create a CLI with tab completion in one file. It also has the ability to generate bash/zsh/fish completion, and tabry-format JSON compatible with [tabry-rs](https://github.com/evanbattaglia/tabry-rs).
 
-To add tab completion:
-* Add a tabry JSON/YAML file in ~/.tabry (or add a symlink) under the name of
-  the command. For instance, to add tab completion to the "aws" command,
-  run `cp examples/aws.json` `~/.tabry`
-  * An alternative is to add the directory with your compile Tabry `.json` file
-    to `TABRY_IMPORTS_PATH` (e.g. in your `~/.bash_profile` or `~/.zshrc`)
-* Add `source /path/to/tabry/sh/bash/tabry_bash.sh` to your `~/.bash_profile` or
-  `~/.zshrc`. Even if you have multiple tabry completion files, this only has
-  to be done once.
-* Add (e.g.) `complete -F _tabry_completions aws` for each command you want tab
-  completion for.
-* Note: for zsh, if you have problems, you may need to run `compinit` and
-  `bashcompinit` before sourcing the `tabry_bash.sh` script.
+# Tab completion (for existing commands)
+Please use [tabry-rs](https://github.com/evanbattaglia/tabry-rs) to for tab completion for existing commands. This gem is now focused on creating CLIs in Ruby.
 
 # Building CLIs
 To use Tabry to build CLIs, start a new project and use tabry as a gem.  Then
@@ -186,8 +149,15 @@ MyConfig.config.foo.bar # config is an openstruct
 
 A nix derivation is provided that builds `tabry`. It does not package the gems provided by the Gemfile.
 
-## Compiling tabry files with nix
+# Future possible improvements
+* `mycmd -ab` should be interpreted as `mycmd -a -b`
+* if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`
 
+# Old information
+
+**WARNING** The compiler has been superseded by the functionality in the [tabry-rs](https://github.com/evenbattaglia/tabry-rs) repository. This is only provided for historical purposes. The treesitter compiler here is DEPRECATED and uses possibly vulnerable dependencies. The information below is recorded only for historical purposes.
+
+## Compiling tabry files with nix
 This flake provides a `tabryc` app which compiles `.tabry` files. To run it, use the flake url, specifying the `tabryc` target:
 
 ```sh
@@ -270,7 +240,3 @@ sub foo
 sub bar
 sub baz
 ```
-
-# Future possible improvements
-* `mycmd -ab` should be interpreted as `mycmd -a -b`
-* if subcommand allows flag "-a", maybe allow it before the subcommand -- e.g. `mycmd -a mysub`
