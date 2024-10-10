@@ -9,6 +9,10 @@ and as such, Tabry configs describe:
   However, multiple flags with one dash (`-ab` => `-a -b`) are not yet
   supported.
 
+Some of this documentation (titles, descriptions) are not currently used
+in the Rust tool used for completions, but rather are only used in the
+Ruby tabry library, for the purposes of creating your own CLIs.
+
 # Getting started
 Here is a very simple CLI definition:
 
@@ -132,9 +136,10 @@ are defined, all are used as possible tab completion values.
 * `opts file`. This uses the shell's file completion to give a list of files.
 * `opts dir`. This uses the shell's directory completion to give a list of
   directories.
+* `opts delegate` delegates to another completion. As of Sept 2024 this is currently experimental and only supported for in the Rust tabry-rs completion engine and only for bash/zsh, and may not work fot work for all commands. For example, `opts delegate "docker compose"` will add the options for `docker compose` to the completion options for your command (only one argument).
 
 Note that options are only used for tab-completion; they are not validated when
-running a CLI built on the Tabry CLI gem.
+running a CLI built on the Tabry CLI ruby gem.
 
 # Optional args and Varargs (opt arg, varargs, opt varargs)
 You can define optional arguments by putting `opt` before `arg`. If you do not
