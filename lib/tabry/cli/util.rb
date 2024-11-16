@@ -67,7 +67,7 @@ module Tabry
       end
 
       def open_web_page(url_or_urls)
-        unless system("(%s %s 2>&1) >/dev/null", open_command, url_or_urls)
+        unless system("nohup %s %s 2>&1 >/dev/null &", open_command, url_or_urls)
           warn "WARNING: opening web page failed: #{make_cmdline("%s %s", open_command, url)}"
         end
       end

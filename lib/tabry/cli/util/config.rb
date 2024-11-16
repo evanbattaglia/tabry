@@ -11,6 +11,8 @@ require "json"
 #   Config = Tabry::CLI::Util::Config.new('~/.mycli.yml')
 # end
 
+# TODO: should probably now just remove this
+
 class Hash
   def to_openstruct
     JSON.parse to_json, object_class: OpenStruct
