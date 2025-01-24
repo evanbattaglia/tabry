@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.email       = "battaglia.evan@gmail.com"
   s.homepage    = "https://github.com/evanbattaglia/tabry"
   s.license     = "MIT"
+  s.required_ruby_version = ">= 3.0"
 
   treesitter_files = %w[
     binding.gyp

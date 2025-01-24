@@ -70,7 +70,7 @@ describe Tabry::CLI::Util do
     it 'uses "xdg-open" when on Linux' do
       stub_const("RUBY_PLATFORM", "x86_64-linux")
       expect(Kernel).to receive("system") do |cmdline|
-        expect(cmdline).to include("(xdg-open ")
+        expect(cmdline).to include("nohup xdg-open ")
       end
       described_class.open_web_page("http://example.com")
     end
@@ -78,7 +78,7 @@ describe Tabry::CLI::Util do
     it 'uses "open" when on Darwin' do
       stub_const("RUBY_PLATFORM", "x86_64-darwin")
       expect(Kernel).to receive("system") do |cmdline|
-        expect(cmdline).to include("(open ")
+        expect(cmdline).to include("nohup open ")
       end
       described_class.open_web_page("http://example.com")
     end
