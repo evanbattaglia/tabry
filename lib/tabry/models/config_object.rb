@@ -32,7 +32,7 @@ module Tabry
           raise ConfigError, "Unknown field(s) #{unknown_fields.inspect} for #{self.class}"
         end
 
-        raw.each do |key, val|
+        raw.compact.each do |key, val|
           type, *extra = Array(self.class::FIELDS[key.to_sym])
           instance_variable_set :"@#{key}", send(:"init_field_#{type}", key, val, *extra)
         end
