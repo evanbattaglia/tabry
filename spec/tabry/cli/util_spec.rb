@@ -2,6 +2,8 @@
 
 require_relative "../../../lib/tabry/cli/util"
 
+require "tempfile"
+
 describe Tabry::CLI::Util do
   describe ".make_cmdline" do
     it "escapes a single string" do
@@ -119,6 +121,33 @@ describe Tabry::CLI::Util do
         expect(Kernel).to have_received(:warn).with(
           a_string_including("command does not exist")
         )
+      end
+    end
+
+    describe "on windows" do
+      before { expect(Gem).to receive(:win_platform?).and_return(true) }
+
+      it "uses bash" do
+        output = described_class.backtick_or_die("echo $BASH_VERSION")
+        expect(output).to match(/^[0-9]/)
+      end
+    end
+  end
+
+  describe "system" do
+    it "calls Kernel.system with the escaped code" do
+      expect(Kernel).to receive(:system).with("echo \\' > /dev/null")
+      described_class.system("echo %s > /dev/null", "'")
+    end
+
+    describe "on windows" do
+      before { expect(Gem).to receive(:win_platform?).and_return(true) }
+
+      it "uses bash" do
+        Tempfile.open do |f|
+          described_class.system("echo $BASH_VERSION > %s", f.path)
+          expect(File.read(f.path)).to match(/^[0-9]/)
+        end
       end
     end
   end

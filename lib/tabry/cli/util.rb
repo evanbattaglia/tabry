@@ -8,6 +8,8 @@ module Tabry
     module Util
       module_function
 
+      SHELL_FOR_WINDOWS = ["bash", "-c"]
+
       def make_cmdline(cmdline, *args, echo: false, echo_only: false, merge_stderr: false)
         # Allow to pass in an array, or varargs:
         args = args.first if args.length == 1 && args.first.is_a?(Array)
@@ -31,7 +33,13 @@ module Tabry
 
       def system(*cmdline, **opts)
         cmdline = make_cmdline(*cmdline, **opts)
-        Kernel.system cmdline if cmdline
+        return unless cmdline
+
+        if Gem.win_platform?
+          Kernel.system *SHELL_FOR_WINDOWS, cmdline
+        else
+          Kernel.system cmdline
+        end
       end
 
       # TODO: would be nice to get separate STDERR and STDOUT
@@ -45,7 +53,11 @@ module Tabry
 
         enoent_error = false
         begin
-          res = `#{cmdline}`
+          res = if Gem.win_platform?
+            IO.popen([*SHELL_FOR_WINDOWS, cmdline]) { |io| io.read }
+          else
+            `#{cmdline}`
+          end
         rescue Errno::ENOENT
           enoent_error = true
         end
