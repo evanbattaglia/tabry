@@ -35,6 +35,8 @@ module Tabry
         cmdline = make_cmdline(*cmdline, **opts)
         return unless cmdline
 
+        require 'rubygems'
+
         if Gem.win_platform?
           Kernel.system *SHELL_FOR_WINDOWS, cmdline
         else
@@ -50,6 +52,8 @@ module Tabry
       def backtick_with_status(*cmdline, valid_statuses: nil, extra_error_message: nil, **opts)
         cmdline = make_cmdline(*cmdline, **opts)
         return [nil, nil] unless cmdline
+
+        require 'rubygems'
 
         enoent_error = false
         begin
